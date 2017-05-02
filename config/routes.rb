@@ -12,8 +12,7 @@ StarSpeak::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get 'lesson/:id' => 'lessons#show', as: 'lesson'
-      post 'lesson/:id' => 'lessons#show', as: 'lesson_2'
+      match 'lesson/:id' => 'lesson#show', via: [:get, :post], as: :lesson_2
     end
   end
 
