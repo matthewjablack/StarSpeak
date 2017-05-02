@@ -1,0 +1,5 @@
+<h1><%= @level.name %></h1>
+
+<% @modulers.each do |moduler| %>
+	<%= link_to moduler.name,  level_moduler_lessons_path(@level, moduler) %>
+<% end %>

@@ -1,0 +1,8 @@
+development:
+  facebook:
+    key: test
+    secret: test
+production:
+  facebook:
+    key: test
+    secret: test

@@ -1,0 +1,9 @@
+<p><%= link_to @level.name, level_modulers_path(@level) %> </p>
+
+<h1><%= @level.name %></h1>
+
+<h3><%= @moduler.name %></h2>
+
+<% @lessons.each do |lesson| %>
+	<%= link_to lesson.name, level_moduler_lesson_path(@level, @moduler,lesson) %>
+<% end %>

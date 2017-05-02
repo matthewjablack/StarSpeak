@@ -1,0 +1,12 @@
+<% if user_signed_in? %>
+	<div class="page-header">
+	  <h1>StarSpeak</h1>
+	  <h3>Helping kids to embrace their presentation.</h3>
+	</div>
+
+	<%= link_to "Get Started", level_path(current_user.level) %>
+<% else %>
+	StarSpeak
+	Helping kids to embrace their presentation.
+<% end %>
+
