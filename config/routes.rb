@@ -16,7 +16,7 @@ StarSpeak::Application.routes.draw do
   #   end
   # end
 
-  match '/api/v1/lesson/:id' => 'lesson#show', via: [:get, :post], as: :lesson_2
+  match '/api/v1/lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_2
 
   root 'home#index'
 
