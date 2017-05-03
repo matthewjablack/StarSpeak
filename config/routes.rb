@@ -10,13 +10,13 @@ StarSpeak::Application.routes.draw do
   # You can have the root of your site routed with "root"
 
 
-  # namespace :api do
-  #   namespace :v1 do
+  namespace :api do
+    namespace :v1 do
+      match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_2
+    end
+  end
 
-  #   end
-  # end
 
-  match '/api/v1/lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_2
 
   root 'home#index'
 
