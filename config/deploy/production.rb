@@ -6,6 +6,7 @@
 # Don't declare `role :all`, it's a meta role
 server "138.197.144.183", user: 'deploy', roles: [:app, :web], :primary => true
 
+default_run_options[:pty] = true
 set :stage, :production
 
 # you can set custom ssh options

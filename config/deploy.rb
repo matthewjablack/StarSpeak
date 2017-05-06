@@ -3,8 +3,6 @@ lock '3.8.0'
 
 set :application, 'StarSpeak'
 set :repo_url, 'https://github.com/mattBlackDesign/StarSpeak.git'
-set :git_https_username, 'mattBlackDesign'
-set :git_https_password, 'cityfun131'
 
 set :deploy_to, '/home/deploy/StarSpeak'
 
