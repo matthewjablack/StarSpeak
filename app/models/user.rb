@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   belongs_to :level
   belongs_to :betacode
 
+  has_many :speechstats
+
 
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
     user = User.where(:provider => auth.provider, :uid => auth.uid).first
