@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :email, :password, :password_confirmation, :first_name, :last_name, :level_id, :betacode_id
+  permit_params :email, :password, :password_confirmation, :first_name, :last_name, :level_id, :betacode_id, :admin
 
   index do
     selectable_column
@@ -24,7 +24,10 @@ ActiveAdmin.register User do
       # f.input :password
       # f.input :password_confirmation
       f.input :first_name
-      f.input :last_name  
+      f.input :last_name
+      f.input :level_id
+      f.input :betacode_id
+      f.input :admin
     end
     f.actions
   end
