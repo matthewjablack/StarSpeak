@@ -20,6 +20,8 @@ StarSpeak::Application.routes.draw do
 
   root 'home#index'
 
+  get "dashboard" => "home#dashboard"
+
   match '/levels' => 'levels#index', via: [:get], as: :levels
 
   resources :levels, only: [:show], path: '' do

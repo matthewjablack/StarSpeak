@@ -1,9 +1,16 @@
-<p><%= link_to @level.name, level_modulers_path(@level) %> </p>
+<h2><i class="fa fa-area-chart"></i> <%= link_to "Dashboard", level_modulers_path(@level) %> <i class="fa fa-chevron-right"></i> <i class="fa fa-columns"></i>  <%= link_to @moduler.name, level_moduler_lessons_path(@level, @moduler) %> </h2>
+<hr>
 
-<h1><%= @level.name %></h1>
+<h3><%= @moduler.name %> Lessons</h3>
 
-<h3><%= @moduler.name %></h2>
+<br>
 
 <% @lessons.each do |lesson| %>
-	<%= link_to lesson.name, level_moduler_lesson_path(@level, @moduler,lesson) %>
+	<%= link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
+		<div class="col-md-3 ">
+			<div class="module-box">
+					<%= lesson.name %>
+			</div>
+		</div>
+	<% end %>
 <% end %>

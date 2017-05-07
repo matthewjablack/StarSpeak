@@ -1,3 +1,15 @@
-<p><%= link_to @level.name, level_modulers_path(@level) %> > <%= link_to @moduler.name, level_moduler_lessons_path(@level, @moduler) %></p>
+<h2><i class="fa fa-area-chart"></i> <%= link_to "Dashboard", level_modulers_path(@level) %> <i class="fa fa-chevron-right"></i> <i class="fa fa-columns"></i>  <%= link_to @moduler.name, level_moduler_lessons_path(@level, @moduler) %>  <i class="fa fa-chevron-right"></i> <i class="fa fa-book"></i> <%= @lesson.name %></h2>
 
-<h1><%= @lesson.name %></h1>
+<hr>
+
+
+<h2><%= @lesson.name %></h2>
+
+<p>Read the situation below and present your solution to the best of your ability.</p>
+
+<p><i class="fa fa-list-alt"></i>&nbsp; <%= @lesson.content %></p>
+
+<p><i class="fa fa-clock-o"></i>&nbsp; <%= @lesson.length %> seconds</p>
+
+
+<!-- <a href=""></a> -->

@@ -14,3 +14,10 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require select2
+
+
+$(document).ready(function() {
+	$('#user_level_id').select2();
+})
+

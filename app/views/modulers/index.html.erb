@@ -1,5 +1,17 @@
-<h1><%= @level.name %></h1>
+<h2><i class="fa fa-area-chart"></i> <%= link_to "Dashboard", level_modulers_path(@level) %></h2>
+
+<hr>
+
+<h3><%= @level.name %> Modules</h3>
+
+<br>
 
 <% @modulers.each do |moduler| %>
-	<%= link_to moduler.name,  level_moduler_lessons_path(@level, moduler) %>
+	<%= link_to level_moduler_lessons_path(@level, moduler) do %>
+		<div class="col-md-3 ">
+			<div class="module-box">
+					<%= moduler.name %>
+			</div>
+		</div>
+	<% end %>
 <% end %>

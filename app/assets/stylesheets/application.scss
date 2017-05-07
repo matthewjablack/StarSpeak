@@ -1,3 +1,61 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
+@import "select2";
+
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('../fonts/HelveticaNeue-Thin?v=1.0.1');
+  src: url('../fonts/HelveticaNeue-Thin.eot?#iefix&v=1.0.1') format('embedded-opentype'), url('../fonts/HelveticaNeue-Thin.woff?v=1.0.1') format('woff'), url('../fonts/HelveticaNeue-Thin.ttf?v=1.0.1') format('truetype'), url('../fonts/HelveticaNeue-Thin.svg?v=1.0.1#HelveticaNeue-Thin') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, h1, h2, h3, h4, h5, h6, p {
+	font-family: "Helvetica Neue",Helvetica,"Open Sans",Arial,"Lucida Grande",Roboto,sans-serif !important;
+}
+
+h1 {
+	font-size: 60px;
+}
+
+p {
+	font-size: 20px;
+}
+
+
+body.full_bg { 
+  background: url(/images/microphone_bg.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+}
+
+.page-header {
+	border-bottom: none;
+	color:white;
+	  text-align: center;
+}
+
+
+#user_level_id {
+	width: 100%;
+}
+
+.module-box {
+  width: 100%;
+  background-color: #2c3e50;
+  color:white;
+  text-align:center;
+  height:150px;
+  padding:50px;
+  font-size:25px;
+  a {
+    color:white;
+  }
+}
+
+

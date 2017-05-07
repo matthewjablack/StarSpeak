@@ -42,6 +42,8 @@ gem 'nokogiri', '~> 1.6.0'
 
 gem 'activeadmin'
 
+gem "select2-rails"
+
 
 gem 'koala'
 gem 'omniauth'

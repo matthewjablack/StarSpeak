@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
 
 
   belongs_to :level
+  belongs_to :betacode
 
 
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
