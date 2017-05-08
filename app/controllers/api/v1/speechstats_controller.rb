@@ -14,6 +14,8 @@ class Api::V1::SpeechstatsController < ApplicationController
 
 
   def create
+    Rails.logger.info "Params "
+    Rails.logger.info params
     @speechstat = Speechstat.new(
       user_id: params[:user_id], 
       betacode_id: params[:betacode_id], 
