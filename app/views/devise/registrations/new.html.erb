@@ -25,7 +25,7 @@
   <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Password Confirmation' %>
   <br />
 
-  <%= f.select :level_id, Level.all.collect { |p| [ p.name, p.id ] }, include_blank: true, id: 'select-level', :prompt => "Pick Group" %>
+  <%= f.select :level_id, Level.all.collect { |p| [ p.name, p.id ] },  id: 'select-level' %>
 
   <br />
   <br/>

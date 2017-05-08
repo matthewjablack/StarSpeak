@@ -25,11 +25,15 @@ StarSpeak::Application.routes.draw do
 
   match '/levels' => 'levels#index', via: [:get], as: :levels
 
+  resources :speechstats, only: [:index, :show]
+
   resources :levels, only: [:show], path: '' do
     resources :modulers, only: [:index], path: '' do 
       resources :lessons, only: [:index, :show]
     end
   end
+
+
 
 
   # Example of regular route:

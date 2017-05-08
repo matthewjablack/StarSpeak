@@ -11,7 +11,7 @@
 	  <h1>StarSpeak</h1>
 	  <h3>Helping kids to embrace their presentation.</h3>
 	  <br>
-	  <a href="#" class="btn btn-default btn-lg">Try the demo</a>&nbsp;<a href="#" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">Sign Up</a>
+	  <a href="#" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">Sign Up</a>&nbsp;<a href="#" class="btn btn-default btn-lg">Try the demo</a>
 	</div>
 
 
@@ -24,6 +24,19 @@
 	        <h4 class="modal-title" id="myModalLabel">StarSpeak</h4>
 	      </div>
 	      <div class="modal-body">
+	      
+			<h2>Beta</h2>
+			<p>Enter code provided by your instructor to start Beta</p>
+
+			<form action="/users/sign_up">
+				<div class="input-group">
+					<input type="text" name="beta_code" class="form-control" placeholder="Access Token">
+					<span class="input-group-btn">
+						<button type="submit" id="mc-embedded-subscribe" class="button btn btn-primary">Submit</button>
+					</span>
+				</div>
+			</form>
+	      	<br>
 	        <!-- Begin MailChimp Signup Form -->
 			<div id="mc_embed_signup">
 			<form action="//starspeak.us11.list-manage.com/subscribe/post?u=1cd17cd17e4536b98745fee5b&amp;id=1ad6be9e86" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
@@ -45,19 +58,8 @@
 			</form>
 			</div>
 
-			<br />
 
-			<h2>Beta</h2>
-			<p>Enter code provided by your instructor to start Beta</p>
-
-			<form action="/users/sign_up">
-				<div class="input-group">
-					<input type="text" name="beta_code" class="form-control" placeholder="Access Token">
-					<span class="input-group-btn">
-						<button type="submit" id="mc-embedded-subscribe" class="button btn btn-primary">Submit</button>
-					</span>
-				</div>
-			</form>
+			
 
 			<!--End mc_embed_signup-->
 	      </div>

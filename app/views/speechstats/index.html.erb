@@ -1,0 +1,45 @@
+<h2>Speech Results </h2>
+<hr>
+
+<br>
+
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Lesson</th>
+        <th>Date</th>
+        <th>Happiness</th>
+        <th>Sadness</th>
+        <th>Angry</th>
+        <th>Fear</th>
+        <th>Surprise</th>
+        <th>Neutral</th>
+      </tr>
+    </thead>
+    <tbody>
+
+		<% @speechstats.each do |speechstat| %>
+			<a href="/speechstats/<%= speechstat.id %>">
+				<div>
+				<tr>
+			        <th><%= speechstat.moduler.name %></th>
+			        <th><%= speechstat.lesson.name %></th>
+			        <th><%= speechstat.created_at.strftime("%b %d, %Y") %></th>
+			        <th><%= speechstat.happy_facial_indico.round(3) * 100 %>%</th>
+			        <th><%= speechstat.sad_facial_indico.round(3) * 100 %>%</th>
+			        <th><%= speechstat.angry_facial_indico.round(3) * 100 %>%</th>
+			        <th><%= speechstat.fear_facial_indico.round(3) * 100 %>%</th>
+			        <th><%= speechstat.surprise_facial_indico.round(3) * 100 %>%</th>
+			        <th><%= speechstat.neutral_facial_indico.round(3) * 100 %>%</th>
+				</tr>
+				</div>
+			</a>
+		<% end %>
+
+      
+    </tbody>
+  </table>
+
+
