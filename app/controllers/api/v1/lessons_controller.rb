@@ -16,7 +16,7 @@ class Api::V1::LessonsController < ApplicationController
   def show
     @lesson = Lesson.find(params[:id])
     render :status => 200,
-           :json => { :lesson => @lesson, moduler: @lesson.moduler, level: @lesson.level, user: @user }
+           :json => { :lesson => @lesson, moduler: @lesson.moduler, level: @lesson.level, user: @user, betacode: @user.betacode }
   end
 
   
