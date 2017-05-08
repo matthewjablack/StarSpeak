@@ -6,11 +6,13 @@
 <br>
 
 <% @lessons.each do |lesson| %>
-	<%= link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
+	<%# link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
+	<a href="https://view.starspeak.io?auth_token=<%= current_user.auth_token %>&lesson_id=<%= lesson.id %>">
 		<div class="col-md-3 ">
 			<div class="module-box">
 					<%= lesson.name %>
 			</div>
 		</div>
-	<% end %>
+	</a>
+	<%# end %>
 <% end %>
