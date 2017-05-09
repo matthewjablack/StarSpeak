@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
 
   has_many :speechstats
 
+  before_save :full_name
+
 
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
     user = User.where(:provider => auth.provider, :uid => auth.uid).first
@@ -49,6 +51,14 @@ class User < ActiveRecord::Base
 
   def ensure_authentication_token
     self.auth_token ||= generate_authentication_token
+  end
+
+  def full_name
+    if !self.first_name.nil? && !self.last_name.nil?
+      if self.name != (self.first_name + " " + self.last_name)
+        self.update_attribute(:name, self.first_name + " " + self.last_name)
+      end
+    end
   end
 
 
