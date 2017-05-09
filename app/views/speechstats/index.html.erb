@@ -7,8 +7,8 @@
 <table class="table table-striped">
     <thead>
       <tr>
+	      <th>Lesson</th>
         <th>Module</th>
-        <th>Lesson</th>
         <th>Date</th>
         <th>Happiness</th>
         <th>Sadness</th>
@@ -21,21 +21,57 @@
     <tbody>
 
 		<% @speechstats.each do |speechstat| %>
-			<a href="/speechstats/<%= speechstat.id %>">
-				<div>
+			
+			<div>
 				<tr>
-			        <th><%= speechstat.moduler.name %></th>
-			        <th><%= speechstat.lesson.name %></th>
-			        <th><%= speechstat.created_at.strftime("%b %d, %Y") %></th>
-			        <th><%= speechstat.happy_facial_indico.round(3) * 100 %>%</th>
-			        <th><%= speechstat.sad_facial_indico.round(3) * 100 %>%</th>
-			        <th><%= speechstat.angry_facial_indico.round(3) * 100 %>%</th>
-			        <th><%= speechstat.fear_facial_indico.round(3) * 100 %>%</th>
-			        <th><%= speechstat.surprise_facial_indico.round(3) * 100 %>%</th>
-			        <th><%= speechstat.neutral_facial_indico.round(3) * 100 %>%</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= speechstat.lesson.name %>
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= speechstat.moduler.name %>
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= speechstat.created_at.strftime("%b %d, %Y") %>
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= (speechstat.happy_facial_indico.round(2) * 100).floor %>%
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= (speechstat.sad_facial_indico.round(2) * 100).floor %>%
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= (speechstat.angry_facial_indico.round(2) * 100).floor %>%
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= (speechstat.fear_facial_indico.round(2) * 100).floor %>%
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= (speechstat.surprise_facial_indico.round(2) * 100).floor %>%
+						<% end %>
+					</th>
+					<th>
+						<%= link_to speechstat_path(speechstat) do %>
+							<%= (speechstat.neutral_facial_indico.round(2) * 100).floor %>%
+						<% end %>
+					</th>
 				</tr>
-				</div>
-			</a>
+			</div>
+			
 		<% end %>
 
       
