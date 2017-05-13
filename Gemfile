@@ -44,6 +44,8 @@ gem 'activeadmin'
 
 gem "select2-rails"
 
+gem "react_on_rails", "~> 7"
+
 
 gem 'koala'
 gem 'omniauth'
@@ -85,3 +87,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'mini_racer', platforms: :ruby
