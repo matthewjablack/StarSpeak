@@ -1,4 +1,5 @@
 StarSpeak::Application.routes.draw do
+  get 'hello_world', to: 'hello_world#index'
   ActiveAdmin.routes(self)
   devise_for :users, :controllers => {
     :registrations => "users/registrations",
@@ -24,6 +25,8 @@ StarSpeak::Application.routes.draw do
   get "dashboard" => "home#dashboard"
 
   match '/levels' => 'levels#index', via: [:get], as: :levels
+
+  resources :users, only: [:show]
 
   resources :speechstats, only: [:index, :show]
 
