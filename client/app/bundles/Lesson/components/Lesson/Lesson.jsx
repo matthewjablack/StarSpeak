@@ -32,11 +32,7 @@ var screenCount = 0;
 
 const ERR_MIC_NARROWBAND = 'Microphone transcription cannot accommodate narrowband voice models, please select a broadband one.';
 
-class Lesson extends React.Component{
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-  };
-
+export default class Lesson extends React.Component{
 
   constructor(props) {
     super(props);
@@ -485,7 +481,7 @@ class Lesson extends React.Component{
 
 
   fetchToken() {
-    return fetch('/api/token').then(res => {
+    return fetch('https://view.starspeak.io/api/token').then(res => {
       if (res.status != 200) {
         throw new Error('Error retrieving auth token');
       }
@@ -807,20 +803,20 @@ class Lesson extends React.Component{
 
     if (this.state.stage === 0) {
       return (
-        <div className={s.frontPg}>
-          <h1 className={s.white}>Welcome to StarSpeak</h1>
-          <h2 className={s.white}>Helping students to embrace their presentation.</h2>
+        <div className="frontPg">
+          <h1 className="white">Welcome to StarSpeak</h1>
+          <h2 className="white">Helping students to embrace their presentation.</h2>
           <br/>
           <p>&nbsp;</p>
-          <button className={s.whiteBtn} onClick={this.startStage1.bind(this)}>Start</button>
+          <button className="whiteBtn" onClick={this.startStage1.bind(this)}>Start</button>
         </div>
       );
     } else if (this.state.stage === 2) {
       return (
         <div>
-        <div className={s.centerFixed}>
+        <div className="centerFixed">
           
-          <h1 className={s.white}>{this.state.lesson_name}</h1>
+          <h1 className="white">{this.state.lesson_name}</h1>
 
           <br/>
           <br/>
@@ -829,28 +825,28 @@ class Lesson extends React.Component{
           <br/>
           <br/>
 
-          <h3 className={s.white}>Read the situation below and present your solution to the best of your ability.</h3>
+          <h3 className="white">Read the situation below and present your solution to the best of your ability.</h3>
           <br/>
-          <h2 className={s.white}>{this.state.content}</h2>
-          <h2 className={s.white}>You have {this.state.length} seconds to present.</h2>
+          <h2 className="white">{this.state.content}</h2>
+          <h2 className="white">You have {this.state.length} seconds to present.</h2>
 
 
-          <button className={s.whiteBtn} onClick={this.startStage3.bind(this)}>Continue</button>
+          <button className="whiteBtn" onClick={this.startStage3.bind(this)}>Continue</button>
 
           
         </div>
 
-        <Webcam audio={false} className={s.reactWebcam} ref='webcam' width={this.state.width} height={this.state.width * 0.75}/>
+        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75}/>
         </div>
       );
     } else if (this.state.stage === 1) {
       return (
         <div>
-          <div className={s.centerFixed}>
-            <h2 className={s.white}>Adjust your camera</h2>
-            <button className={s.whiteBtn} onClick={this.startStage2.bind(this)}>Ready</button>
+          <div className="centerFixed">
+            <h2 className="white">Adjust your camera</h2>
+            <button className="whiteBtn" onClick={this.startStage2.bind(this)}>Ready</button>
           </div>
-        <Webcam audio={false} className={s.reactWebcam} ref='webcam' width={this.state.width} height={this.state.width * 0.75}/>
+        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75}/>
         </div>
       );
     } else if (this.state.stage === 3) {
@@ -861,7 +857,7 @@ class Lesson extends React.Component{
 
       return (
         <div>
-        <div className={s.centerFixed}>
+        <div className="centerFixed">
 
           <h2>
             {(this.state.count2 % 2) == 0 ?  
@@ -876,13 +872,13 @@ class Lesson extends React.Component{
               style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color: '#e74c3c', fontSize: '20px', position: 'fixed', top: '110px', marginLeft: '-25px' }}
             /> }
             {this.formatSeconds(this.state.count2)}
-            <button className={s.whiteBtnSpace} onClick={this.startStage4.bind(this)}>Stop</button>
+            <button className="whiteBtnSpace" onClick={this.startStage4.bind(this)}>Stop</button>
           </h2>
 
         </div>
 
 
-          <Webcam audio={false} className={s.reactWebcam} ref='webcam' width={this.state.width} height={this.state.width * 0.75} ref='webcam'/>
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} ref='webcam'/>
 
 
 
@@ -929,9 +925,9 @@ class Lesson extends React.Component{
       );
     } else if (this.state.stage == 4) {
       return (
-        <div className={s.bgWhite}>
-          <div className={s.container}>
-            <h3 className={s.finishedLink}><a href={linkBack}>Click here when finished</a></h3>
+        <div className="bgWhite">
+          <div className="container">
+            <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
             <h1>Results</h1>
             <Transcript messages={messages}/>
             <p>Confidence</p>
@@ -974,9 +970,9 @@ class Lesson extends React.Component{
     } else {
       var linkBack = 'https://starspeak.io/' + this.state.level_id + '/' + this.state.moduler_id + '/lessons';
       return (
-        <div className={s.bgWhite}>
-          <div className={s.container}>
-            <h3 className={s.finishedLink}><a href={linkBack}>Click here when finished</a></h3>
+        <div className="bgWhite">
+          <div className="container">
+            <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
             <h1>Results</h1>
             <Transcript messages={messages}/>
             <br/>
@@ -1032,5 +1028,5 @@ class Lesson extends React.Component{
 }
 
 
-export default withStyles(s)(Lesson);
+// export default withStyles(s)(Lesson);
 
