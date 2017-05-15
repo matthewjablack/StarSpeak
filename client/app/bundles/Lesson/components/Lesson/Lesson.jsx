@@ -15,6 +15,7 @@ import samples from './samples.json';
 import { ProgressBar, Col, Row } from 'react-bootstrap';
 import JSONView from './json-view';
 import SpeechToText from 'speech-to-text';
+import browser from 'detect-browser';
 
 
 var Timers = require("react-timers");
@@ -808,7 +809,9 @@ export default class Lesson extends React.Component{
         '&openness_indico=' + this.state.openness + 
         '&watson_text=' + full_message + 
         '&local_text=' + this.state.localText + 
-        '&pace=' + this.state.pace
+        '&pace=' + this.state.pace + 
+        '&browser_name=' + browser.name + 
+        '&browser_version=' + browser.version
         , {
         method: 'POST',
         header: {
