@@ -1,16 +1,16 @@
-// Place all the styles related to the home controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-
-.navbar-static-top {
-	margin-bottom: 0px !important;
-}
 
 .root {
   padding-left: 20px;
   padding-right: 20px;
 }
+
+.container {
+  margin: 0 auto;
+  padding: 0 0 40px;
+  max-width: var(--max-content-width);
+}
+
+
 
 
 body {
@@ -171,7 +171,7 @@ dialog, dd, dt {
 .reactWebcam {
     width: 100%;
     position: fixed;
-    top: 51px;
+    top: 81px;
     left: 0;
     z-index: 1;
 }
@@ -265,7 +265,7 @@ dialog, dd, dt {
     background: none !important;
 }
 
-body.view { 
+html { 
   background: url(/images/microphone.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -304,9 +304,21 @@ body.view {
     right: 0;
 }
 
+h1 {
+    font-weight:200;
+}
 
+h2 {
+    font-weight:200;
+}
+
+h3 {
+    font-weight:200;
+}
 
 .finishedLink {
     float:right;
     text-align:right;
 }
+
+

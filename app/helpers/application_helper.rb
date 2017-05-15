@@ -3,6 +3,10 @@ module ApplicationHelper
 	def get_body_class
 		if current_page?(root_path)
 			"full_bg"
+		elsif (params[:controller] == "lessons" && params[:action] == "show") || params[:controller] == "hello_world"
+			"view"
+		else
+			""
 		end
 	end
 

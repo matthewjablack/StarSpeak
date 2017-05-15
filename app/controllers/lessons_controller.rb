@@ -10,6 +10,4 @@ class LessonsController < ApplicationController
 		@moduler = Moduler.find(params[:moduler_id])
 		@lesson = Lesson.find(params[:id])
 	end
-
-
 end
