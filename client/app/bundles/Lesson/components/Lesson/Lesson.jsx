@@ -132,7 +132,7 @@ export default class Lesson extends React.Component{
       this.setState({stage: 1})
       this.fetchLesson(this.paramsObject().auth_token, this.paramsObject().lesson_id);
     } else if (!this.isObjectEmpty(this.state.lesson)) {
-      this.setState({stage: 1, length: this.state.lesson.length, auth_token: this.state.user.auth_token})
+      this.setState({stage: 1, count2: this.state.lesson.length, length: this.state.lesson.length, auth_token: this.state.user.auth_token})
     }
 
 
