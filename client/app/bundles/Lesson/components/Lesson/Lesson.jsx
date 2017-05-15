@@ -38,6 +38,7 @@ export default class Lesson extends React.Component{
     lesson: PropTypes.object.isRequired,
     moduler: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
 
@@ -103,6 +104,7 @@ export default class Lesson extends React.Component{
       lesson: this.props.lesson,
       moduler: this.props.moduler,
       level: this.props.level,
+      user: this.props.user,
       localText: "", 
       interimText: "", 
       pace: 0, 
@@ -129,6 +131,9 @@ export default class Lesson extends React.Component{
     if (!this.isObjectEmpty(this.paramsObject())) {
       this.setState({stage: 1})
       this.fetchLesson(this.paramsObject().auth_token, this.paramsObject().lesson_id);
+    } else if (!this.isObjectEmpty(this.state.lesson)) {
+      this.setState({stage: 1, length: this.state.lesson.length, auth_token: this.state.user.auth_token})
+      this.state.length = this.state.lesson.length;
     }
 
 
@@ -650,6 +655,7 @@ export default class Lesson extends React.Component{
     if (this.state.localText === "") {
       this.setState({localText: this.state.interimText});
     }
+
     this.setState({stage: 4, length: this.state.length - this.state.count2});
     this.handleMicClick();
     console.log('look at local text');
@@ -665,6 +671,10 @@ export default class Lesson extends React.Component{
   }
 
   async startAnalyzing(txt) {
+
+    const pace = (60 / this.state.length) * txt.split(" ").length;
+    this.setState({pace: pace});
+
     this.setState({analyzing: true});
     // console.log(screenCount);
     // console.log('hello');
@@ -754,11 +764,6 @@ export default class Lesson extends React.Component{
     this.setState({
       confidence: (this.state.agreeableness + this.state.conscientiousness + this.state.extraversion + this.state.openness + this.state.happy + this.state.happy2 + this.state.sad + this.state.sad2 - this.state.fear - this.state.fear2) / 6
     })
-
-
-    const pace = (60 / this.state.length) * this.state.localText.split(" ").length
-
-    this.setState({pace: pace})
 
 
     this.setState({stage: 5})
@@ -872,7 +877,7 @@ export default class Lesson extends React.Component{
         <div>
         <div className="centerFixed">
           
-          <h1 className="white">{this.state.lesson_name}</h1>
+          <h1 className="white">{this.state.lesson.name}</h1>
 
           <br/>
           <br/>
@@ -883,8 +888,8 @@ export default class Lesson extends React.Component{
 
           <h3 className="white">Read the situation below and present your solution to the best of your ability.</h3>
           <br/>
-          <h2 className="white">{this.state.content}</h2>
-          <h2 className="white">You have {this.state.length} seconds to present.</h2>
+          <h2 className="white">{this.state.lesson.content}</h2>
+          <h2 className="white">You have {this.state.lesson.length} seconds to present.</h2>
 
 
           <button className="whiteBtn" onClick={this.startStage3.bind(this)}>Continue</button>
@@ -986,8 +991,7 @@ export default class Lesson extends React.Component{
             <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
             <h1>Results</h1>
             <p>{this.state.localText}</p>
-            <p>Confidence</p>
-            <ProgressBar now={this.state.confidence * 100} label={`${Math.round(this.state.confidence * 100)}%`} />
+            <p>Pace: {Math.round(this.state.pace)} Words per Minute</p>
             <Row>
               <Col md={4}>
                 <h2>Personality</h2>
@@ -1024,13 +1028,14 @@ export default class Lesson extends React.Component{
         </div>
       );
     } else {
-      var linkBack = 'https://starspeak.io/' + this.state.level_id + '/' + this.state.moduler_id + '/lessons';
+      var linkBack = '/' + this.state.level.id + '/' + this.state.moduler.id + '/lessons';
       return (
         <div className="bgWhite">
           <div className="container">
             <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
             <h1>Results</h1>
             <p>{this.state.localText}</p>
+            <p>Pace: {Math.round(this.state.pace)} Words per Minute</p>
             <br/>
 
             <Row>
