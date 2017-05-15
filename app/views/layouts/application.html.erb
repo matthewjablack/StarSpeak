@@ -26,11 +26,18 @@
     
 
     <%= render 'shared/header' %>
+    
 
+    <% if (params[:controller] == "lessons" && params[:action] == "show") || (params[:controller] == "hello_world") %>
+        <%= yield %>
+    <% else %>
+        <div class="container">
+            <%= yield %>
+        </div>
+    <% end %>
+    
 
-    <div class="container">
-    <%= yield %>
-    </div>
+    
 
 
 
