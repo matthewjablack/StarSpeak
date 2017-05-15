@@ -9,5 +9,6 @@ class LessonsController < ApplicationController
 		@level = Level.find(params[:level_id])
 		@moduler = Moduler.find(params[:moduler_id])
 		@lesson = Lesson.find(params[:id])
+		@lesson_props = { lesson: @lesson, moduler: @moduler, level: @level }
 	end
 end

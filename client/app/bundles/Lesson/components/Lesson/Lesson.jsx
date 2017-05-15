@@ -33,6 +33,12 @@ var screenCount = 0;
 const ERR_MIC_NARROWBAND = 'Microphone transcription cannot accommodate narrowband voice models, please select a broadband one.';
 
 export default class Lesson extends React.Component{
+  static propTypes = {
+    lesson: PropTypes.object.isRequired,
+    moduler: PropTypes.object.isRequired,
+    level: PropTypes.object.isRequired,
+  };
+
 
   constructor(props) {
     super(props);
@@ -93,6 +99,9 @@ export default class Lesson extends React.Component{
       auth_token: null,
       user_id: 0,
       betacode_id: 0,
+      lesson: this.props.lesson,
+      moduler: this.props.moduler,
+      level: this.props.level,
     };
 
     // this.startStage1.bind(this);
@@ -108,6 +117,9 @@ export default class Lesson extends React.Component{
 
   componentDidMount() {
     this.fetchToken();
+
+    console.log("display lesson");
+    console.log(this.state.lesson.name)
 
     if (!this.isObjectEmpty(this.paramsObject())) {
       this.setState({stage: 1})
