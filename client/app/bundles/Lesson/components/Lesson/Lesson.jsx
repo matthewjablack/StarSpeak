@@ -864,12 +864,12 @@ export default class Lesson extends React.Component{
             <FontAwesome
               className='super-crazy-colors'
               name='circle'
-              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',   display: 'none', position: 'fixed', top: '110px', marginLeft: '-25px' }}
+              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',   display: 'none', position: 'fixed', top: '78px', marginLeft: '-25px' }}
             /> :  
             <FontAwesome
               className='super-crazy-colors'
               name='circle'
-              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color: '#e74c3c', fontSize: '20px', position: 'fixed', top: '110px', marginLeft: '-25px' }}
+              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color: '#e74c3c', fontSize: '20px', position: 'fixed', top: '78px', marginLeft: '-25px' }}
             /> }
             {this.formatSeconds(this.state.count2)}
             <button className="whiteBtnSpace" onClick={this.startStage4.bind(this)}>Stop</button>
