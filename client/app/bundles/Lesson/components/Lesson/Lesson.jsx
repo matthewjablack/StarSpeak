@@ -103,6 +103,9 @@ export default class Lesson extends React.Component{
       lesson: this.props.lesson,
       moduler: this.props.moduler,
       level: this.props.level,
+      localText: "", 
+      interimText: "", 
+      pace: 0, 
     };
 
     // this.startStage1.bind(this);
@@ -113,6 +116,7 @@ export default class Lesson extends React.Component{
     this.stopTranscription = this.stopTranscription.bind(this);
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.handleLocalStream = this.handleLocalStream.bind(this)
   }
 
 
@@ -127,16 +131,6 @@ export default class Lesson extends React.Component{
       this.fetchLesson(this.paramsObject().auth_token, this.paramsObject().lesson_id);
     }
 
-
-    const onAnythingSaid = text => console.log(`Interim text: ${text}`);
-    const onFinalised = text => console.log(`Finalised text: ${text}`);
-     
-    try {
-      const listener = new SpeechToText(onAnythingSaid, onFinalised);
-      listener.startListening();
-    } catch (error) {
-      console.log(error);
-    }
 
 
     // tokens expire after 60 minutes, so automatcally fetch a new one ever 50 minutes
@@ -212,7 +206,7 @@ export default class Lesson extends React.Component{
           })
         })
 
-        this.startAnalyzing(full_message);
+        this.startAnalyzing(this.state.localText);
       }
 
     }, 1000)
@@ -296,6 +290,30 @@ export default class Lesson extends React.Component{
     //  * a few other things for backwards compatibility and sane defaults
     // In addition to this, it passes other service-level options along to the RecognizeStream that manages the actual WebSocket connection.
     this.handleStream(recognizeMicrophone(this.getRecognizeOptions()));
+  }
+
+  handleLocalStream() {
+    const onAnythingSaid = text => {
+      if (this.state.stage == 3) {
+        this.setState({interimText: text});
+        console.log(`Interim text: ${text}`);
+      }
+      
+    }
+    
+    const onFinalised = text => {
+      if (this.state.stage == 3) {
+        this.setState({localText: text});
+        console.log(`Finalised text: ${text}`);
+      }
+    }
+     
+    try {
+      const listener = new SpeechToText(onAnythingSaid, onFinalised);
+      listener.startListening();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   handleUploadClick() {
@@ -624,12 +642,19 @@ export default class Lesson extends React.Component{
     // console.log('stage 3');
     this.setState({stage: 3});
     this.handleMicClick();
+    this.handleLocalStream();
   }
 
   startStage4() {
     // console.log('stage 3');
+    if (this.state.localText === "") {
+      this.setState({localText: this.state.interimText});
+    }
     this.setState({stage: 4, length: this.state.length - this.state.count2});
     this.handleMicClick();
+    console.log('look at local text');
+    console.log(this.state.localText);
+    
   }
 
 
@@ -731,6 +756,11 @@ export default class Lesson extends React.Component{
     })
 
 
+    const pace = (60 / this.state.length) * this.state.localText.split(" ").length
+
+    this.setState({pace: pace})
+
+
     this.setState({stage: 5})
 
 
@@ -768,7 +798,9 @@ export default class Lesson extends React.Component{
         '&conscientiousness_indico=' + this.state.conscientiousness + 
         '&extraversion_indico=' + this.state.extraversion + 
         '&openness_indico=' + this.state.openness + 
-        '&watson_text=' + full_message
+        '&watson_text=' + full_message + 
+        '&local_text=' + this.state.localText + 
+        '&pace=' + this.state.pace
         , {
         method: 'POST',
         header: {
@@ -953,7 +985,7 @@ export default class Lesson extends React.Component{
           <div className="container">
             <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
             <h1>Results</h1>
-            <Transcript messages={messages}/>
+            <p>{this.state.localText}</p>
             <p>Confidence</p>
             <ProgressBar now={this.state.confidence * 100} label={`${Math.round(this.state.confidence * 100)}%`} />
             <Row>
@@ -998,7 +1030,7 @@ export default class Lesson extends React.Component{
           <div className="container">
             <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
             <h1>Results</h1>
-            <Transcript messages={messages}/>
+            <p>{this.state.localText}</p>
             <br/>
 
             <Row>

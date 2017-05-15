@@ -34,7 +34,9 @@ class Api::V1::SpeechstatsController < ApplicationController
       conscientiousness_indico: params[:conscientiousness_indico],
       extraversion_indico: params[:extraversion_indico],
       openness_indico: params[:openness_indico],
-      watson_text: params[:watson_text]
+      watson_text: params[:watson_text],
+      local_text: params[:local_text],
+      pace: params[:pace]
     )
 
     if @speechstat.save

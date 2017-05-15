@@ -2369,13 +2369,19 @@ react-timers@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/react-timers/-/react-timers-5.0.3.tgz#b1cc56ee53a9f89882b6313e1456378443982109"
 
+react-voice-components@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-voice-components/-/react-voice-components-1.0.0.tgz#a365fbc2a89d524a7a865478365de3cf89ab7ccd"
+  dependencies:
+    react "^15.4.1"
+
 react-webcam@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-webcam/-/react-webcam-0.1.0.tgz#5ea342408b524a174679dc7b7fd55bafa025b564"
   dependencies:
     prop-types "^15.5.8"
 
-react@^15.5.4, "react@~0.14 || ^15.3.0":
+react@^15.4.1, react@^15.5.4, "react@~0.14 || ^15.3.0":
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
