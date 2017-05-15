@@ -12,6 +12,7 @@
     "test": "rspec"
   },
   "dependencies": {
-    "create-react-class": "^15.5.3"
+    "create-react-class": "^15.5.3",
+    "speech-to-text": "^0.4.4"
   }
 }

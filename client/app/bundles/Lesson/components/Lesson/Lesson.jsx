@@ -14,6 +14,7 @@ import FontAwesome from 'react-fontawesome';
 import samples from './samples.json';
 import { ProgressBar, Col, Row } from 'react-bootstrap';
 import JSONView from './json-view';
+import SpeechToText from 'speech-to-text';
 
 
 var Timers = require("react-timers");
@@ -126,7 +127,18 @@ export default class Lesson extends React.Component{
       this.fetchLesson(this.paramsObject().auth_token, this.paramsObject().lesson_id);
     }
 
-    
+
+    const onAnythingSaid = text => console.log(`Interim text: ${text}`);
+    const onFinalised = text => console.log(`Finalised text: ${text}`);
+     
+    try {
+      const listener = new SpeechToText(onAnythingSaid, onFinalised);
+      listener.startListening();
+    } catch (error) {
+      console.log(error);
+    }
+
+
     // tokens expire after 60 minutes, so automatcally fetch a new one ever 50 minutes
     // Not sure if this will work properly if a computer goes to sleep for > 50 minutes and then wakes back up
     // react automatically binds the call to this
