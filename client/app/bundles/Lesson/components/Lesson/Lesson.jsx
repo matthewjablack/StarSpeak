@@ -133,7 +133,6 @@ export default class Lesson extends React.Component{
       this.fetchLesson(this.paramsObject().auth_token, this.paramsObject().lesson_id);
     } else if (!this.isObjectEmpty(this.state.lesson)) {
       this.setState({stage: 1, length: this.state.lesson.length, auth_token: this.state.user.auth_token})
-      this.state.length = this.state.lesson.length;
     }
 
 
@@ -784,10 +783,10 @@ export default class Lesson extends React.Component{
     if (this.state.auth_token !== null) {
       let response3 = await fetch(
         'https://starspeak.io/api/v1/speechstats.json?auth_token=' + this.state.auth_token +
-        '&user_id=' + this.state.user_id +
-        '&betacode_id=' + this.state.betacode_id + 
-        '&lesson_id=' + this.state.lesson_id + 
-        '&moduler_id=' + this.state.moduler_id + 
+        '&user_id=' + this.state.user.id +
+        '&betacode_id=' + this.state.user.betacode_id + 
+        '&lesson_id=' + this.state.lesson.id + 
+        '&moduler_id=' + this.state.moduler.id + 
         '&happy_facial_indico=' + this.state.happy + 
         '&sad_facial_indico=' + this.state.sad + 
         '&angry_facial_indico=' + this.state.angry + 
