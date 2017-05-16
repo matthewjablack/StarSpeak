@@ -36,7 +36,9 @@ class Api::V1::SpeechstatsController < ApplicationController
       openness_indico: params[:openness_indico],
       watson_text: params[:watson_text],
       local_text: params[:local_text],
-      pace: params[:pace]
+      pace: params[:pace],
+      browser_name: params[:browser_name],
+      browser_version: params[:browser_version]
     )
 
     if @speechstat.save
