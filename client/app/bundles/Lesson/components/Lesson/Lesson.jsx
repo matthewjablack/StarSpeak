@@ -17,7 +17,6 @@ import JSONView from './json-view';
 import SpeechToText from 'speech-to-text';
 import browser from 'detect-browser';
 
-
 var Timers = require("react-timers");
 
 
@@ -127,7 +126,8 @@ export default class Lesson extends React.Component{
     this.fetchToken();
 
     console.log("display lesson");
-    console.log(this.state.lesson.name)
+    console.log(this.state.lesson.name);
+
 
     if (!this.isObjectEmpty(this.paramsObject())) {
       this.setState({stage: 1})
@@ -787,7 +787,7 @@ export default class Lesson extends React.Component{
 
     if (this.state.auth_token !== null) {
       let response3 = await fetch(
-        'https://starspeak.io/api/v1/speechstats.json?auth_token=' + this.state.auth_token +
+        '/api/v1/speechstats.json?auth_token=' + this.state.auth_token +
         '&user_id=' + this.state.user.id +
         '&betacode_id=' + this.state.user.betacode_id + 
         '&lesson_id=' + this.state.lesson.id + 
