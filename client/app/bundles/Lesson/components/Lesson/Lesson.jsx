@@ -14,6 +14,8 @@ import { ProgressBar, Col, Row } from 'react-bootstrap';
 import JSONView from './json-view';
 import SpeechToText from 'speech-to-text';
 import browser from 'detect-browser';
+import {formatSeconds, formatDigit} from './format-time';
+import {paramsObject, isObjectEmpty} from './params';
 
 
 var k = [
@@ -116,10 +118,10 @@ export default class Lesson extends React.Component{
   componentDidMount() {
     this.fetchToken();
 
-    if (!this.isObjectEmpty(this.paramsObject())) {
+    if (!isObjectEmpty(paramsObject())) {
       this.setState({stage: 1})
-      this.fetchLesson(this.paramsObject().auth_token, this.paramsObject().lesson_id);
-    } else if (!this.isObjectEmpty(this.state.lesson)) {
+      this.fetchLesson(paramsObject().auth_token, paramsObject().lesson_id);
+    } else if (!isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
         alert("Please download the latest version of Google Chrome");
         history.go(-1);
@@ -230,11 +232,6 @@ export default class Lesson extends React.Component{
     }, extra);
   }
 
-  isNarrowBand(model) {
-    model = model || this.state.model;
-    return model.indexOf('Narrowband') !== -1;
-  }
-
   handleMicClick() {
     if (this.state.audioSource === 'mic') {
       return this.stopTranscription();
@@ -264,14 +261,6 @@ export default class Lesson extends React.Component{
       listener.startListening();
     } catch (error) {
       console.log(error);
-    }
-  }
-
-  handleUploadClick() {
-    if (this.state.audioSource === 'upload') {
-      this.stopTranscription();
-    } else {
-      this.dropzone.open();
     }
   }
 
@@ -341,39 +330,7 @@ export default class Lesson extends React.Component{
     })
   }
 
-  paramsObject() {
-    var pairs = window.location.search.substring(1).split("&"), obj = {}, pair, i;
-
-    for ( i in pairs ) {
-      if ( pairs[i] === "" ) continue;
-
-      pair = pairs[i].split("=");
-      obj[ decodeURIComponent( pair[0] ) ] = decodeURIComponent( pair[1] );
-    }
-
-    return obj;
-  }
-
-  isObjectEmpty(object) {
-    if ('object' !== typeof object) {
-        throw new Error('Object must be specified.');
-    }
-
-    if (null === object) {
-        return true;
-    }
-
-    if ('undefined' !== Object.keys) {
-        return (0 === Object.keys(object).length);
-    } else {
-        for (var key in object) {
-            if (object.hasOwnProperty(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
-  } 
+  
 
   fetchToken() {
     return fetch('https://view.starspeak.io/api/token').then(res => {
@@ -427,22 +384,6 @@ export default class Lesson extends React.Component{
     this.setState({ error: err.message || err });
   }
 
-  formatSeconds(seconds) {
-    let hours = Math.floor(seconds/3600);
-    let remh = seconds % 3600;
-    let minutes = Math.floor(remh/60);
-    let seconds2 = remh % 60;
-    return this.formatDigit(hours) + ":" + this.formatDigit(minutes) + ":" + this.formatDigit(seconds2);
-  }
-
-  formatDigit(number) {
-    if(number < 10) {
-      return "0" + number.toString();
-    } else {
-      return number.toString();
-    }
-  }
-
   startStage1() {
     this.setState({stage: 1});
   }
@@ -463,19 +404,9 @@ export default class Lesson extends React.Component{
     }
     this.setState({stage: 4, length: this.state.length - this.state.count2});
     this.handleMicClick();
-    console.log('look at local text');
-    console.log(this.state.localText);
-    
-  }
-
-  storeEmotion(screenshot) {
-    var screenshots = this.state.screenshot;
-    screenshots[this.state.screenCount] = screenshot;
-    this.setState({screenshot: screenshots, screenCount: this.state.screenCount + 1})
   }
 
   async startAnalyzing(txt) {
-
     const pace = (60 / this.state.length) * txt.split(" ").length;
     this.setState({pace: pace});
 
@@ -669,7 +600,7 @@ export default class Lesson extends React.Component{
               name='circle'
               style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color: '#e74c3c', fontSize: '20px', position: 'fixed', top: '78px', marginLeft: '-25px' }}
             /> }
-            {this.formatSeconds(this.state.count2)}
+            {formatSeconds(this.state.count2)}
             <button className="whiteBtnSpace" onClick={this.startStage4.bind(this)}>Stop</button>
           </h2>
         </div>
