@@ -118,10 +118,7 @@ export default class Lesson extends React.Component{
   componentDidMount() {
     this.fetchToken();
 
-    if (!isObjectEmpty(paramsObject())) {
-      this.setState({stage: 1})
-      this.fetchLesson(paramsObject().auth_token, paramsObject().lesson_id);
-    } else if (!isObjectEmpty(this.state.lesson)) {
+    if (!isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
         alert("Please download the latest version of Google Chrome");
         history.go(-1);
@@ -148,15 +145,6 @@ export default class Lesson extends React.Component{
       }
       if (this.state.stage == 4 && this.state.readability == null) {
         this.setState({readability: false});
-
-        const messages = this.getFinalAndLatestInterimResult();
-        let full_message = "";
-
-        messages.forEach(function(msg) {
-          msg.results.forEach(function(result) {
-            full_message += result.alternatives[0].transcript;
-          })
-        })
       }
 
       if (this.state.count2 % 2 == 0 && this.state.stage == 3) {
@@ -166,14 +154,6 @@ export default class Lesson extends React.Component{
       }
 
       if (this.state.analyzing == false && this.state.stage == 4) {
-        const messages = this.getFinalAndLatestInterimResult();
-        let full_message = "";
-
-        messages.forEach(function(msg) {
-          msg.results.forEach(function(result) {
-            full_message += result.alternatives[0].transcript;
-          })
-        })
         this.startAnalyzing(this.state.localText);
       }
     }, 1000)
@@ -248,14 +228,12 @@ export default class Lesson extends React.Component{
         console.log(`Interim text: ${text}`);
       }
     }
-    
     const onFinalised = text => {
       if (this.state.stage == 3) {
         this.setState({localText: text});
         console.log(`Finalised text: ${text}`);
       }
     }
-     
     try {
       const listener = new SpeechToText(onAnythingSaid, onFinalised);
       listener.startListening();
@@ -301,36 +279,6 @@ export default class Lesson extends React.Component{
   handleTranscriptEnd() {
     this.setState({audioSource: null})
   }
-
-  async fetchLesson(auth_token, lesson_id) {
-    let response = await fetch('https://starspeak.io/api/v1/lesson/'+ lesson_id +'.json?auth_token=' + auth_token, {
-      method: 'GET',
-      header: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }
-    })
-
-    let responseJson = await response.json();
-
-    this.setState({
-      lesson_name: responseJson.lesson.name,
-      lesson_id: responseJson.lesson.id,
-      level_id: responseJson.lesson.level_id,
-      moduler_id: responseJson.lesson.moduler_id,
-      content: responseJson.lesson.content, 
-      length: responseJson.lesson.length,
-      prep: responseJson.lesson.prep,
-      user_id: responseJson.user.id,
-      betacode_id: responseJson.betacode.id,
-      auth_token: auth_token,
-      count: responseJson.lesson.prep,
-      count2: responseJson.lesson.length,
-    })
-  }
-
-  
 
   fetchToken() {
     return fetch('https://view.starspeak.io/api/token').then(res => {
@@ -409,7 +357,6 @@ export default class Lesson extends React.Component{
   async startAnalyzing(txt) {
     const pace = (60 / this.state.length) * txt.split(" ").length;
     this.setState({pace: pace});
-
     this.setState({analyzing: true});
     for (var i = 0; i < screenCount; i++) {
       let response = await fetch('https://apiv2.indico.io/fer', {
