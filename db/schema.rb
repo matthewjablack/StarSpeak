@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515225833) do
+ActiveRecord::Schema.define(version: 20170520153750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,9 +86,10 @@ ActiveRecord::Schema.define(version: 20170515225833) do
     t.datetime "updated_at",               null: false
     t.text     "watson_text"
     t.text     "local_text"
-    t.float    "pace"
     t.string   "browser_name"
     t.string   "browser_version"
+    t.float    "watson_text_pace"
+    t.float    "local_text_pace"
   end
 
   create_table "users", force: :cascade do |t|
