@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function paramsObject() {
+function paramsObject() {
   var pairs = window.location.search.substring(1).split("&"), obj = {}, pair, i;
 
   for ( i in pairs ) {

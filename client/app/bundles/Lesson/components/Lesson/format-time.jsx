@@ -8,7 +8,7 @@ export function formatSeconds(seconds) {
     return formatDigit(hours) + ":" + formatDigit(minutes) + ":" + formatDigit(seconds2);
 }
 
-export function formatDigit(number) {
+function formatDigit(number) {
     if(number < 10) {
 		return "0" + number.toString();
     } else {
