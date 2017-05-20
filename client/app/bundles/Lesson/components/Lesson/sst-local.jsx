@@ -1,4 +1,5 @@
 import React from 'react';
+import SpeechToText from 'speech-to-text';
 
 export function handleLocalStream() {
   const onAnythingSaid = text => {

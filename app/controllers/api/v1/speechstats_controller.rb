@@ -36,7 +36,8 @@ class Api::V1::SpeechstatsController < ApplicationController
       openness_indico: params[:openness_indico],
       watson_text: params[:watson_text],
       local_text: params[:local_text],
-      pace: params[:pace],
+      watson_text_pace: params[:watson_text_pace],
+      local_text_pace: params[:local_text_pace],
       browser_name: params[:browser_name],
       browser_version: params[:browser_version]
     )
