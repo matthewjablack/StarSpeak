@@ -25,7 +25,7 @@ export default class RenderRecord extends Component {
             <button className="whiteBtnSpace" onClick={this.props.startStageAnalyze}>Stop</button>
           </h2>
         </div>
-        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} ref='webcam'/>
+        {this.props.children}
       </div>
     )
   }

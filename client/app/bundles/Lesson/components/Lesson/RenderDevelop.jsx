@@ -17,7 +17,7 @@ export default class RenderDevelop extends Component {
           <h2 className="white">You have {this.props.lesson.length} seconds to present.</h2>
           <button className="whiteBtn" onClick={this.props.startStageRecord}>Continue</button>
         </div>
-        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75}/>
+        {this.props.children}
       </div>
     )
   }

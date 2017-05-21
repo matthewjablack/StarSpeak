@@ -355,35 +355,21 @@ export default class Lesson extends Component{
       );
     } else if (this.state.stage === 'Adjust') {
       return (
-        <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} />
+        <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} >
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} />
+        </RenderAdjust>
       );
     } else if (this.state.stage === 'Develop') {
       return (
-        <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson}  />
+        <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} >
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} />
+        </RenderDevelop>
       );
     } else if (this.state.stage === 'Record') {
       return (
-        <div>
-          <div className="centerFixed">
-            <h2>
-              {(this.state.presentCount % 2) == 0 ?  
-              <FontAwesome
-                className='super-crazy-colors'
-                name='circle'
-                style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',   display: 'none', position: 'fixed', top: '78px', marginLeft: '-25px' }}
-              /> :  
-              <FontAwesome
-                className='super-crazy-colors'
-                name='circle'
-                style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color: '#e74c3c', fontSize: '20px', position: 'fixed', top: '78px', marginLeft: '-25px' }}
-              /> }
-              {formatSeconds(this.state.presentCount)}
-              <button className="whiteBtnSpace" onClick={this.startStageAnalyze}>Stop</button>
-            </h2>
-          </div>
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} ref='webcam'/>
-        </div>
-        // <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} />
+        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} >
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} />
+        </RenderRecord>
       );
     } else if (this.state.stage == 'Analyze') {
       return (
