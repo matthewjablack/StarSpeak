@@ -26,6 +26,11 @@ StarSpeak::Application.routes.draw do
 
   match '/levels' => 'levels#index', via: [:get], as: :levels
 
+
+  get '/privacy' => 'pages#privacy', via: [:get], as: :privacy
+  get '/terms' => 'pages#terms', via: [:get], as: :terms
+
+
   resources :users, only: [:show]
 
   resources :speechstats, only: [:index, :show]
