@@ -2,7 +2,7 @@ class LessonsController < ApplicationController
 	def index
 		@level = Level.find(params[:level_id])
 		@moduler = Moduler.find(params[:moduler_id])
-		@lessons = @moduler.lessons
+		@lessons = @moduler.lessons.order(:sort_order)
 	end
 
 	def show
