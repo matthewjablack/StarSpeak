@@ -1,58 +1,20 @@
-Hackathon Starter Rails
+StarSpeak
 =======================
 
-Hackathon starter for Rails developer. Inspired by [hackathon-starter](https://github.com/sahat/hackathon-starter).
+Online public speaking platform https://github.com/mattblackdesign/starspeak.
 
 # Demo
 
-[http://hackathon-starter-rails.herokuapp.com/](http://hackathon-starter-rails.herokuapp.com/)
+https://starspeak.io
 
 # Usage
 
-    $ git clone https://github.com/moongift/hackathon-starter-rails
-	$ cd hackathon-starter-rails
-	$ mv config/webapi.yml.default config/webapi.yml
-	# Edit webapi.yml
-	$ bundle install
-	$ rails s
-
-# webapi.yml
-
-```
-development:
-  facebook:
-    key: key
-    secret: secret
-  twitter:
-    key: key
-    secret: secret
-```
-
-## Facebook
-
-Goto [Facebook developers](https://developers.facebook.com/). And create new app.
-
-- URL is **http://localhost:3000/**
-- Enable Client OAuth Login
-- Enable Embedded browser OAuth Login
-
-## Twitter
-
-Goto [Twitter Developers](https://dev.twitter.com/). And create new app.
-
-Fix key and secret to your app's.
-
-# Features
-
-- [Bootstrap](getbootstrap.com)
-- [Font awesome](fortawesome.github.io/Font-Awesome/)
-- OAuth Login (Facebook / Twitter) using OmniAuth
-- ID/Password Login (Devise)
-
-# LETS'S HACKING!
-
-# LICENSE
-
-MIT License.
-
-
+  $ git clone git@github.com:mattBlackDesign/StarSpeak.git
+  $ cd starspeak
+  $ mv config/database.yml.default config/database.yml
+  # Edit database.yml
+  $ bundle && yarn
+  $ rake db:migrate
+  $ yarn rails-server
+  # Open another console window
+  $ rails s
