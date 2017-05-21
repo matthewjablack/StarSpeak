@@ -20,10 +20,6 @@ import RenderRecord from './RenderRecord';
 import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert'
-// import Alert from 'react-s-alert';
-
-// import 'react-s-alert/dist/s-alert-default.css';
-// import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 
 
 var screenshots = [];
@@ -425,7 +421,7 @@ export default class Lesson extends Component{
 
     createSpeechstat(this.state.user, this.state.lesson, this.state.moduler, 
       this.state.indico, this.state.watson, this.state.local, browser);
-    
+
     for (var i = 0; i < indico.errors.length; i++) {
       this.createError('error', indico.errors[i]);
     }

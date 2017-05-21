@@ -22,18 +22,10 @@ export async function getIndicoEmotions(screenshots, txt) {
     return errors.indexOf(val)==i;
   });
 
-  console.log('facial emotions');
-  console.log(facialEmotion);
-  console.log(speechEmotion);
-
-  console.log('errors');
-  console.log(errors);
-
 	return {facialEmotion: facialEmotion, speechEmotion: speechEmotion, personality: personality, errors: errors};
 }
 
 async function getFacialEmotion(screenshot, facialEmotion) {
-  console.log(screenshot);
   if (screenshot === null) {
     facialEmotion.errors.push(CAMERA_ERROR);
   } else {
