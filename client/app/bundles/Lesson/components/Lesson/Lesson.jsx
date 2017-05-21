@@ -19,10 +19,16 @@ import RenderDevelop from './RenderDevelop';
 import RenderRecord from './RenderRecord';
 import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
+import AlertContainer from 'react-alert'
+// import Alert from 'react-s-alert';
+
+// import 'react-s-alert/dist/s-alert-default.css';
+// import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 
 
 var screenshots = [];
 var screenCount = 0;
+var errors = [];
 
 
 export default class Lesson extends Component{
@@ -31,6 +37,21 @@ export default class Lesson extends Component{
     moduler: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+  };
+
+  alertOptions = {
+    offset: 14,
+    position: 'top right',
+    theme: 'light',
+    time: 5000,
+    transition: 'scale'
+  };
+
+  showAlert = (type, txt) => {
+    this.msg.show(txt, {
+      time: 200000,
+      type: type,
+    })
   };
 
   constructor(props) {
@@ -47,9 +68,10 @@ export default class Lesson extends Component{
         speakerLabels: false
       },
       error: null,
-      stage: 'Intro',
+      stage: 'Adjust',
       count1: 2,
       presentCount: 20,
+      loadCount: 3,
       indico: {
         facialEmotion: {
           happy: 0.00,
@@ -95,6 +117,8 @@ export default class Lesson extends Component{
       level: this.props.level,
       user: this.props.user,
       linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons',
+      errors: [],
+      alerts: [],
     };
 
     this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
@@ -109,6 +133,8 @@ export default class Lesson extends Component{
     this.startStageDevelop = this.startStageDevelop.bind(this);
     this.startStageRecord = this.startStageRecord.bind(this);
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
+    this.showAlert = this.showAlert.bind(this);
+    this.updatePercentage = this.updatePercentage.bind(this);
   }
 
   componentDidMount() {
@@ -119,24 +145,49 @@ export default class Lesson extends Component{
         alert("Please download the latest version of Google Chrome");
         history.go(-1);
       }
-      this.setState({stage: 'Adjust', presentCount: this.state.lesson.length, length: this.state.lesson.length})
+      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length})
     }
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
     setInterval(() => {
+      if (this.state.loadCount === 0) {
+        if (this.state.stage == 'Adjust') {
+          let screenshot = this.refs.webcamAdjust.getScreenshot();
+          if (this.refs.webcamAdjust && screenshot === null) {
+            this.createError('error', "Looks like your Webcam isn't turned on.");
+          } else {
+            this.createAlert('success', "Webcam loaded successfully");
+          }
+        }
+      } else {
+        this.setState({ loadCount: this.state.loadCount - 1 });
+      }
+      
+
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
+        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sst === "") {
+          this.createError('error', "We aren't picking up any words from your presentation. Double check that your microphone is working properly ");
+        }
       } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
         this.setState({stage: 'Analyze'});
         this.handleMicClick();
       }
 
       if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
-        let screenshot = this.refs.webcam.getScreenshot();
-        screenshots[screenCount] = screenshot;
-        screenCount += 1;
+        try {
+          let screenshot = this.refs.webcamRecord.getScreenshot();
+          if (screenshot === null) {
+            this.createError('error', "Error using webcam. Make sure it's turned on");
+          }
+          screenshots[screenCount] = screenshot;
+          screenCount += 1;
+        } catch(error) {
+          this.createError('error', "Error using webcam. Make sure it's turned on");
+        }
+        
       }
 
       if (this.state.analyzing == false && this.state.stage == 'Analyze') {
@@ -159,6 +210,26 @@ export default class Lesson extends Component{
       this.stopTranscription();
     }
     this.setState({rawMessages: [], formattedMessages: [], error: null});
+  }
+
+  createError(type, txt) {
+    if (!this.state.errors.includes(txt)) {
+      let newErrors = this.state.errors;
+      newErrors[newErrors.length] = txt;
+      this.setState({errors: newErrors});
+      // errors[errors.length] = txt;
+      this.showAlert(type,txt);
+    }
+  }
+
+  createAlert(type, txt) {
+    if (!this.state.alerts.includes(txt)) {
+      let newAlerts = this.state.alerts;
+      newAlerts[newAlerts.length] = txt;
+      this.setState({alerts: newAlerts});
+      // errors[errors.length] = txt;
+      this.showAlert(type,txt);
+    }
   }
 
   captureSettings() {
@@ -276,6 +347,10 @@ export default class Lesson extends Component{
     then(token => this.setState({token})).catch(this.handleError);
   }
 
+  updatePercentage(percentage) {
+    this.setState({percentage: percentage})
+  }
+
   getFinalResults() {
     return this.state.formattedMessages.filter(r => r.results && r.results.length && r.results[0].final);
   }
@@ -298,15 +373,19 @@ export default class Lesson extends Component{
   }
 
   handleError(err, extra) {
-    console.error(err, extra);
-    if (err.name == 'UNRECOGNIZED_FORMAT') {
-      err = 'Unable to determine content type from file header; only wav, flac, and ogg/opus are supported. Please choose a different file.';
-    } else if (err.name === 'NotSupportedError' && this.state.audioSource === 'mic') {
-      err = 'This browser does not support microphone input.';
-    } else if (err.message === '(\'UpsamplingNotAllowed\', 8000, 16000)') {
-      err = 'Please select a narrowband voice model to transcribe 8KHz audio files.';
+    try {
+      // console.error(err, extra);
+      if (err.name == 'UNRECOGNIZED_FORMAT') {
+        err = 'Unable to determine content type from file header; only wav, flac, and ogg/opus are supported. Please choose a different file.';
+      } else if (err.name === 'NotSupportedError' && this.state.audioSource === 'mic') {
+        err = 'This browser does not support microphone input.';
+      } else if (err.message === '(\'UpsamplingNotAllowed\', 8000, 16000)') {
+        err = 'Please select a narrowband voice model to transcribe 8KHz audio files.';
+      }
+      this.setState({ error: err.message || err });
+    } catch(error) {
+      console.log('problems');
     }
-    this.setState({ error: err.message || err });
   }
 
   startStageAdjust() {
@@ -346,38 +425,51 @@ export default class Lesson extends Component{
 
     createSpeechstat(this.state.user, this.state.lesson, this.state.moduler, 
       this.state.indico, this.state.watson, this.state.local, browser);
+    
+    for (var i = 0; i < indico.errors.length; i++) {
+      this.createError('error', indico.errors[i]);
+    }
   }
 
   render() {
     if (this.state.stage === 'Intro') {
       return (
-        <RenderIntro startStageAdjust={this.startStageAdjust} />
+        <RenderIntro startStageAdjust={this.startStageAdjust} >
+          <Webcam audio={false} className="reactWebcam" ref='webcamIntro' width={this.state.width} height={this.state.width * 0.75} />
+        </RenderIntro>
       );
     } else if (this.state.stage === 'Adjust') {
       return (
         <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} >
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} />
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+          <Webcam audio={false} className="reactWebcam" ref='webcamAdjust' width={this.state.width} height={this.state.width * 0.75} />
         </RenderAdjust>
       );
     } else if (this.state.stage === 'Develop') {
       return (
         <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} >
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} />
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+          <Webcam audio={false} className="reactWebcam" ref='webcamDevelop' width={this.state.width} height={this.state.width * 0.75} />
         </RenderDevelop>
       );
     } else if (this.state.stage === 'Record') {
       return (
         <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} >
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.props.width} height={this.props.width * 0.75} />
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+          <Webcam audio={false} className="reactWebcam" ref='webcamRecord' width={this.state.width} height={this.state.width * 0.75} />
         </RenderRecord>
       );
     } else if (this.state.stage == 'Analyze') {
       return (
-        <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />
+        <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} >
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+        </RenderAnalyze>
       );
     } else {
       return (
-        <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />
+        <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} >
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+        </RenderResults>
       );
     } 
   }
