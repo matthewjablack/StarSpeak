@@ -1,25 +1,31 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone';
-import Webcam from 'react-webcam';
 import FontAwesome from 'react-fontawesome';
+import Webcam from 'react-webcam';
 import { ProgressBar, Col, Row } from 'react-bootstrap';
+import {formatSeconds} from './format-time';
 import SpeechToText from 'speech-to-text';
 import browser from 'detect-browser';
-import {formatSeconds} from './format-time';
 import {isObjectEmpty} from './params';
 import {getIndicoEmotions} from './indico-emotion';
 import {parseWatson} from './watson-parse';
 import {Progress} from './progress';
 import {createSpeechstat, calculatePace} from './speechstat';
 import {Stats} from './stats';
+import RenderIntro from './RenderIntro';
+import RenderAdjust from './RenderAdjust';
+import RenderDevelop from './RenderDevelop';
+import RenderRecord from './RenderRecord';
+import RenderAnalyze from './RenderAnalyze';
+import RenderResults from './RenderResults';
 
 
 var screenshots = [];
 var screenCount = 0;
 
 
-export default class Lesson extends React.Component{
+export default class Lesson extends Component{
   static propTypes = {
     lesson: PropTypes.object.isRequired,
     moduler: PropTypes.object.isRequired,
@@ -41,7 +47,7 @@ export default class Lesson extends React.Component{
         speakerLabels: false
       },
       error: null,
-      stage: 0,
+      stage: 'Intro',
       count1: 2,
       presentCount: 20,
       indico: {
@@ -88,6 +94,7 @@ export default class Lesson extends React.Component{
       moduler: this.props.moduler,
       level: this.props.level,
       user: this.props.user,
+      linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons',
     };
 
     this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
@@ -97,7 +104,11 @@ export default class Lesson extends React.Component{
     this.stopTranscription = this.stopTranscription.bind(this);
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.handleLocalStream = this.handleLocalStream.bind(this)
+    this.handleLocalStream = this.handleLocalStream.bind(this);
+    this.startStageAdjust = this.startStageAdjust.bind(this);
+    this.startStageDevelop = this.startStageDevelop.bind(this);
+    this.startStageRecord = this.startStageRecord.bind(this);
+    this.startStageAnalyze = this.startStageAnalyze.bind(this);
   }
 
   componentDidMount() {
@@ -108,27 +119,27 @@ export default class Lesson extends React.Component{
         alert("Please download the latest version of Google Chrome");
         history.go(-1);
       }
-      this.setState({stage: 1, presentCount: this.state.lesson.length, length: this.state.lesson.length})
+      this.setState({stage: 'Adjust', presentCount: this.state.lesson.length, length: this.state.lesson.length})
     }
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
     setInterval(() => {
-      if (this.state.stage == 3 && this.state.presentCount > 0) {
+      if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
-      } else if (this.state.stage == 3 && this.state.presentCount == 0) {
-        this.setState({stage: 4});
+      } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
+        this.setState({stage: 'Analyze'});
         this.handleMicClick();
       }
 
-      if (this.state.presentCount % 2 == 0 && this.state.stage == 3) {
+      if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
         let screenshot = this.refs.webcam.getScreenshot();
         screenshots[screenCount] = screenshot;
         screenCount += 1;
       }
 
-      if (this.state.analyzing == false && this.state.stage == 4) {
+      if (this.state.analyzing == false && this.state.stage == 'Analyze') {
         this.startAnalyzing();
       }
     }, 1000)
@@ -196,7 +207,7 @@ export default class Lesson extends React.Component{
 
   handleLocalStream() {
     const onAnythingSaid = text => {
-      if (this.state.stage == 3) {
+      if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
         newLocal.sstInterim = text;
         this.setState({local: newLocal});
@@ -204,7 +215,7 @@ export default class Lesson extends React.Component{
       }
     }
     const onFinalised = text => {
-      if (this.state.stage == 3) {
+      if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
         newLocal.sst = text;
         this.setState({local: newLocal});
@@ -298,22 +309,22 @@ export default class Lesson extends React.Component{
     this.setState({ error: err.message || err });
   }
 
-  startStage1() {
-    this.setState({stage: 1});
+  startStageAdjust() {
+    this.setState({stage: 'Adjust'});
   }
 
-  startStage2() {
-    this.setState({stage: 2});
+  startStageDevelop() {
+    this.setState({stage: 'Develop'});
   }
 
-  startStage3() {
-    this.setState({stage: 3});
+  startStageRecord() {
+    this.setState({stage: 'Record'});
     this.handleMicClick();
     this.handleLocalStream();
   }
 
-  startStage4() {
-    this.setState({stage: 4, length: this.state.length - this.state.presentCount});
+  startStageAnalyze() {
+    this.setState({stage: 'Analyze', length: this.state.length - this.state.presentCount});
     this.handleMicClick();
   }
 
@@ -331,54 +342,26 @@ export default class Lesson extends React.Component{
 
     let indico = await getIndicoEmotions(screenshots, newLocal.sst);
     
-    this.setState({indico: indico, stage: 5});
+    this.setState({indico: indico, stage: 'Results'});
 
     createSpeechstat(this.state.user, this.state.lesson, this.state.moduler, 
       this.state.indico, this.state.watson, this.state.local, browser);
   }
 
   render() {
-    var linkBack = '/' + this.state.level.id + '/' + this.state.moduler.id + '/lessons';
-    if (this.state.stage === 0) {
+    if (this.state.stage === 'Intro') {
       return (
-        <div className="frontPg">
-          <h1 className="white">Welcome to StarSpeak</h1>
-          <h2 className="white">Helping students to embrace their presentation.</h2>
-          <br/>
-          <p>&nbsp;</p>
-          <button className="whiteBtn" onClick={this.startStage1.bind(this)}>Start</button>
-        </div>
+        <RenderIntro startStageAdjust={this.startStageAdjust} />
       );
-    } else if (this.state.stage === 1) {
+    } else if (this.state.stage === 'Adjust') {
       return (
-        <div>
-          <div className="centerFixed">
-            <h2 className="white">Adjust your camera</h2>
-            <button className="whiteBtn" onClick={this.startStage2.bind(this)}>Ready</button>
-          </div>
-        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75}/>
-        </div>
+        <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} />
       );
-    } else if (this.state.stage === 2) {
+    } else if (this.state.stage === 'Develop') {
       return (
-        <div>
-        <div className="centerFixed">
-          
-          <h1 className="white">{this.state.lesson.name}</h1>
-
-          <br/><br/><br/><br/><br/><br/>
-
-          <h3 className="white">Read the situation below and present your solution to the best of your ability.</h3>
-          <br/>
-          <h2 className="white">{this.state.lesson.content}</h2>
-          <h2 className="white">You have {this.state.lesson.length} seconds to present.</h2>
-          <button className="whiteBtn" onClick={this.startStage3.bind(this)}>Continue</button>
-        </div>
-
-        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75}/>
-        </div>
+        <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson}  />
       );
-    } else if (this.state.stage === 3) {
+    } else if (this.state.stage === 'Record') {
       return (
         <div>
           <div className="centerFixed">
@@ -395,37 +378,20 @@ export default class Lesson extends React.Component{
                 style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color: '#e74c3c', fontSize: '20px', position: 'fixed', top: '78px', marginLeft: '-25px' }}
               /> }
               {formatSeconds(this.state.presentCount)}
-              <button className="whiteBtnSpace" onClick={this.startStage4.bind(this)}>Stop</button>
+              <button className="whiteBtnSpace" onClick={this.startStageAnalyze}>Stop</button>
             </h2>
           </div>
           <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} ref='webcam'/>
-
         </div>
+        // <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} />
       );
-    } else if (this.state.stage == 4) {
+    } else if (this.state.stage == 'Analyze') {
       return (
-        <div className="bgWhite">
-          <div className="container">
-            <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
-            <h1>Results</h1>
-            <p>{this.state.local.sst}</p>
-            <p>Pace: {Math.round(this.state.local.pace)} Words per Minute</p>
-            <Stats stage={this.state.stage} indico={this.state.indico} />
-          </div>
-        </div>
+        <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />
       );
     } else {
       return (
-        <div className="bgWhite">
-          <div className="container">
-            <h3 className="finishedLink"><a href={linkBack}>Click here when finished</a></h3>
-            <h1>Results</h1>
-            <p>{this.state.local.sst}</p>
-            <p>Pace: {Math.round(this.state.local.pace)} Words per Minute</p>
-            <br/>
-            <Stats stage={this.state.stage} indico={this.state.indico} />
-          </div>
-        </div>
+        <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />
       );
     } 
   }
