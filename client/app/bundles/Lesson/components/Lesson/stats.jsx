@@ -6,7 +6,7 @@ import {Progress} from './progress';
 
 export function Stats(props) {
 
-  if (props.stage === 4) {
+  if (props.stage === 'Analyze') {
     return (
       <Row>
         <Col md={4}>
@@ -90,5 +90,5 @@ export function Stats(props) {
 
 Stats.propTypes = {
   indico: React.PropTypes.object.isRequired,
-  stage: React.PropTypes.number.isRequired,
+  stage: React.PropTypes.string.isRequired,
 };
