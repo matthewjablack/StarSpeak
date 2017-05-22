@@ -116,6 +116,7 @@ export default class Lesson extends Component{
       linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons',
       errors: [],
       alerts: [],
+      percentage: 0.00,
     };
 
     this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
@@ -131,7 +132,6 @@ export default class Lesson extends Component{
     this.startStageRecord = this.startStageRecord.bind(this);
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
     this.showAlert = this.showAlert.bind(this);
-    this.updatePercentage = this.updatePercentage.bind(this);
   }
 
   componentDidMount() {
@@ -149,6 +149,8 @@ export default class Lesson extends Component{
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
     setInterval(() => {
+      console.log('Percentage');
+      console.log(this.state.percentage);
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
           let screenshot = this.refs.webcam.getScreenshot();
@@ -340,10 +342,6 @@ export default class Lesson extends Component{
     then(token => this.setState({token})).catch(this.handleError);
   }
 
-  updatePercentage(percentage) {
-    this.setState({percentage: percentage})
-  }
-
   getFinalResults() {
     return this.state.formattedMessages.filter(r => r.results && r.results.length && r.results[0].final);
   }
@@ -409,7 +407,7 @@ export default class Lesson extends Component{
     this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
     this.handleMicClick();
 
-    let indico = await getIndicoEmotions(screenshots, this.state.local.stt);
+    let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
     
     this.setState({indico: indico, stage: 'Results'});
 
@@ -432,9 +430,9 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />;
+      lessonContent = <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
     } else {
-      lessonContent = <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />;
+      lessonContent = <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
     }
 
     let commonContent;
