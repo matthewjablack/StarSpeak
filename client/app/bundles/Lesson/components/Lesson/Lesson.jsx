@@ -164,7 +164,7 @@ export default class Lesson extends Component{
 
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sst === "") {
+        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sstInterim === "") {
           this.createError('error', "We aren't picking up any words from your presentation. Double check that your microphone is working properly ");
         }
       } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
