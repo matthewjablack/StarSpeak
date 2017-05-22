@@ -186,10 +186,6 @@ export default class Lesson extends Component{
         }
         
       }
-
-      // if (this.state.analyzing == false && this.state.stage == 'Analyze') {
-      //   this.startAnalyzing();
-      // }
     }, 1000)
     
   }
@@ -428,9 +424,7 @@ export default class Lesson extends Component{
   render() {
     if (this.state.stage === 'Intro') {
       return (
-        <RenderIntro startStageAdjust={this.startStageAdjust} >
-          <Webcam audio={false} className="reactWebcam" ref='webcamIntro' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderIntro>
+        <RenderIntro startStageAdjust={this.startStageAdjust} />
       );
     } else if (this.state.stage === 'Adjust') {
       return (
