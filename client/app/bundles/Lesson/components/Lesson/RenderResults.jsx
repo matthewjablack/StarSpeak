@@ -14,8 +14,6 @@ export default class RenderResults extends Component {
           <p>Pace: {Math.round(this.props.local.pace)} Words per Minute</p>
           <br/>
           <Stats stage={this.props.stage} indico={this.props.indico} />
-          <h2>Loading...</h2>
-          <Progress value={this.props.percentage * 0.01} />
           {this.props.children}
         </div>
       </div>
