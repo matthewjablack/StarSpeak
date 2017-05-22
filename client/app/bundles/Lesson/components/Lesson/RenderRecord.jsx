@@ -28,7 +28,7 @@ export default class RenderRecord extends Component {
         {this.props.children}
         <div className="centerFixed">
           <div className="alignBottom">
-            <h3 className="white">{this.props.sst}</h3>
+            <h3 className="white">{this.props.stt}</h3>
           </div>
         </div>
       </div>

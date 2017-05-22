@@ -94,13 +94,13 @@ export default class Lesson extends Component{
         confidence: 0.00,
       },
       watson: {
-        sst: "",
+        stt: "",
         pace: 0.00,
       },
       local: {
-        sst: "", 
-        sstInterim: [""], 
-        sstFinal: [],
+        stt: "", 
+        sttInterim: [""], 
+        sttFinal: [],
         pace: 0.00,
       },
       screenshot: [],
@@ -165,7 +165,7 @@ export default class Lesson extends Component{
 
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sstInterim[0] === "") {
+        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === "") {
           this.createError('error', "We aren't picking up any words from your presentation. Double check that your microphone is working properly ");
         }
       } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
@@ -277,11 +277,7 @@ export default class Lesson extends Component{
     const onAnythingSaid = text => {
       if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
-        newLocal.sstInterim = text;
-
-        
-        console.log('sttInterim');
-        console.log(newLocal.sstInterim);
+        newLocal.sttInterim = text;
         this.setState({local: newLocal});
         console.log(`Interim text: ${text}`);
       }
@@ -289,11 +285,7 @@ export default class Lesson extends Component{
     const onFinalised = text => {
       if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
-        // newLocal.sst = text;
-
-        newLocal.sstFinal[newLocal.sstFinal.length] = text;
-        console.log(newLocal.sstFinal);
-
+        newLocal.sttFinal[newLocal.sttFinal.length] = text;
         this.setState({local: newLocal});
         console.log(`Finalised text: ${text}`);
       }
@@ -379,7 +371,6 @@ export default class Lesson extends Component{
 
   handleError(err, extra) {
     try {
-      // console.error(err, extra);
       if (err.name == 'UNRECOGNIZED_FORMAT') {
         err = 'Unable to determine content type from file header; only wav, flac, and ogg/opus are supported. Please choose a different file.';
       } else if (err.name === 'NotSupportedError' && this.state.audioSource === 'mic') {
@@ -389,7 +380,7 @@ export default class Lesson extends Component{
       }
       this.setState({ error: err.message || err });
     } catch(error) {
-      console.log('problems');
+      console.log(error);
     }
   }
 
@@ -410,19 +401,19 @@ export default class Lesson extends Component{
   async startStageAnalyze() {
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
-    newLocal.sst = newLocal.sstFinal.toString();
+    newLocal.stt = newLocal.sttFinal.toString();
 
-    if (newLocal.sstFinal[newLocal.sstFinal.length - 1].substring(0,8) !== newLocal.sstInterim.substring(0,8)) {
-      newLocal.sst += newLocal.sstInterim;
+    if (newLocal.sttFinal[newLocal.sttFinal.length - 1].substring(0,8) !== newLocal.sttInterim.substring(0,8)) {
+      newLocal.stt += newLocal.sttInterim;
     }
-    newWatson.sst = parseWatson(this.getFinalAndLatestInterimResult());
-    newLocal.pace = calculatePace(newLocal.sst, this.state.length);
-    newWatson.pace = calculatePace(newWatson.sst, this.state.length); 
-    
+    newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
+    newLocal.pace = calculatePace(newLocal.stt, this.state.length);
+    newWatson.pace = calculatePace(newWatson.stt, this.state.length); 
+
     this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
     this.handleMicClick();
 
-    let indico = await getIndicoEmotions(screenshots, this.state.local.sst);
+    let indico = await getIndicoEmotions(screenshots, this.state.local.stt);
     
     this.setState({indico: indico, stage: 'Results'});
 
@@ -433,11 +424,6 @@ export default class Lesson extends Component{
       this.createError('error', indico.errors[i]);
     }
   }
-
-  // async startAnalyzing() {
-
-    
-  // }
 
   render() {
     if (this.state.stage === 'Intro') {
@@ -462,7 +448,7 @@ export default class Lesson extends Component{
       );
     } else if (this.state.stage === 'Record') {
       return (
-        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} sst={this.state.local.sstInterim} >
+        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} >
           <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
           <Webcam audio={false} className="reactWebcam" ref='webcamRecord' width={this.state.width} height={this.state.width * 0.75} />
         </RenderRecord>
