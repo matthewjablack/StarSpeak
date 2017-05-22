@@ -99,7 +99,8 @@ export default class Lesson extends Component{
       },
       local: {
         sst: "", 
-        sstInterim: "", 
+        sstInterim: [""], 
+        sstFinal: [],
         pace: 0.00,
       },
       screenshot: [],
@@ -164,11 +165,11 @@ export default class Lesson extends Component{
 
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sstInterim === "") {
+        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sstInterim[0] === "") {
           this.createError('error', "We aren't picking up any words from your presentation. Double check that your microphone is working properly ");
         }
       } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
-        this.setState({stage: 'Analyze'});
+        this.startStageAnalyze();
         this.handleMicClick();
       }
 
@@ -186,9 +187,9 @@ export default class Lesson extends Component{
         
       }
 
-      if (this.state.analyzing == false && this.state.stage == 'Analyze') {
-        this.startAnalyzing();
-      }
+      // if (this.state.analyzing == false && this.state.stage == 'Analyze') {
+      //   this.startAnalyzing();
+      // }
     }, 1000)
     
   }
@@ -277,6 +278,10 @@ export default class Lesson extends Component{
       if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
         newLocal.sstInterim = text;
+
+        
+        console.log('sttInterim');
+        console.log(newLocal.sstInterim);
         this.setState({local: newLocal});
         console.log(`Interim text: ${text}`);
       }
@@ -284,7 +289,11 @@ export default class Lesson extends Component{
     const onFinalised = text => {
       if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
-        newLocal.sst = text;
+        // newLocal.sst = text;
+
+        newLocal.sstFinal[newLocal.sstFinal.length] = text;
+        console.log(newLocal.sstFinal);
+
         this.setState({local: newLocal});
         console.log(`Finalised text: ${text}`);
       }
@@ -398,24 +407,22 @@ export default class Lesson extends Component{
     this.handleLocalStream();
   }
 
-  startStageAnalyze() {
-    this.setState({stage: 'Analyze', length: this.state.length - this.state.presentCount});
-    this.handleMicClick();
-  }
-
-  async startAnalyzing() {
-    this.setState({analyzing: true});
-
+  async startStageAnalyze() {
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
-    if (newLocal.sst === "") { newLocal.sst = newLocal.sstInterim };
+    newLocal.sst = newLocal.sstFinal.toString();
+
+    if (newLocal.sstFinal[newLocal.sstFinal.length - 1].substring(0,8) !== newLocal.sstInterim.substring(0,8)) {
+      newLocal.sst += newLocal.sstInterim;
+    }
     newWatson.sst = parseWatson(this.getFinalAndLatestInterimResult());
     newLocal.pace = calculatePace(newLocal.sst, this.state.length);
     newWatson.pace = calculatePace(newWatson.sst, this.state.length); 
+    
+    this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
+    this.handleMicClick();
 
-    this.setState({local: newLocal, watson: newWatson});
-
-    let indico = await getIndicoEmotions(screenshots, newLocal.sst);
+    let indico = await getIndicoEmotions(screenshots, this.state.local.sst);
     
     this.setState({indico: indico, stage: 'Results'});
 
@@ -426,6 +433,11 @@ export default class Lesson extends Component{
       this.createError('error', indico.errors[i]);
     }
   }
+
+  // async startAnalyzing() {
+
+    
+  // }
 
   render() {
     if (this.state.stage === 'Intro') {
@@ -450,7 +462,7 @@ export default class Lesson extends Component{
       );
     } else if (this.state.stage === 'Record') {
       return (
-        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} >
+        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} sst={this.state.local.sstInterim} >
           <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
           <Webcam audio={false} className="reactWebcam" ref='webcamRecord' width={this.state.width} height={this.state.width * 0.75} />
         </RenderRecord>
