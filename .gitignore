@@ -50,3 +50,7 @@ node_modules
 
 # Generated js bundles
 /app/assets/webpack/*
+
+
+# Ignore application configuration
+/config/application.yml

@@ -13,7 +13,7 @@ export default class RenderResults extends Component {
           <p>{this.props.local.stt}</p>
           <p>Pace: {Math.round(this.props.local.pace)} Words per Minute</p>
           <br/>
-          <Stats stage={this.props.stage} indico={this.props.indico} />
+          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} />
           {this.props.children}
         </div>
       </div>

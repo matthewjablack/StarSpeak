@@ -46,6 +46,9 @@ gem "select2-rails"
 
 gem "react_on_rails", "~> 7"
 
+gem 'httparty'
+
+gem 'figaro'
 
 gem 'koala'
 gem 'omniauth'
