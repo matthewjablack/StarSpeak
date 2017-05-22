@@ -9,13 +9,17 @@ let STT_EMPTY = "We didn't pickup enough text to analyze your presentation. Try 
 let CAMERA_ERROR = "Looks like your camera isn't on";
 
 
-export async function getIndicoEmotions(screenshots, txt) {
+export async function getIndicoEmotions(screenshots, txt, ctx) {
+  let percentageCount = screenshots.length + 2;
 	let facialEmotion = {eCount: 0, happy: 0, sad: 0, angry: 0, fear: 0, surprise: 0, neutral: 0, errors: []};
 	for (var i = 0; i < screenshots.length; i++) {
 		facialEmotion = await getFacialEmotion(screenshots[i], facialEmotion);
+    ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)});
 	}
 	let speechEmotion = await getSpeechEmotion(txt);
+  ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)});
 	let personality = await getPersonality(txt);
+  ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)});
 
   let errors = facialEmotion.errors.concat(speechEmotion.errors).concat(personality.errors);
   errors = errors.filter((val,i)=>{

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
+import {Progress} from './progress';
 
 export default class RenderResults extends Component {
   render() {
