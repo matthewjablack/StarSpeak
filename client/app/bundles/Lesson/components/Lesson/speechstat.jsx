@@ -23,8 +23,8 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       '&conscientiousness_indico=' + indico.personality.conscientiousness + 
       '&extraversion_indico=' + indico.personality.extraversion + 
       '&openness_indico=' + indico.personality.openness + 
-      '&watson_text=' + watson.sst + 
-      '&local_text=' + local.sst + 
+      '&watson_text=' + watson.stt + 
+      '&local_text=' + local.stt + 
       '&watson_text_pace=' + watson.pace + 
       '&local_text_pace=' + local.pace + 
       '&browser_name=' + browser.name + 

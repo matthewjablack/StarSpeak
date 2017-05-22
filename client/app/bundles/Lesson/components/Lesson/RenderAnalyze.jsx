@@ -9,7 +9,7 @@ export default class RenderAnalyze extends Component {
         <div className="container">
           <h3 className="finishedLink"><a href={this.props.linkback}>Click here when finished</a></h3>
           <h1>Results</h1>
-          <p>{this.props.local.sst}</p>
+          <p>{this.props.local.stt}</p>
           <p>Pace: {Math.round(this.props.local.pace)} Words per Minute</p>
           <br/>
           <Stats stage={this.props.stage} indico={this.props.indico} />

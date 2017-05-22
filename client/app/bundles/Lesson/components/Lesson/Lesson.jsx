@@ -94,12 +94,13 @@ export default class Lesson extends Component{
         confidence: 0.00,
       },
       watson: {
-        sst: "",
+        stt: "",
         pace: 0.00,
       },
       local: {
-        sst: "", 
-        sstInterim: "", 
+        stt: "", 
+        sttInterim: [""], 
+        sttFinal: [],
         pace: 0.00,
       },
       screenshot: [],
@@ -150,8 +151,8 @@ export default class Lesson extends Component{
     setInterval(() => {
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
-          let screenshot = this.refs.webcamAdjust.getScreenshot();
-          if (this.refs.webcamAdjust && screenshot === null) {
+          let screenshot = this.refs.webcam.getScreenshot();
+          if (this.refs.webcam && screenshot === null) {
             this.createError('error', "Looks like your Webcam isn't turned on.");
           } else {
             this.createAlert('success', "Webcam loaded successfully");
@@ -164,17 +165,17 @@ export default class Lesson extends Component{
 
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sstInterim === "") {
+        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === "") {
           this.createError('error', "We aren't picking up any words from your presentation. Double check that your microphone is working properly ");
         }
       } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
-        this.setState({stage: 'Analyze'});
+        this.startStageAnalyze();
         this.handleMicClick();
       }
 
       if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
         try {
-          let screenshot = this.refs.webcamRecord.getScreenshot();
+          let screenshot = this.refs.webcam.getScreenshot();
           if (screenshot === null) {
             this.createError('error', "Error using webcam. Make sure it's turned on");
           }
@@ -184,10 +185,6 @@ export default class Lesson extends Component{
           this.createError('error', "Error using webcam. Make sure it's turned on");
         }
         
-      }
-
-      if (this.state.analyzing == false && this.state.stage == 'Analyze') {
-        this.startAnalyzing();
       }
     }, 1000)
     
@@ -276,7 +273,7 @@ export default class Lesson extends Component{
     const onAnythingSaid = text => {
       if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
-        newLocal.sstInterim = text;
+        newLocal.sttInterim = text;
         this.setState({local: newLocal});
         console.log(`Interim text: ${text}`);
       }
@@ -284,7 +281,7 @@ export default class Lesson extends Component{
     const onFinalised = text => {
       if (this.state.stage == 'Record') {
         let newLocal = this.state.local;
-        newLocal.sst = text;
+        newLocal.sttFinal[newLocal.sttFinal.length] = text;
         this.setState({local: newLocal});
         console.log(`Finalised text: ${text}`);
       }
@@ -370,7 +367,6 @@ export default class Lesson extends Component{
 
   handleError(err, extra) {
     try {
-      // console.error(err, extra);
       if (err.name == 'UNRECOGNIZED_FORMAT') {
         err = 'Unable to determine content type from file header; only wav, flac, and ogg/opus are supported. Please choose a different file.';
       } else if (err.name === 'NotSupportedError' && this.state.audioSource === 'mic') {
@@ -380,7 +376,7 @@ export default class Lesson extends Component{
       }
       this.setState({ error: err.message || err });
     } catch(error) {
-      console.log('problems');
+      console.log(error);
     }
   }
 
@@ -398,24 +394,22 @@ export default class Lesson extends Component{
     this.handleLocalStream();
   }
 
-  startStageAnalyze() {
-    this.setState({stage: 'Analyze', length: this.state.length - this.state.presentCount});
-    this.handleMicClick();
-  }
-
-  async startAnalyzing() {
-    this.setState({analyzing: true});
-
+  async startStageAnalyze() {
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
-    if (newLocal.sst === "") { newLocal.sst = newLocal.sstInterim };
-    newWatson.sst = parseWatson(this.getFinalAndLatestInterimResult());
-    newLocal.pace = calculatePace(newLocal.sst, this.state.length);
-    newWatson.pace = calculatePace(newWatson.sst, this.state.length); 
+    newLocal.stt = newLocal.sttFinal.toString();
 
-    this.setState({local: newLocal, watson: newWatson});
+    if (newLocal.sttFinal[newLocal.sttFinal.length - 1].substring(0,8) !== newLocal.sttInterim.substring(0,8)) {
+      newLocal.stt += newLocal.sttInterim;
+    }
+    newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
+    newLocal.pace = calculatePace(newLocal.stt, this.state.length);
+    newWatson.pace = calculatePace(newWatson.stt, this.state.length); 
 
-    let indico = await getIndicoEmotions(screenshots, newLocal.sst);
+    this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
+    this.handleMicClick();
+
+    let indico = await getIndicoEmotions(screenshots, this.state.local.stt);
     
     this.setState({indico: indico, stage: 'Results'});
 
@@ -428,46 +422,37 @@ export default class Lesson extends Component{
   }
 
   render() {
+    let lessonContent;
     if (this.state.stage === 'Intro') {
-      return (
-        <RenderIntro startStageAdjust={this.startStageAdjust} >
-          <Webcam audio={false} className="reactWebcam" ref='webcamIntro' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderIntro>
-      );
+      lessonContent = <RenderIntro startStageAdjust={this.startStageAdjust} />;
     } else if (this.state.stage === 'Adjust') {
-      return (
-        <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          <Webcam audio={false} className="reactWebcam" ref='webcamAdjust' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderAdjust>
-      );
+      lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} />;
     } else if (this.state.stage === 'Develop') {
-      return (
-        <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          <Webcam audio={false} className="reactWebcam" ref='webcamDevelop' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderDevelop>
-      );
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} />;
     } else if (this.state.stage === 'Record') {
-      return (
-        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          <Webcam audio={false} className="reactWebcam" ref='webcamRecord' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderRecord>
-      );
+      lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      return (
-        <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        </RenderAnalyze>
-      );
+      lessonContent = <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />;
     } else {
-      return (
-        <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        </RenderResults>
-      );
-    } 
+      lessonContent = <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />;
+    }
+
+    let commonContent;
+    if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results') {
+      commonContent = (
+        <div>
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+        {lessonContent}
+        {commonContent}
+      </div>
+    )
   }
 }
 

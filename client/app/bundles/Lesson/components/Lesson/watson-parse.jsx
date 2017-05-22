@@ -17,19 +17,4 @@ export function fetchToken() {
 	let responseJson = response.json();
 
 	return responseJson.text();
-
-	// if (responseJson.results[0] && typeof responseJson.results[0].emotions != 'undefined') {
-
-	// }
-
-
-
-
-	// return fetch('https://view.starspeak.io/api/token').then(res => {
-	//   if (res.status != 200) {
-	//     throw new Error('Error retrieving auth token');
-	//   }
-	//   console.log(res.text());
-	//   return res.text();
-	// })
 }

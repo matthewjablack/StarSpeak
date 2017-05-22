@@ -4,8 +4,8 @@ import {num} from './common';
 
 let FACE_ERROR = "We couldn't find your face during the presentation. Try refreshing and try again.";
 let CONNECTION_ERROR = "There was a problem with your internet connection. Try refreshing and try again.";
-let SST_ERROR = "There seems to be a problem with Speech to Text. Try freshing and try again.";
-let SST_EMPTY = "We didn't pickup enough text to analyze your presentation. Try reshing, and present a little longer. ";
+let STT_ERROR = "There seems to be a problem with Speech to Text. Try freshing and try again.";
+let STT_EMPTY = "We didn't pickup enough text to analyze your presentation. Try reshing, and present a little longer. ";
 let CAMERA_ERROR = "Looks like your camera isn't on";
 
 
@@ -41,8 +41,6 @@ async function getFacialEmotion(screenshot, facialEmotion) {
 
       let responseJson = await response.json();
 
-      console.log(responseJson);
-
       if (responseJson.results) {
         if (responseJson.results[0] && typeof responseJson.results[0].emotions != 'undefined') {
           var emotions = responseJson.results[0].emotions;
@@ -59,8 +57,6 @@ async function getFacialEmotion(screenshot, facialEmotion) {
         facialEmotion.errors.push(FACE_ERROR);
       }
     } catch(error) {
-      console.log('facial error');
-      console.log(error);
       facialEmotion.errors.push(CONNECTION_ERROR);
     }
   } 
@@ -71,7 +67,7 @@ async function getFacialEmotion(screenshot, facialEmotion) {
 async function getSpeechEmotion(txt) {
   var speechEmotion = {happy: 0, sad: 0, angry: 0, fear: 0, surprise: 0, errors: []};
   if (txt.length > 0 && txt.length <= 10) {
-    speechEmotion.errors.push(SST_EMPTY);
+    speechEmotion.errors.push(STT_EMPTY);
   } else if (txt.length > 10) {
     try {
       let response = await fetch('https://apiv2.indico.io/emotion ', {
@@ -93,13 +89,13 @@ async function getSpeechEmotion(txt) {
         speechEmotion.fear = num(emotions['fear']);
         speechEmotion.surprise = num(emotions['surprise']);
       } else {
-        speechEmotion.errors.push(SST_ERROR);
+        speechEmotion.errors.push(STT_ERROR);
       }
     } catch(error) {
       speechEmotion.errors.push(CONNECTION_ERROR);
     }
   } else {
-    speechEmotion.errors.push(SST_ERROR);
+    speechEmotion.errors.push(STT_ERROR);
   }
   return speechEmotion;
 }
@@ -107,7 +103,7 @@ async function getSpeechEmotion(txt) {
 async function getPersonality(txt) {
   var personality = {agreeableness: 0, conscientiousness: 0, extraversion: 0, openness: 0, errors: []};
   if (txt.length > 0 && txt.length <= 10) {
-    personality.errors.push(SST_EMPTY);
+    personality.errors.push(STT_EMPTY);
   } else if (txt.length > 10) {
     try {
       let response = await fetch('https://apiv2.indico.io/personality ', {
@@ -127,13 +123,13 @@ async function getPersonality(txt) {
         personality.extraversion = num(emotions['extraversion']);
         personality.openness = num(emotions['openness']);
       } else {
-        personality.errors.push(SST_ERROR )
+        personality.errors.push(STT_ERROR )
       }
     } catch(error) {
       personality.errors.push(CONNECTION_ERROR);
     }
   } else {
-    personality.errors.push(SST_ERROR);
+    personality.errors.push(STT_ERROR);
   }
   return personality;
 }
