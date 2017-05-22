@@ -149,8 +149,6 @@ export default class Lesson extends Component{
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
     setInterval(() => {
-      console.log('Percentage');
-      console.log(this.state.percentage);
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
           let screenshot = this.refs.webcam.getScreenshot();
