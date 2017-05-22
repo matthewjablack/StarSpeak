@@ -151,8 +151,8 @@ export default class Lesson extends Component{
     setInterval(() => {
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
-          let screenshot = this.refs.webcamAdjust.getScreenshot();
-          if (this.refs.webcamAdjust && screenshot === null) {
+          let screenshot = this.refs.webcam.getScreenshot();
+          if (this.refs.webcam && screenshot === null) {
             this.createError('error', "Looks like your Webcam isn't turned on.");
           } else {
             this.createAlert('success', "Webcam loaded successfully");
@@ -175,7 +175,7 @@ export default class Lesson extends Component{
 
       if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
         try {
-          let screenshot = this.refs.webcamRecord.getScreenshot();
+          let screenshot = this.refs.webcam.getScreenshot();
           if (screenshot === null) {
             this.createError('error', "Error using webcam. Make sure it's turned on");
           }
@@ -422,44 +422,37 @@ export default class Lesson extends Component{
   }
 
   render() {
+    let lessonContent;
     if (this.state.stage === 'Intro') {
-      return (
-        <RenderIntro startStageAdjust={this.startStageAdjust} />
-      );
+      lessonContent = <RenderIntro startStageAdjust={this.startStageAdjust} />;
     } else if (this.state.stage === 'Adjust') {
-      return (
-        <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          <Webcam audio={false} className="reactWebcam" ref='webcamAdjust' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderAdjust>
-      );
+      lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} />;
     } else if (this.state.stage === 'Develop') {
-      return (
-        <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          <Webcam audio={false} className="reactWebcam" ref='webcamDevelop' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderDevelop>
-      );
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} />;
     } else if (this.state.stage === 'Record') {
-      return (
-        <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          <Webcam audio={false} className="reactWebcam" ref='webcamRecord' width={this.state.width} height={this.state.width * 0.75} />
-        </RenderRecord>
-      );
+      lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      return (
-        <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        </RenderAnalyze>
-      );
+      lessonContent = <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />;
     } else {
-      return (
-        <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} >
-          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        </RenderResults>
-      );
-    } 
+      lessonContent = <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} />;
+    }
+
+    let commonContent;
+    if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results') {
+      commonContent = (
+        <div>
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+        {lessonContent}
+        {commonContent}
+      </div>
+    )
   }
 }
 
