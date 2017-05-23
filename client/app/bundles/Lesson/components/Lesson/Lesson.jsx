@@ -447,8 +447,8 @@ export default class Lesson extends Component{
       this.createError('error', indico.errors[i]);
     }
 
-    for (var i = 0; i < newWatson.errors.length; i++) {
-      this.createError('error', newWatson.errors[i]);
+    for (var i = 0; i < WatsonTone.errors.length; i++) {
+      this.createError('error', WatsonTone.errors[i]);
     }
   }
 
