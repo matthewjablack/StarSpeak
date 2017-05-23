@@ -416,8 +416,13 @@ export default class Lesson extends Component{
     let newWatson = this.state.watson;
     newLocal.stt = newLocal.sttFinal.toString();
 
-    if (newLocal.sttFinal[newLocal.sttFinal.length - 1].substring(0,8) !== newLocal.sttInterim.substring(0,8)) {
-      newLocal.stt += newLocal.sttInterim;
+    try {
+      if ((newLocal.sttFinal.length === 0) ||
+      (newLocal.sttFinal[newLocal.sttFinal.length - 1].substring(0,8) !== newLocal.sttInterim.substring(0,8))) {
+        newLocal.stt += newLocal.sttInterim;
+      }
+    } catch(error) {
+      console.log(error);
     }
     newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
     newLocal.pace = calculatePace(newLocal.stt, this.state.length);
