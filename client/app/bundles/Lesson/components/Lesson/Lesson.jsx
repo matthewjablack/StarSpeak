@@ -19,13 +19,13 @@ import RenderDevelop from './RenderDevelop';
 import RenderRecord from './RenderRecord';
 import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
-import AlertContainer from 'react-alert'
+import AlertContainer from 'react-alert';
+import {watsonTone} from './watsonTone';
 
 
 var screenshots = [];
 var screenCount = 0;
 var errors = [];
-
 
 export default class Lesson extends Component{
   static propTypes = {
@@ -96,6 +96,27 @@ export default class Lesson extends Component{
       watson: {
         stt: "",
         pace: 0.00,
+        tone: {
+          emotion: {
+            anger: 0.00, 
+            disgust: 0.00,
+            fear: 0.00, 
+            joy: 0.00, 
+            sadness: 0.00, 
+          },
+          language: {
+            analytical: 0.00, 
+            confident: 0.00,
+            tentative: 0.00,
+          },
+          social: {
+            openness: 0.00,
+            conscientiousness: 0.00,
+            extraversion: 0.00,
+            agreeableness: 0.00,
+            emotionalRange: 0.00,
+          },
+        }
       },
       local: {
         stt: "", 
@@ -395,12 +416,21 @@ export default class Lesson extends Component{
     let newWatson = this.state.watson;
     newLocal.stt = newLocal.sttFinal.toString();
 
-    if (newLocal.sttFinal[newLocal.sttFinal.length - 1].substring(0,8) !== newLocal.sttInterim.substring(0,8)) {
-      newLocal.stt += newLocal.sttInterim;
+    try {
+      if ((newLocal.sttFinal.length === 0) ||
+      (newLocal.sttFinal[newLocal.sttFinal.length - 1].substring(0,8) !== newLocal.sttInterim.substring(0,8))) {
+        newLocal.stt += newLocal.sttInterim;
+      }
+    } catch(error) {
+      console.log(error);
     }
     newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
     newLocal.pace = calculatePace(newLocal.stt, this.state.length);
     newWatson.pace = calculatePace(newWatson.stt, this.state.length); 
+
+    let WatsonTone = await watsonTone(this.state.user.auth_token, newWatson.stt);
+
+    newWatson.tone = WatsonTone;
 
     this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
     this.handleMicClick();
@@ -428,9 +458,9 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
+      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
     } else {
-      lessonContent = <RenderResults local={this.state.local} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
     }
 
     let commonContent;

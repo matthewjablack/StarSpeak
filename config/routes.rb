@@ -15,6 +15,7 @@ StarSpeak::Application.routes.draw do
     namespace :v1 do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api
       post 'speechstats' => 'speechstats#create'
+      post 'watson_tone' => 'services#watson_tone'
     end
   end
 
@@ -29,6 +30,7 @@ StarSpeak::Application.routes.draw do
 
   get '/privacy' => 'pages#privacy', via: [:get], as: :privacy
   get '/terms' => 'pages#terms', via: [:get], as: :terms
+  get '/help' => 'pages#help', via: [:get], as: :help
 
 
   resources :users, only: [:show]

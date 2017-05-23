@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170520153750) do
+ActiveRecord::Schema.define(version: 20170522234821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,14 +82,27 @@ ActiveRecord::Schema.define(version: 20170520153750) do
     t.float    "conscientiousness_indico"
     t.float    "extraversion_indico"
     t.float    "openness_indico"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.text     "watson_text"
     t.text     "local_text"
     t.string   "browser_name"
     t.string   "browser_version"
     t.float    "watson_text_pace"
     t.float    "local_text_pace"
+    t.float    "anger_speech_watson"
+    t.float    "disgust_speech_watson"
+    t.float    "fear_speech_watson"
+    t.float    "joy_speech_watson"
+    t.float    "sadness_speech_watson"
+    t.float    "analytical_speech_watson"
+    t.float    "confident_speech_watson"
+    t.float    "tentative_speech_watson"
+    t.float    "openness_speech_watson"
+    t.float    "conscientiousness_speech_watson"
+    t.float    "extraversion_speech_watson"
+    t.float    "agreeableness_speech_watson"
+    t.float    "emotional_range_speech_watson"
   end
 
   create_table "users", force: :cascade do |t|
