@@ -25,7 +25,7 @@ export async function watsonTone(auth_token, text) {
           emotionalRange: 0.00 };
   let errors = [];
 
-  if (text.length > 0 && text.length <= 10) {
+  if (text.length > 2 && text.length <= 10) {
     errors.push(STT_EMPTY);
   } else if (text.length > 10) {
     try {

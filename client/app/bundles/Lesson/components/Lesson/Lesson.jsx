@@ -429,7 +429,7 @@ export default class Lesson extends Component{
     newLocal.pace = calculatePace(newLocal.stt, this.state.length);
     newWatson.pace = calculatePace(newWatson.stt, this.state.length); 
 
-    let WatsonTone = await watsonTone(this.state.user.auth_token, newWatson.stt);
+    let WatsonTone = await watsonTone(this.state.user.auth_token, newLocal.stt);
 
     newWatson.tone = WatsonTone;
 
