@@ -116,6 +116,7 @@ export default class Lesson extends Component{
             agreeableness: 0.00,
             emotionalRange: 0.00,
           },
+          errors: [],
         }
       },
       local: {
@@ -444,6 +445,10 @@ export default class Lesson extends Component{
 
     for (var i = 0; i < indico.errors.length; i++) {
       this.createError('error', indico.errors[i]);
+    }
+
+    for (var i = 0; i < newWatson.errors.length; i++) {
+      this.createError('error', newWatson.errors[i]);
     }
   }
 
