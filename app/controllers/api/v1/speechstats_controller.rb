@@ -39,7 +39,20 @@ class Api::V1::SpeechstatsController < ApplicationController
       watson_text_pace: params[:watson_text_pace],
       local_text_pace: params[:local_text_pace],
       browser_name: params[:browser_name],
-      browser_version: params[:browser_version]
+      browser_version: params[:browser_version],
+      anger_speech_watson: params[:anger_speech_watson],
+      disgust_speech_watson: params[:disgust_speech_watson], 
+      fear_speech_watson: params[:fear_speech_watson],
+      joy_speech_watson: params[:joy_speech_watson],
+      sadness_speech_watson: params[:sadness_speech_watson],
+      analytical_speech_watson: params[:analytical_speech_watson],
+      confident_speech_watson: params[:confident_speech_watson],
+      tentative_speech_watson: params[:tentative_speech_watson],
+      openness_speech_watson: params[:openness_speech_watson],
+      conscientiousness_speech_watson: params[:conscientiousness_speech_watson],
+      extraversion_speech_watson: params[:extraversion_speech_watson],
+      agreeableness_speech_watson: params[:agreeableness_speech_watson], 
+      emotional_range_speech_watson: params[:emotional_range_speech_watson]
     )
 
     if @speechstat.save

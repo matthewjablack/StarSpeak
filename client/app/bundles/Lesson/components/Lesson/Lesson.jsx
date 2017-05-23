@@ -97,19 +97,19 @@ export default class Lesson extends Component{
         stt: "",
         pace: 0.00,
         tone: {
-          emotionTone: {
+          emotion: {
             anger: 0.00, 
             disgust: 0.00,
             fear: 0.00, 
             joy: 0.00, 
             sadness: 0.00, 
           },
-          languageTone: {
+          language: {
             analytical: 0.00, 
             confident: 0.00,
             tentative: 0.00,
           },
-          socialTone: {
+          social: {
             openness: 0.00,
             conscientiousness: 0.00,
             extraversion: 0.00,

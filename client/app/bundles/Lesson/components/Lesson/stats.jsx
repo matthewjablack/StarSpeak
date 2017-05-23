@@ -123,37 +123,37 @@ export function Stats(props) {
         <Col md={4}>
           <h2>Emotion Tone</h2>
           <p>Anger</p>
-          <Progress value={props.watson.tone.emotionTone.anger} />
+          <Progress value={props.watson.tone.emotion.anger} />
           <p>Disgust</p>
-          <Progress value={props.watson.tone.emotionTone.disgust} />
+          <Progress value={props.watson.tone.emotion.disgust} />
           <p>Fear</p>
-          <Progress value={props.watson.tone.emotionTone.fear} />
+          <Progress value={props.watson.tone.emotion.fear} />
           <p>Joy</p>
-          <Progress value={props.watson.tone.emotionTone.joy} />
+          <Progress value={props.watson.tone.emotion.joy} />
           <p>Sadness</p>
-          <Progress value={props.watson.tone.emotionTone.sadness} />
+          <Progress value={props.watson.tone.emotion.sadness} />
         </Col>
         <Col md={4}>
           <h2>Language Tone</h2>
           <p>Analytical</p>
-          <Progress value={props.watson.tone.languageTone.analytical} />
+          <Progress value={props.watson.tone.language.analytical} />
           <p>Confident</p>
-          <Progress value={props.watson.tone.languageTone.confident} />
+          <Progress value={props.watson.tone.language.confident} />
           <p>Tentative</p>
-          <Progress value={props.watson.tone.languageTone.tentative} />
+          <Progress value={props.watson.tone.language.tentative} />
         </Col>
         <Col md={4}>
           <h2>Social Tone</h2>
           <p>Openness</p>
-          <Progress value={props.watson.tone.socialTone.openness} />
+          <Progress value={props.watson.tone.social.openness} />
           <p>Conscientiousness</p>
-          <Progress value={props.watson.tone.socialTone.conscientiousness} />
+          <Progress value={props.watson.tone.social.conscientiousness} />
           <p>Extraversion</p>
-          <Progress value={props.watson.tone.socialTone.extraversion} />
+          <Progress value={props.watson.tone.social.extraversion} />
           <p>Agreeableness</p>
-          <Progress value={props.watson.tone.socialTone.agreeableness} />
+          <Progress value={props.watson.tone.social.agreeableness} />
           <p>Emotional Range</p>
-          <Progress value={props.watson.tone.socialTone.emotionalRange} />
+          <Progress value={props.watson.tone.social.emotionalRange} />
         </Col>
       </Row>
       </div>
