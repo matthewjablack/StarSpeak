@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
 import {Progress} from './progress';
+import Pace from './pace';
 
 export default class RenderAnalyze extends Component {
   render() {
