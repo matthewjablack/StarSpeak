@@ -30,6 +30,7 @@ StarSpeak::Application.routes.draw do
 
   get '/privacy' => 'pages#privacy', via: [:get], as: :privacy
   get '/terms' => 'pages#terms', via: [:get], as: :terms
+  get '/help' => 'pages#help', via: [:get], as: :help
 
 
   resources :users, only: [:show]
