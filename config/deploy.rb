@@ -6,7 +6,7 @@ set :repo_url, 'git@github.com:mattBlackDesign/StarSpeak.git'
 
 set :deploy_to, '/home/deploy/StarSpeak'
 
-set :linked_files, %w{config/database.yml config/webapi.yml}
+set :linked_files, %w{config/database.yml config/webapi.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 
