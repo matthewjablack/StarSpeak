@@ -3,7 +3,8 @@
 @import "font-awesome";
 @import "select2";
 @import "home";
-
+@import "materialize";
+@import "material_icons";
 
 
 
@@ -34,15 +35,18 @@ h1 {
 p {
 	font-size: 20px;
 }
+a:hover {
+  text-decoration: none;
+}
 
 
-body.full_bg { 
-  background: url(/images/microphone_bg.jpg) no-repeat center center fixed; 
+body.full_bg {
+  background: url(/images/microphone_bg.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  
+
 }
 
 .page-header {
@@ -69,5 +73,3 @@ body.full_bg {
     color:white;
   }
 }
-
-

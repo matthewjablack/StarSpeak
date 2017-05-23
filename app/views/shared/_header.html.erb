@@ -1,5 +1,31 @@
 <!-- Static navbar -->
-<nav class="navbar navbar-inverse navbar-static-top">
+<ul id="dropdown1" class="dropdown-content">
+  <li><%= link_to "My Profile", user_path(current_user) %></li>
+  <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+  <!-- <li class="divider"></li>
+  <li><a href="#!">three</a></li> -->
+</ul>
+<nav>
+  <div class="container">
+    <div class="nav-wrapper">
+      <a href="/" class="brand-logo">StarSpeak</a>
+      <ul class="right hide-on-med-and-down">
+        <% unless user_signed_in? %>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+            <li><a href="#" data-toggle="modal" data-target="#myModal">Sign up</a></li>
+          <% else %>
+            <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
+            <li><%= link_to "Speech Results", speechstats_path %></li>
+            <li><%= link_to "Help", help_path %></li>
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><%= current_user.first_name %> <span class="caret"></span></a></li>
+
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- <nav class="navbar navbar-inverse navbar-static-top">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -15,7 +41,6 @@
           <% unless user_signed_in? %>
               <li><%= link_to "Sign in", new_user_session_path %></li>
               <li><a href="#" data-toggle="modal" data-target="#myModal">Sign up</a></li>
-              <!-- <li><%# link_to "Sign up", new_user_registration_path %></li> -->
             <% else %>
               <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
               <li><%= link_to "Speech Results", speechstats_path %></li>
@@ -27,9 +52,9 @@
                   <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
                 </ul>
               </li>
-              
+
           <% end %>
         </ul>
-    </div><!--/.nav-collapse -->
+    </div>
   </div>
-</nav>
+</nav> -->

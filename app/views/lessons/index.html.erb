@@ -7,12 +7,12 @@
 
 <% @lessons.each do |lesson| %>
 	<%= link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
-	<!-- <a href="https://view.starspeak.io?auth_token=<%# current_user.auth_token %>&lesson_id=<%# lesson.id %>"> -->
-		<div class="col-md-3 ">
-			<div class="module-box">
-				<%= lesson.name %>
+	<div class="col s12 m4 stats">
+		<div class="card white hoverable center waves-effect waves-red">
+			<div class="card-content valign-wrapper center">
+				<h5 class="valign black-text"><%= lesson.name %></h5>
 			</div>
 		</div>
-	<!-- </a> -->
+	</div>
 	<% end %>
 <% end %>
