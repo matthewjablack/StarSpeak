@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import { ProgressBar, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import {Progress} from './progress';
+import { ProgressBar } from 'react-materialize';
 
 export function Stats(props) {
 
@@ -60,52 +61,52 @@ export function Stats(props) {
         <Col md={3}>
           <h2>Emotion Tone</h2>
           <p>Joy</p>
-          <Progress value={props.watson.tone.emotion.joy} />
+          <ProgressBar className="red" progress={props.watson.tone.emotion.joy * 100} />
           <p>Fear</p>
-          <Progress value={props.watson.tone.emotion.fear} />
+          <ProgressBar className="red" progress={props.watson.tone.emotion.fear * 100} />
           <p>Sadness</p>
-          <Progress value={props.watson.tone.emotion.sadness} />
+          <ProgressBar className="red" progress={props.watson.tone.emotion.sadness * 100} />
           <p>Disgust</p>
-          <Progress value={props.watson.tone.emotion.disgust} />
+          <ProgressBar className="red" progress={props.watson.tone.emotion.disgust * 100} />
           <p>Anger</p>
-          <Progress value={props.watson.tone.emotion.anger} />
+          <ProgressBar className="red" progress={props.watson.tone.emotion.anger * 100} />
         </Col>
         <Col md={3}>
           <h2>Language Tone</h2>
           <p>Analytical</p>
-          <Progress value={props.watson.tone.language.analytical} />
+          <ProgressBar className="red" progress={props.watson.tone.language.analytical * 100} />
           <p>Confident</p>
-          <Progress value={props.watson.tone.language.confident} />
+          <ProgressBar className="red" progress={props.watson.tone.language.confident * 100} />
           <p>Tentative</p>
-          <Progress value={props.watson.tone.language.tentative} />
+          <ProgressBar className="red" progress={props.watson.tone.language.tentative * 100} />
         </Col>
         <Col md={3}>
           <h2>Social Tone</h2>
           <p>Openness</p>
-          <Progress value={props.watson.tone.social.openness} />
+          <ProgressBar className="red" progress={props.watson.tone.social.openness * 100} />
           <p>Conscientiousness</p>
-          <Progress value={props.watson.tone.social.conscientiousness} />
+          <ProgressBar className="red" progress={props.watson.tone.social.conscientiousness * 100} />
           <p>Extraversion</p>
-          <Progress value={props.watson.tone.social.extraversion} />
+          <ProgressBar className="red" progress={props.watson.tone.social.extraversion * 100} />
           <p>Agreeableness</p>
-          <Progress value={props.watson.tone.social.agreeableness} />
+          <ProgressBar className="red" progress={props.watson.tone.social.agreeableness * 100} />
           <p>Emotional Range</p>
-          <Progress value={props.watson.tone.social.emotionalRange} />
+          <ProgressBar className="red" progress={props.watson.tone.social.emotionalRange * 100} />
         </Col>
         <Col md={3}>
           <h2>Facial Emotions</h2>
           <p>Happy</p>
-          <Progress value={props.indico.facialEmotion.happy} />
+          <ProgressBar className="red" progress={props.indico.facialEmotion.happy * 100} />
           <p>Sad</p>
-          <Progress value={props.indico.facialEmotion.sad} />
+          <ProgressBar className="red" progress={props.indico.facialEmotion.sad * 100} />
           <p>Angry</p>
-          <Progress value={props.indico.facialEmotion.angry} />
+          <ProgressBar className="red" progress={props.indico.facialEmotion.angry * 100} />
           <p>Fear</p>
-          <Progress value={props.indico.facialEmotion.fear} />
+          <ProgressBar className="red" progress={props.indico.facialEmotion.fear * 100} />
           <p>Surprise</p>
-          <Progress value={props.indico.facialEmotion.surprise} />
+          <ProgressBar className="red" progress={props.indico.facialEmotion.surprise * 100} />
           <p>Neutral</p>
-          <Progress value={props.indico.facialEmotion.neutral} />
+          <ProgressBar className="red" progress={props.indico.facialEmotion.neutral * 100} />
         </Col>
       </Row>
       </div>

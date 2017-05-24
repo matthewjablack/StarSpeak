@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {Stats} from './stats';
 import {Progress} from './progress';
 import Pace from './Pace';
+import { ProgressBar } from 'react-materialize';
+
 
 export default class RenderAnalyze extends Component {
   render() {
@@ -16,7 +18,7 @@ export default class RenderAnalyze extends Component {
           <br/>
           <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} />
           <h2>Loading...</h2>
-          <Progress value={this.props.percentage * 0.01} />
+          <ProgressBar className="red lighten-2" progress={this.props.percentage}/>
           {this.props.children}
         </div>
       </div>
