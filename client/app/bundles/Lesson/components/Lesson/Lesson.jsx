@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone';
 import FontAwesome from 'react-fontawesome';
 import Webcam from 'react-webcam';
-import { ProgressBar, Col, Row } from 'react-bootstrap';
+import { ProgressBar, Row } from 'react-bootstrap';
 import {formatSeconds} from './format-time';
 import SpeechToText from 'speech-to-text';
 import browser from 'detect-browser';
@@ -21,6 +21,7 @@ import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
+import { Card, Col } from 'react-materialize';
 
 
 var screenshots = [];
@@ -98,14 +99,14 @@ export default class Lesson extends Component{
         pace: 0.00,
         tone: {
           emotion: {
-            anger: 0.00, 
+            anger: 0.00,
             disgust: 0.00,
-            fear: 0.00, 
-            joy: 0.00, 
-            sadness: 0.00, 
+            fear: 0.00,
+            joy: 0.00,
+            sadness: 0.00,
           },
           language: {
-            analytical: 0.00, 
+            analytical: 0.00,
             confident: 0.00,
             tentative: 0.00,
           },
@@ -120,14 +121,14 @@ export default class Lesson extends Component{
         }
       },
       local: {
-        stt: "", 
-        sttInterim: [""], 
+        stt: "",
+        sttInterim: [""],
         sttFinal: [],
         pace: 0.00,
       },
       screenshot: [],
       analyzing: false,
-      width: '0', 
+      width: '0',
       height: '0',
       length: 20,
       prep: 10,
@@ -183,7 +184,7 @@ export default class Lesson extends Component{
       } else {
         this.setState({ loadCount: this.state.loadCount - 1 });
       }
-      
+
 
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
@@ -206,10 +207,10 @@ export default class Lesson extends Component{
         } catch(error) {
           this.createError('error', "Error using webcam. Make sure it's turned on");
         }
-        
+
       }
     }, 1000)
-    
+
   }
 
   componentWillUnmount() {
@@ -427,7 +428,7 @@ export default class Lesson extends Component{
     }
     newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
     newLocal.pace = calculatePace(newLocal.stt, this.state.length);
-    newWatson.pace = calculatePace(newWatson.stt, this.state.length); 
+    newWatson.pace = calculatePace(newWatson.stt, this.state.length);
 
     let WatsonTone = await watsonTone(this.state.user.auth_token, newLocal.stt);
 
@@ -437,10 +438,10 @@ export default class Lesson extends Component{
     this.handleMicClick();
 
     let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
-    
+
     this.setState({indico: indico, stage: 'Results'});
 
-    createSpeechstat(this.state.user, this.state.lesson, this.state.moduler, 
+    createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser);
 
     for (var i = 0; i < indico.errors.length; i++) {
@@ -486,4 +487,3 @@ export default class Lesson extends Component{
     )
   }
 }
-
