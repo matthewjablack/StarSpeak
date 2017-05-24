@@ -47,6 +47,24 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
   }
 }
 
+export async function updateRating(ratingName, ratingValue) {
+	if (user.auth_token !== null) {
+    let response3 = await fetch(
+      '/api/v1/speechstats.json?auth_token=' + user.auth_token +
+      '&facial_emotions_rating=' + ratingName +
+			'&social_tone_rating=' + ratingName +
+			'&language_tone_rating=' + ratingName +
+			'&emotion_tone_rating=' + ratingName +
+      , {
+      method: 'PUT',
+      header: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      }
+    })
+  }
+}
 
 export function calculatePace(txt, length) {
   const pace = (60 / length) * txt.split(" ").length;
