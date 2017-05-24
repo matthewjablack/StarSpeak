@@ -1,10 +1,7 @@
 <h2>Speech Results </h2>
 <hr>
-
 <br>
-
-
-<table class="table table-striped">
+<table class="highlight centered responsive-table bordered" id="speechStatsTable">
     <thead>
       <tr>
 	      <th>Lesson</th>
@@ -19,10 +16,7 @@
       </tr>
     </thead>
     <tbody>
-
 		<% @speechstats.each do |speechstat| %>
-			
-			<div>
 				<tr>
 					<th>
 						<%= link_to speechstat_path(speechstat) do %>
@@ -70,12 +64,6 @@
 						<% end %>
 					</th>
 				</tr>
-			</div>
-			
 		<% end %>
-
-      
     </tbody>
   </table>
-
-
