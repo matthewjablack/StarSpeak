@@ -47,14 +47,11 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
   }
 }
 
-export async function updateRating(ratingName, ratingValue) {
+export async function updateRating(ratingName, ratingValue, user) {
 	if (user.auth_token !== null) {
     let response3 = await fetch(
-      '/api/v1/speechstats.json?auth_token=' + user.auth_token +
-      '&facial_emotions_rating=' + ratingName +
-			'&social_tone_rating=' + ratingName +
-			'&language_tone_rating=' + ratingName +
-			'&emotion_tone_rating=' + ratingName +
+      '/api/v1/speechstats_rating.json?auth_token=' + user.auth_token +
+      '&'+ ratingName + '=' + ratingValue
       , {
       method: 'PUT',
       header: {

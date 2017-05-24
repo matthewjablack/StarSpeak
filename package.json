@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "create-react-class": "^15.5.3",
+    "react": "^15.5.4",
+    "react-rating": "^0.7.1",
     "speech-to-text": "^0.4.4"
   }
 }
