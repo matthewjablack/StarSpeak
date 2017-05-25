@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
-import {Progress} from './progress';
 import Pace from './Pace';
 import { ProgressBar } from 'react-materialize';
 

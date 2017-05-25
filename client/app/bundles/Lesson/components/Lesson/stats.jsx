@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import { Col, Row } from 'react-bootstrap';
-import {Progress} from './progress';
-import { ProgressBar, Card } from 'react-materialize';
+import { ProgressBar, Card, Col, Row } from 'react-materialize';
 
 export function Stats(props) {
 
@@ -11,7 +9,7 @@ export function Stats(props) {
     return (
       <div>
         <Row>
-          <Col md={3}>
+          <Col m={3}>
             <h2>Emotion Tone</h2>
             <FontAwesome
               className='refresh'
@@ -21,7 +19,7 @@ export function Stats(props) {
               style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
             />
           </Col>
-          <Col md={3}>
+          <Col m={3}>
             <h2>Language Tone</h2>
             <FontAwesome
               className='refresh'
@@ -31,7 +29,7 @@ export function Stats(props) {
               style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
             />
           </Col>
-          <Col md={3}>
+          <Col m={3}>
             <h2>Social Tone</h2>
             <FontAwesome
               className='refresh'
@@ -41,7 +39,7 @@ export function Stats(props) {
               style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
             />
           </Col>
-          <Col md={3}>
+          <Col m={3}>
             <h2>Facial Emotions</h2>
             <FontAwesome
               className='refresh'
@@ -66,7 +64,7 @@ export function Stats(props) {
           </Card>
         </Row>
         <Row>
-          <Col md={6}>
+          <Col m={6}>
             <Card className="hoverable">
               <h3>Emotion Tone</h3>
               <p>Joy</p>
@@ -81,7 +79,7 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.emotion.anger * 100} />
             </Card>
           </Col>
-          <Col md={6}>
+          <Col m={6}>
             <Card className="hoverable">
               <h3>Language Tone</h3>
               <p>Analytical</p>
@@ -94,7 +92,7 @@ export function Stats(props) {
           </Col>
         </Row>
         <Row>
-          <Col md={6}>
+          <Col m={6}>
             <Card className="hoverable">
               <h3>Social Tone</h3>
               <p>Openness</p>
@@ -109,7 +107,7 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.social.emotionalRange * 100} />
             </Card>
           </Col>
-          <Col md={6}>
+          <Col m={6}>
             <Card className="hoverable">
               <h3>Facial Emotions</h3>
               <p>Happy</p>
