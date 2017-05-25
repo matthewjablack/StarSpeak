@@ -19,7 +19,7 @@ import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
-import { Card, Col } from 'react-materialize';
+import { Card } from 'react-materialize';
 
 
 var screenshots = [];

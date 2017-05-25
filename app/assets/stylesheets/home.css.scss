@@ -346,6 +346,14 @@ body.view {
 }
 
 
-#speechStatsTable tbody tr th {
+#speech-stats-table tbody tr th {
   text-align: center;
+}
+
+.breadcrumb:first-child {
+	padding-left:20px;
+}
+
+#breadcrumb-nav {
+	margin-top: 20px;
 }

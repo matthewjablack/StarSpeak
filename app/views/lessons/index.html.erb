@@ -1,18 +1,23 @@
-<h2><i class="fa fa-area-chart"></i> <%= link_to "Dashboard", level_modulers_path(@level) %> <i class="fa fa-chevron-right"></i> <i class="fa fa-columns"></i>  <%= link_to @moduler.name, level_moduler_lessons_path(@level, @moduler) %> </h2>
-<hr>
-
-<h3><%= @moduler.name %> Lessons</h3>
-
+<h2><%= @moduler.name %> Lessons</h2>
+<nav id="breadcrumb-nav">
+  <div class="nav-wrapper">
+    <div class="col s12">
+      <%= link_to "Dashboard", level_modulers_path(@level),:class => "breadcrumb"%>
+			<%= link_to @moduler.name, level_moduler_lessons_path(@level, @moduler), :class => "breadcrumb" %>
+    </div>
+  </div>
+</nav>
 <br>
+<hr>
 
 <% @lessons.each do |lesson| %>
 	<%= link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
-	<div class="col s12 m4 stats">
-		<div class="card white hoverable center waves-effect waves-red">
-			<div class="card-content valign-wrapper center">
-				<h5 class="valign black-text"><%= lesson.name %></h5>
+		<div class="col s12 m4 stats">
+			<div class="card white hoverable center waves-effect waves-red">
+				<div class="card-content valign-wrapper center">
+					<h5 class="valign black-text"><%= lesson.name %></h5>
+				</div>
 			</div>
 		</div>
-	</div>
 	<% end %>
 <% end %>
