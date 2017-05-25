@@ -9,7 +9,9 @@ export default class RenderAdjust extends Component {
       <div>
         <div className="centerFixed">
           <h2>Adjust your camera</h2>
-          <Button className="red lighten-2" waves="light" onClick={this.props.startStageDevelop}>Ready</Button>
+          <div className="row center">
+            <Button className="red lighten-2" waves="light" onClick={this.props.startStageDevelop}>Ready</Button>
+          </div>
         </div>
         {this.props.children}
       </div>

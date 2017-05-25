@@ -9,11 +9,9 @@ export default class RenderDevelop extends Component {
       <div>
         <div className="centerFixed">
           <h1 >{this.props.lesson.name}</h1>
-          <br/>
-          <h3 >Read the situation below and present your solution to the best of your ability.</h3>
-          <br/>
+          <h4 >Read the situation below and present your solution to the best of your ability.</h4>
           <h2 >{this.props.lesson.content}</h2>
-          <h2 >You have {this.props.lesson.length} seconds to present.</h2>
+          <h4 >You have {this.props.lesson.length} seconds to present.</h4>
           <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>Continue</Button>
 
         </div>
