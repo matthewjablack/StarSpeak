@@ -26,3 +26,7 @@ $(document).ready(function() {
 	$('.modal').modal();
 	$(".button-collapse").sideNav();
 })
+
+$(document).on('turbolinks:load', function() {
+  Waves.displayEffect();
+});
