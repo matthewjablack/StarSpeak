@@ -10,14 +10,16 @@
 <br>
 <hr>
 
-<% @lessons.each do |lesson| %>
-	<%= link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
-		<div class="col s12 m4 stats">
-			<div class="card white hoverable center waves-effect waves-red">
-				<div class="card-content valign-wrapper center">
-					<h5 class="valign black-text"><%= lesson.name %></h5>
+<div class="row">
+	<% @lessons.each do |lesson| %>
+		<%= link_to level_moduler_lesson_path(@level, @moduler,lesson) do%>
+			<div class="col m3 stats">
+				<div class="card white hoverable center waves-effect waves-red full-width">
+					<div class="card-content valign-wrapper center">
+						<h5 class="valign black-text flex-1"><%= lesson.name %></h5>
+					</div>
 				</div>
 			</div>
-		</div>
+		<% end %>
 	<% end %>
-<% end %>
+</div>
