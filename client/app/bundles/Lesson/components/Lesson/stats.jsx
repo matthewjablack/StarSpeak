@@ -76,7 +76,7 @@ export function Stats(props) {
             <h3>Summary Card</h3>
             <h5>{props.user.name}</h5>
             <img src={props.screenshot} style={{objectFit: 'cover', borderRadius:100, width: 150, height: 150}}/>
-            <h5>Score {Math.round((props.watson.tone.language.confident/2)* 100 + pacePercentage(props.local.pace/2) )}%</h5>
+            <h5>Score {Math.round((props.watson.tone.language.confident/2)* 100 + pacePercentage(props.local.pace)/2 )}%</h5>
           </Card>
         </Row>
         <Row>
