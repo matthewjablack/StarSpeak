@@ -4,7 +4,7 @@
   <div class="nav-wrapper">
     <div class="col s12">
       <%= link_to "Speech Results", speechstats_path ,:class => "breadcrumb"%>
-			<%= link_to @speechstat.lesson.name %> <%= link_to @speechstat.created_at.strftime("%b %d, %Y"), :class => "breadcrumb"%>
+			<a class="breadcrumb"><%= @speechstat.lesson.name %> <%= @speechstat.created_at.strftime("%b %d, %Y") %></a>
     </div>
   </div>
 </nav>
@@ -16,88 +16,98 @@
 
 <div class="row">
 	<div class="col-md-4">
-		<h2>Personality</h2>
-		<span>Agreeableness - <%= (@speechstat.agreeableness_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.agreeableness_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Conscientiousness - <%= (@speechstat.conscientiousness_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.conscientiousness_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Extraversion - <%= (@speechstat.extraversion_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.extraversion_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Openness - <%= (@speechstat.extraversion_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.openness_indico.round(2) * 100).floor %>%">
-		  </div>
+		<div class="card hoverable">
+			<div class="card-content">
+				<h2>Personality</h2>
+				<span>Agreeableness - <%= (@speechstat.agreeableness_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.agreeableness_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Conscientiousness - <%= (@speechstat.conscientiousness_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.conscientiousness_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Extraversion - <%= (@speechstat.extraversion_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.extraversion_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Openness - <%= (@speechstat.extraversion_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.openness_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="col-md-4">
-		<h2>Speech Emotions</h2>
-		<span>Happy - <%= (@speechstat.happy_speech_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.happy_speech_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Sad - <%= (@speechstat.sad_speech_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.sad_speech_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Angry - <%= (@speechstat.angry_speech_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.angry_speech_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Fear - <%= (@speechstat.fear_speech_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.fear_speech_indico.round(2) * 100).floor %>%">
-		  </div>
-		</div>
-		<span>Surpise - <%= (@speechstat.surprise_speech_indico.round(2) * 100).floor %>%</span>
-		<div class="progress">
-		  <div class="determinate" style="width:<%= (@speechstat.surprise_speech_indico.round(2) * 100).floor %>%">
-		  </div>
+		<div class="card hoverable">
+			<div class="card-content">
+				<h2>Speech Emotions</h2>
+				<span>Happy - <%= (@speechstat.happy_speech_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.happy_speech_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Sad - <%= (@speechstat.sad_speech_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.sad_speech_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Angry - <%= (@speechstat.angry_speech_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.angry_speech_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Fear - <%= (@speechstat.fear_speech_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.fear_speech_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Surpise - <%= (@speechstat.surprise_speech_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.surprise_speech_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="col-md-4">
-		<div class="card">
-			<h2>Facial Emotions</h2>
-			<span>Happy - <%= (@speechstat.happy_facial_indico.round(2) * 100).floor %>%</span>
-			<div class="progress">
-			  <div class="determinate" style="width:<%= (@speechstat.happy_facial_indico.round(2) * 100).floor %>%">
-			  </div>
-			</div>
-			<span>Sad - <%= (@speechstat.sad_facial_indico.round(2) * 100).floor %>%</span>
-			<div class="progress">
-			  <div class="determinate" style="width:<%= (@speechstat.sad_facial_indico.round(2) * 100).floor %>%">
-			  </div>
-			</div>
-			<span>Angry - <%= (@speechstat.angry_facial_indico.round(2) * 100).floor %>%</span>
-			<div class="progress">
-			  <div class="determinate" style="width:<%= (@speechstat.angry_facial_indico.round(2) * 100).floor %>%">
-			  </div>
-			</div>
-			<span>Fear - <%= (@speechstat.fear_facial_indico.round(2) * 100).floor %>%</span>
-			<div class="progress">
-			  <div class="determinate" style="width:<%= (@speechstat.fear_facial_indico.round(2) * 100).floor %>%">
-			  </div>
-			</div>
-			<span>Surprise - <%= (@speechstat.surprise_facial_indico.round(2) * 100).floor %>%</span>
-			<div class="progress">
-			  <div class="determinate" style="width:<%= (@speechstat.surprise_facial_indico.round(2) * 100).floor %>%">
-			  </div>
-			</div>
-			<span>Neutral - <%= (@speechstat.neutral_facial_indico.round(2) * 100).floor %>%</span>
-			<div class="progress">
-			  <div class="determinate" style="width:<%= (@speechstat.neutral_facial_indico.round(2) * 100).floor %>%">
-			  </div>
+		<div class="card hoverable">
+			<div class="card-content">
+				<h2>Facial Emotions</h2>
+				<span>Happy - <%= (@speechstat.happy_facial_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.happy_facial_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Sad - <%= (@speechstat.sad_facial_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.sad_facial_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Angry - <%= (@speechstat.angry_facial_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.angry_facial_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Fear - <%= (@speechstat.fear_facial_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.fear_facial_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Surprise - <%= (@speechstat.surprise_facial_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.surprise_facial_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
+				<span>Neutral - <%= (@speechstat.neutral_facial_indico.round(2) * 100).floor %>%</span>
+				<div class="progress">
+				  <div class="determinate" style="width:<%= (@speechstat.neutral_facial_indico.round(2) * 100).floor %>%">
+				  </div>
+				</div>
 			</div>
 		</div>
 	</div>
