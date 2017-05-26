@@ -56,11 +56,11 @@ export function Stats(props) {
     return (
       <div>
         <Row>
-          <Card className="hoverable">
+          <Card className="hoverable center">
             <h3>Summary Card</h3>
             <h5>{props.user.name}</h5>
-            <img src='data:image/png;base64,{props.screenshot[props.screenshot.length -1]}'/>
-            <h5>*Overall 'rating/score' on how they did?*</h5>
+            <img src={props.screenshot} style={{objectFit: 'cover', borderRadius:100, width: 150, height: 150}}/>
+            <h5>Score {props.watson.tone.language.confident * 100}%</h5>
           </Card>
         </Row>
         <Row>
