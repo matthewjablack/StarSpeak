@@ -23,5 +23,5 @@
 $(document).ready(function() {
 	$('#user_level_id').select2();
 	$(".dropdown-button").dropdown();
-
+	$('.modal').modal();
 })
