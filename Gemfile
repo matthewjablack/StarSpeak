@@ -46,6 +46,8 @@ gem "select2-rails"
 
 gem "react_on_rails", "~> 7"
 
+gem 'kaminari'
+
 gem 'httparty'
 
 gem 'figaro'
