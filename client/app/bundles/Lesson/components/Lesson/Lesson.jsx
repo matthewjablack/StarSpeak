@@ -138,6 +138,7 @@ export default class Lesson extends Component{
       errors: [],
       alerts: [],
       percentage: 0.00,
+      intervalId: 0,
     };
 
     this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
@@ -169,7 +170,7 @@ export default class Lesson extends Component{
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
-    setInterval(() => {
+    var refreshIntervalId = setInterval(() => {
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
           let screenshot = this.refs.webcam.getScreenshot();
@@ -209,10 +210,14 @@ export default class Lesson extends Component{
       }
     }, 1000)
 
+
+    this.setState({intervalId: refreshIntervalId})
+
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions.bind(this));
+    clearInterval(this.state.intervalId);
   }
 
   updateWindowDimensions() {
