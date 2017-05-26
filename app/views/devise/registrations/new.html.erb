@@ -1,5 +1,7 @@
 <div class="col-md-6 col-md-offset-3">
 
+<% params[:beta_code] = params[:beta_code].split.join %>
+
 <% if params[:beta_code] && Betacode.where(token: params[:beta_code]).count > 0 %>
 
 <h2>Sign up</h2>
