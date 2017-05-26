@@ -58,8 +58,8 @@ export function Stats(props) {
         <Row>
           <Card className="hoverable">
             <h3>Summary Card</h3>
-            <h5>*Implement Name Here*</h5>
-            <h5>*Insert single screenshot from recording?*</h5>
+            <h5>{props.user.name}</h5>
+            <img src={props.screenshot[props.screenshot.length -1]}/>
             <h5>*Overall 'rating/score' on how they did?*</h5>
           </Card>
         </Row>
