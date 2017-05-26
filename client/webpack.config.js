@@ -11,7 +11,7 @@ const config = {
   entry: [
     'es5-shim/es5-shim',
     'es5-shim/es5-sham',
-    './app/babel-polyfill',
+    'babel-polyfill',
     './app/bundles/Lesson/startup/registration',
   ],
 
