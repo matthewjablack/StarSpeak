@@ -1,6 +1,6 @@
 class SpeechstatsController < ApplicationController
 	def index
-		@speechstats = current_user.speechstats
+		@speechstats = current_user.speechstats.page(params[:page]).per(10)
 	end
 
 	def show
