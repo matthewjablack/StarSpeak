@@ -26,7 +26,7 @@
   <br />
 
   <%= f.select :level_id, Level.all.collect { |p| [ p.name, p.id ] },  id: 'select-level' %>
-  
+
   <br />
   <br />
 
@@ -34,7 +34,7 @@
   <br/>
   <br />
 
-  <div><%= f.submit "Sign up", class: 'btn btn-primary' %></div>
+  <div><%= f.submit "Sign up", class: 'btn red lighten-2 waves-effect waves-light' %></div>
   <br />
   <br />
 <% end %>
