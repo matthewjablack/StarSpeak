@@ -64,7 +64,7 @@ export function Stats(props) {
           </Card>
         </Row>
         <Row>
-          <Col m={6}>
+          <Col m={6} s={12}>
             <Card className="hoverable">
               <h3>Emotion Tone</h3>
               <p>Joy</p>
@@ -79,7 +79,7 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.emotion.anger * 100} />
             </Card>
           </Col>
-          <Col m={6}>
+          <Col m={6} s={12}>
             <Card className="hoverable">
               <h3>Language Tone</h3>
               <p>Analytical</p>
@@ -92,7 +92,7 @@ export function Stats(props) {
           </Col>
         </Row>
         <Row>
-          <Col m={6}>
+          <Col m={6} s={12}>
             <Card className="hoverable">
               <h3>Social Tone</h3>
               <p>Openness</p>
@@ -107,7 +107,7 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.social.emotionalRange * 100} />
             </Card>
           </Col>
-          <Col m={6}>
+          <Col m={6} s={12}>
             <Card className="hoverable">
               <h3>Facial Emotions</h3>
               <p>Happy</p>
