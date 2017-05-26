@@ -7,14 +7,13 @@ Online public speaking platform https://github.com/mattblackdesign/starspeak.
 
 https://starspeak.io
 
-# Usage
-
-  $ git clone git@github.com:mattBlackDesign/StarSpeak.git
-  $ cd starspeak
-  $ mv config/database.yml.default config/database.yml
-  Edit database.yml
-  $ bundle && yarn
-  $ rake db:migrate
-  $ yarn rails-server
-  Open another console window
-  $ rails s
+# Installation
+1. `git clone git@github.com:mattBlackDesign/StarSpeak.git`
+2. `cd starspeak`
+3. `mv config/database.yml.default config/database.yml`
+4. Edit database.yml and application.yml
+5. `bundle && yarn`
+6. `rake db:migrate`
+7. `yarn rails-server`
+8. Open another console window
+9. `rails s`
