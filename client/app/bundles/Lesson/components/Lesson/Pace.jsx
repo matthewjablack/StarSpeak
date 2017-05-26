@@ -16,7 +16,7 @@ export default class Pace extends Component {
   		paceInfo = (<p className="red-txt">You're talking way too fast! Try slowing down. </p>);
   	}
 
-    if (this.props.pace.length > 5) {
+    if (this.props.pace > 5) {
       return (
         <div>
           <p>Pace: {Math.round(this.props.pace)} Words per Minute</p>
