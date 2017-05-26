@@ -48,6 +48,8 @@ gem "react_on_rails", "~> 7"
 gem 'materialize-sass'
 gem 'material_icons'
 
+gem 'kaminari'
+
 gem 'httparty'
 
 gem 'figaro'
