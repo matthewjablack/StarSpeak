@@ -430,8 +430,8 @@ export default class Lesson extends Component{
       console.log(error);
     }
     newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
-    newLocal.pace = calculatePace(newLocal.stt, this.state.length);
-    newWatson.pace = calculatePace(newWatson.stt, this.state.length);
+    newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
+    newWatson.pace = calculatePace(newWatson.stt,  this.state.length - this.state.presentCount);
 
     let WatsonTone = await watsonTone(this.state.user.auth_token, newLocal.stt);
 
