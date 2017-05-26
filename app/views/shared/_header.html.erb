@@ -1,35 +1,38 @@
-<!-- Static navbar -->
-<nav class="navbar navbar-inverse navbar-static-top">
+<nav>
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">StarSpeak</a>
+    <div class="nav-wrapper">
+      <a href="/" class="brand-logo">StarSpeak</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="side-nav" id="mobile-demo">
+        <% unless user_signed_in? %>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+            <li><a href="#modal1">Sign up</a></li>
+          <% else %>
+            <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
+            <li><%= link_to "Speech Results", speechstats_path %></li>
+            <li><%= link_to "Help", help_path %></li>
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><%= current_user.first_name %> <span class="caret"></span></a></li>
+            <ul id="dropdown1" class="dropdown-content">
+              <li><%= link_to "My Profile", user_path(current_user) %></li>
+              <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+            </ul>
+        <% end %>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <% unless user_signed_in? %>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+            <li><a href="#modal1">Sign up</a></li>
+          <% else %>
+            <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
+            <li><%= link_to "Speech Results", speechstats_path %></li>
+            <li><%= link_to "Help", help_path %></li>
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><%= current_user.first_name %> <span class="caret"></span></a></li>
+            <ul id="dropdown1" class="dropdown-content">
+              <li><%= link_to "My Profile", user_path(current_user) %></li>
+              <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+            </ul>
+        <% end %>
+      </ul>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-          <% unless user_signed_in? %>
-              <li><%= link_to "Sign in", new_user_session_path %></li>
-              <li><a href="#" data-toggle="modal" data-target="#myModal">Sign up</a></li>
-              <!-- <li><%# link_to "Sign up", new_user_registration_path %></li> -->
-            <% else %>
-              <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
-              <li><%= link_to "Speech Results", speechstats_path %></li>
-              <li><%= link_to "Help", help_path %></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= current_user.first_name %> <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><%= link_to "My Profile", user_path(current_user) %></li>
-                  <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
-                </ul>
-              </li>
-              
-          <% end %>
-        </ul>
-    </div><!--/.nav-collapse -->
   </div>
 </nav>

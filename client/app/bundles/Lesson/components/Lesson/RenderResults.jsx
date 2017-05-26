@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
-import {Progress} from './progress';
 import Pace from './Pace';
 
 export default class RenderResults extends Component {
@@ -14,10 +13,9 @@ export default class RenderResults extends Component {
           <p>{this.props.local.stt}</p>
           <Pace pace={this.props.local.pace} />
           <br/>
-          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} />
+          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} user={this.props.user} screenshot={this.props.screenshot} local={this.props.local} />
           {this.props.children}
           <br/><br/>
-
           <h2>Understanding your results</h2>
           <p></p>
         </div>

@@ -31,10 +31,6 @@ export default class Pace extends Component {
       )
     }
 
-    
+
   }
 }
-
-
-
-

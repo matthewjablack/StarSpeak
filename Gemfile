@@ -45,6 +45,8 @@ gem 'activeadmin'
 gem "select2-rails"
 
 gem "react_on_rails", "~> 7"
+gem 'materialize-sass'
+gem 'material_icons'
 
 gem 'kaminari'
 
@@ -71,7 +73,7 @@ gem 'capistrano-rbenv', '~> 2.1'
 gem "font-awesome-rails"
 
 gem "wysiwyg-rails"
- 
+
 gem "kaminari"
 
 

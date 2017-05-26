@@ -34,7 +34,6 @@
     "isomorphic-style-loader": "^2.0.0",
     "react": "^15.5.4",
     "react-alert": "^2.0.1",
-    "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
     "react-fontawesome": "^1.6.1",
     "react-on-rails": "7.0.4",

@@ -17,8 +17,16 @@
 //= require turbolinks
 //= require_tree .
 //= require select2
+//= require materialize-sprockets
+
 
 $(document).ready(function() {
 	$('#user_level_id').select2();
+	$(".dropdown-button").dropdown();
+	$('.modal').modal();
+	$(".button-collapse").sideNav();
 })
 
+$(document).on('turbolinks:load', function() {
+  Waves.displayEffect();
+});

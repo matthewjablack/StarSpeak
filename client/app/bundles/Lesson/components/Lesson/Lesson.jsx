@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone';
 import FontAwesome from 'react-fontawesome';
 import Webcam from 'react-webcam';
-import { ProgressBar, Col, Row } from 'react-bootstrap';
 import {formatSeconds} from './format-time';
 import SpeechToText from 'speech-to-text';
 import browser from 'detect-browser';
 import {isObjectEmpty} from './params';
 import {getIndicoEmotions} from './indico-emotion';
 import {parseWatson} from './watson-parse';
-import {Progress} from './progress';
 import {createSpeechstat, calculatePace} from './speechstat';
 import {Stats} from './stats';
 import RenderIntro from './RenderIntro';
@@ -21,6 +19,7 @@ import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
+import { Card } from 'react-materialize';
 
 
 var screenshots = [];
@@ -98,14 +97,14 @@ export default class Lesson extends Component{
         pace: 0.00,
         tone: {
           emotion: {
-            anger: 0.00, 
+            anger: 0.00,
             disgust: 0.00,
-            fear: 0.00, 
-            joy: 0.00, 
-            sadness: 0.00, 
+            fear: 0.00,
+            joy: 0.00,
+            sadness: 0.00,
           },
           language: {
-            analytical: 0.00, 
+            analytical: 0.00,
             confident: 0.00,
             tentative: 0.00,
           },
@@ -120,14 +119,14 @@ export default class Lesson extends Component{
         }
       },
       local: {
-        stt: "", 
-        sttInterim: [""], 
+        stt: "",
+        sttInterim: [""],
         sttFinal: [],
         pace: 0.00,
       },
       screenshot: [],
       analyzing: false,
-      width: '0', 
+      width: '0',
       height: '0',
       length: 20,
       prep: 10,
@@ -139,6 +138,7 @@ export default class Lesson extends Component{
       errors: [],
       alerts: [],
       percentage: 0.00,
+      intervalId: 0,
     };
 
     this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
@@ -170,7 +170,7 @@ export default class Lesson extends Component{
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
-    setInterval(() => {
+    var refreshIntervalId = setInterval(() => {
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
           let screenshot = this.refs.webcam.getScreenshot();
@@ -183,7 +183,7 @@ export default class Lesson extends Component{
       } else {
         this.setState({ loadCount: this.state.loadCount - 1 });
       }
-      
+
 
       if (this.state.stage == 'Record' && this.state.presentCount > 0) {
         this.setState({ presentCount: this.state.presentCount - 1 });
@@ -206,14 +206,18 @@ export default class Lesson extends Component{
         } catch(error) {
           this.createError('error', "Error using webcam. Make sure it's turned on");
         }
-        
+
       }
     }, 1000)
-    
+
+
+    this.setState({intervalId: refreshIntervalId})
+
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions.bind(this));
+    clearInterval(this.state.intervalId);
   }
 
   updateWindowDimensions() {
@@ -426,8 +430,8 @@ export default class Lesson extends Component{
       console.log(error);
     }
     newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
-    newLocal.pace = calculatePace(newLocal.stt, this.state.length);
-    newWatson.pace = calculatePace(newWatson.stt, this.state.length); 
+    newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
+    newWatson.pace = calculatePace(newWatson.stt,  this.state.length - this.state.presentCount);
 
     let WatsonTone = await watsonTone(this.state.user.auth_token, newLocal.stt);
 
@@ -437,10 +441,10 @@ export default class Lesson extends Component{
     this.handleMicClick();
 
     let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
-    
+
     this.setState({indico: indico, stage: 'Results'});
 
-    createSpeechstat(this.state.user, this.state.lesson, this.state.moduler, 
+    createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser);
 
     for (var i = 0; i < indico.errors.length; i++) {
@@ -465,7 +469,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
     } else {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]}/>;
     }
 
     let commonContent;
@@ -486,4 +490,3 @@ export default class Lesson extends Component{
     )
   }
 }
-
