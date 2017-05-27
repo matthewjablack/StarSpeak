@@ -36,6 +36,8 @@ gem 'devise'
 
 gem 'rack-cors', :require => 'rack/cors'
 
+gem 'client_side_validations'
+
 gem 'faraday', '~> 0.9.2'
 
 gem 'nokogiri', '~> 1.6.0'
