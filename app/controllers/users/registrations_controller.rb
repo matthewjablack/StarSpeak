@@ -4,28 +4,28 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
   end
 
-	before_filter :configure_permitted_parameters
+  before_filter :configure_permitted_parameters
 
-	protected
+  protected
 
 
-	def configure_permitted_parameters
+  def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :first_name, :last_name, :level_id, :betacode_id) }
   end
 
 
-	def sign_up_params
+  def sign_up_params
     params.require(:user).permit(:email, :password, :password_confirmation,:first_name, :last_name, :level_id, :betacode_id)
-	end
+  end
 
 
-	def after_sign_up_path_for(resource)
-		dashboard_path
+  def after_sign_up_path_for(resource)
+    dashboard_path
 
-		
-	end
+    
+  end
 
-	def after_inactive_sign_up_path_for(resource)
-		new_user_session_path
-	end
+  def after_inactive_sign_up_path_for(resource)
+    new_user_session_path
+  end
 end
