@@ -2594,7 +2594,7 @@ recordrtc-nodejs@^1.0.6:
     mime latest
     recordrtc latest
 
-recordrtc@latest:
+recordrtc@^5.4.1, recordrtc@latest:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/recordrtc/-/recordrtc-5.4.1.tgz#01202784ae2636dbd79ac42071c6593548c56c74"
 
