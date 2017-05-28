@@ -1,8 +1,8 @@
 import React from 'react';
 
-export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser) {
+export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, video) {
 	if (user.auth_token !== null) {
-    let response3 = await fetch(
+    let response = await fetch(
       '/api/v1/speechstats.json?auth_token=' + user.auth_token +
       '&user_id=' + user.id +
       '&betacode_id=' + user.betacode_id + 
@@ -41,7 +41,8 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       '&conscientiousness_speech_watson=' + watson.tone.social.conscientiousness + 
       '&extraversion_speech_watson=' + watson.tone.social.extraversion + 
       '&agreeableness_speech_watson=' + watson.tone.social.agreeableness + 
-      '&emotional_range_speech_watson=' + watson.tone.social.emotionalRange
+      '&emotional_range_speech_watson=' + watson.tone.social.emotionalRange + 
+      '&video_id=' + video.id
       , {
       method: 'POST',
       header: {
@@ -50,6 +51,8 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
         'Access-Control-Allow-Origin': '*',
       }
     }) 
+    let responseJson = response.json();
+    return responseJson.speechstat;
   }
 }
 

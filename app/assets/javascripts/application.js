@@ -16,6 +16,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require_tree ./stores
 //= require select2
 //= require materialize-sprockets
 

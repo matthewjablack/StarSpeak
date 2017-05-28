@@ -224,6 +224,84 @@ export default class Lesson extends Component{
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
+
+
+
+
+
+  captureUserMedia(callback) {  
+    var params = { audio: true, video: true };
+    navigator.getUserMedia(params, callback, (error) => {
+      alert(JSON.stringify(error));
+    });
+  };
+
+  requestUserMedia() {  
+    this.captureUserMedia((stream) => {
+      src = window.URL.createObjectURL(stream);
+      // this.setState({ src: window.URL.createObjectURL(stream) });
+    });
+  }
+
+
+  startRecord() {  
+    this.captureUserMedia((stream) => {
+      recordVideo = RecordRTC(stream, { type: 'video' });
+      recordVideo.startRecording();
+    });
+  }
+
+  stopRecord() {
+    recordVideo.stopRecording(() => {
+      var blob = recordVideo.getBlob();
+
+      var fileName = uuidV1() + '.webm';
+
+      var file = new File([blob], fileName, {
+          type: 'video/webm'
+      });
+
+      this.setState({upload: {name: file.name, size: file.size, loaded: 0} } );
+
+      FileStore.createResource(file, { onProgress: this.handleProgress })
+      .then((data) => {
+        this.handleResourceCreated(file, data.video);
+      })
+      .fail((xhr) => {
+        this.handleError(file, xhr);
+      });
+
+      this.setState({ uploading: true });
+    });
+  }
+
+
+  handleProgress(file, loaded) {
+    var upload = this.state.upload;
+    if (upload) { upload.loaded = loaded };
+      
+    let loader = this.state.upload.loaded;
+    let size = this.state.upload.size;
+      
+    this.setState({
+     percentUploaded: Math.round((loader) / (size) * 100)
+    });
+  }
+
+  handleError(file, xhr) {
+    this.setState({ errors: file.name + ' failed to upload'});
+  }
+
+
+  handleResourceCreated(file, video) {
+    this.setState({video: video});
+  }
+
+
+
+
+
+
   reset() {
     if (this.state.audioSource) {
       this.stopTranscription();
@@ -411,12 +489,16 @@ export default class Lesson extends Component{
   }
 
   startStageRecord() {
+    this.startRecord();
+    
     this.setState({stage: 'Record'});
     this.handleMicClick();
     this.handleLocalStream();
   }
 
   async startStageAnalyze() {
+    this.stopRecord();
+
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
     newLocal.stt = newLocal.sttFinal.toString();
@@ -499,131 +581,235 @@ export default class Lesson extends Component{
 
 
 
-// fetching DOM references
-var btnStartRecording = document.querySelector('#btn-start-recording');
-var btnStopRecording  = document.querySelector('#btn-stop-recording');
+// // fetching DOM references
+// var btnStartRecording = document.querySelector('#btn-start-recording');
+// var btnStopRecording  = document.querySelector('#btn-stop-recording');
 
-var videoElement      = document.querySelector('video');
+// var videoElement      = document.querySelector('video');
 
-var progressBar = document.querySelector('#progress-bar');
-var percentage = document.querySelector('#percentage');
+// var progressBar = document.querySelector('#progress-bar');
+// var percentage = document.querySelector('#percentage');
 
-var recorder;
+// var recorder;
 
-// reusable helpers
+// // reusable helpers
 
-// this function submits recorded blob to nodejs server
-function postFiles() {
-    var blob = recorder.getBlob();
+// // this function submits recorded blob to nodejs server
+// function postFiles() {
+//     var blob = recorder.getBlob();
 
     // getting unique identifier for the file name
-    var fileName = generateRandomString() + '.webm';
+    // var fileName = generateRandomString() + '.webm';
 
-    var file = new File([blob], fileName, {
-        type: 'video/webm'
-    });
+    // var file = new File([blob], fileName, {
+    //     type: 'video/webm'
+    // });
+//     // getting unique identifier for the file name
+//     var fileName = generateRandomString() + '.webm';
+    
+//     var file = new File([blob], fileName, {
+//         type: 'video/webm'
+//     });
 
-    videoElement.src = '';
-    videoElement.poster = '/ajax-loader.gif';
+//     videoElement.src = '';
+//     videoElement.poster = '/ajax-loader.gif';
 
-    xhr('/uploadFile', file, function(responseText) {
-        var fileURL = JSON.parse(responseText).fileURL;
+//     xhr('/uploadFile', file, function(responseText) {
+//         var fileURL = JSON.parse(responseText).fileURL;
 
-        console.info('fileURL', fileURL);
-        videoElement.src = fileURL;
-        videoElement.play();
-        videoElement.muted = false;
-        videoElement.controls = true;
+//         console.info('fileURL', fileURL);
+//         videoElement.src = fileURL;
+//         videoElement.play();
+//         videoElement.muted = false;
+//         videoElement.controls = true;
 
-        document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
-    });
+// <<<<<<< HEAD
+//         document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
+//     });
 
-    if(mediaStream) mediaStream.stop();
-}
+//     if(mediaStream) mediaStream.stop();
+// }
 
-// XHR2/FormData
-function xhr(url, data, callback) {
-    var request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
-        if (request.readyState == 4 && request.status == 200) {
-            callback(request.responseText);
-        }
-    };
+// // XHR2/FormData
+// function xhr(url, data, callback) {
+//     var request = new XMLHttpRequest();
+//     request.onreadystatechange = function() {
+//         if (request.readyState == 4 && request.status == 200) {
+//             callback(request.responseText);
+//         }
+//     };
 
-    request.upload.onprogress = function(event) {
-        progressBar.max = event.total;
-        progressBar.value = event.loaded;
-        progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
-    };
+//     request.upload.onprogress = function(event) {
+//         progressBar.max = event.total;
+//         progressBar.value = event.loaded;
+//         progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
+//     };
 
-    request.upload.onload = function() {
-        percentage.style.display = 'none';
-        progressBar.style.display = 'none';
-    };
-    request.open('POST', url);
+//     request.upload.onload = function() {
+//         percentage.style.display = 'none';
+//         progressBar.style.display = 'none';
+//     };
+//     request.open('POST', url);
 
-    var formData = new FormData();
-    formData.append('file', data);
-    request.send(formData);
-}
+//     var formData = new FormData();
+//     formData.append('file', data);
+//     request.send(formData);
+// }
 
-// generating random string
-function generateRandomString() {
-    if (window.crypto) {
-        var a = window.crypto.getRandomValues(new Uint32Array(3)),
-            token = '';
-        for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
-        return token;
-    } else {
-        return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
-    }
-}
+// // generating random string
+// function generateRandomString() {
+//     if (window.crypto) {
+//         var a = window.crypto.getRandomValues(new Uint32Array(3)),
+//             token = '';
+//         for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
+//         return token;
+//     } else {
+//         return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
+//     }
+// }
 
-var mediaStream = null;
-// reusable getUserMedia
-function captureUserMedia(success_callback) {
-    var session = {
-        audio: true,
-        video: true
-    };
+// var mediaStream = null;
+// // reusable getUserMedia
+// function captureUserMedia(success_callback) {
+//     var session = {
+//         audio: true,
+//         video: true
+//     };
 
-    navigator.getUserMedia(session, success_callback, function(error) {
-        alert('Unable to capture your camera. Please check console logs.');
-        console.error(error);
-    });
-}
+//     navigator.getUserMedia(session, success_callback, function(error) {
+//         alert('Unable to capture your camera. Please check console logs.');
+//         console.error(error);
+//     });
+// }
 
-// UI events handling
-btnStartRecording.onclick = function() {
-    btnStartRecording.disabled = true;
+// // UI events handling
+// btnStartRecording.onclick = function() {
+//     btnStartRecording.disabled = true;
 
-    captureUserMedia(function(stream) {
-        mediaStream = stream;
+//     captureUserMedia(function(stream) {
+//         mediaStream = stream;
 
-        videoElement.src = window.URL.createObjectURL(stream);
-        videoElement.play();
-        videoElement.muted = true;
-        videoElement.controls = false;
+//         videoElement.src = window.URL.createObjectURL(stream);
+//         videoElement.play();
+//         videoElement.muted = true;
+//         videoElement.controls = false;
 
-        recorder = RecordRTC(stream, {
-            type: 'video'
-        });
+//         recorder = RecordRTC(stream, {
+//             type: 'video'
+//         });
 
-        recorder.startRecording();
+//         recorder.startRecording();
 
-        // enable stop-recording button
-        btnStopRecording.disabled = false;
-    });
-};
+//         // enable stop-recording button
+//         btnStopRecording.disabled = false;
+//     });
+// };
 
 
-btnStopRecording.onclick = function() {
-    btnStartRecording.disabled = false;
-    btnStopRecording.disabled = true;
+// btnStopRecording.onclick = function() {
+//     btnStartRecording.disabled = false;
+//     btnStopRecording.disabled = true;
 
-    recorder.stopRecording(postFiles);
-};
+//     recorder.stopRecording(postFiles);
+// };
 
-window.onbeforeunload = function() {
-    startRecording.disabled = false;
-};
+// window.onbeforeunload = function() {
+//     startRecording.disabled = false;
+// };
+// =======
+//         document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
+//     });
+    
+//     if(mediaStream) mediaStream.stop();
+// }
+
+// // XHR2/FormData
+// function xhr(url, data, callback) {
+//     var request = new XMLHttpRequest();
+//     request.onreadystatechange = function() {
+//         if (request.readyState == 4 && request.status == 200) {
+//             callback(request.responseText);
+//         }
+//     };
+            
+//     request.upload.onprogress = function(event) {
+//         progressBar.max = event.total;
+//         progressBar.value = event.loaded;
+//         progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
+//     };
+            
+//     request.upload.onload = function() {
+//         percentage.style.display = 'none';
+//         progressBar.style.display = 'none';
+//     };
+//     request.open('POST', url);
+
+//     var formData = new FormData();
+//     formData.append('file', data);
+//     request.send(formData);
+// }
+
+// // generating random string
+// function generateRandomString() {
+//     if (window.crypto) {
+//         var a = window.crypto.getRandomValues(new Uint32Array(3)),
+//             token = '';
+//         for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
+//         return token;
+//     } else {
+//         return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
+//     }
+// }
+
+// var mediaStream = null;
+// // reusable getUserMedia
+// function captureUserMedia(success_callback) {
+//     var session = {
+//         audio: true,
+//         video: true
+//     };
+    
+//     navigator.getUserMedia(session, success_callback, function(error) {
+//         alert('Unable to capture your camera. Please check console logs.');
+//         console.error(error);
+//     });
+// }
+
+// // UI events handling
+// btnStartRecording.onclick = function() {
+//     btnStartRecording.disabled = true;
+    
+//     captureUserMedia(function(stream) {
+//         mediaStream = stream;
+        
+//         videoElement.src = window.URL.createObjectURL(stream);
+//         videoElement.play();
+//         videoElement.muted = true;
+//         videoElement.controls = false;
+        
+//         recorder = RecordRTC(stream, {
+//             type: 'video'
+//         });
+        
+//         recorder.startRecording();
+        
+//         // enable stop-recording button
+//         btnStopRecording.disabled = false;
+//     });
+// };
+
+
+// btnStopRecording.onclick = function() {
+//     btnStartRecording.disabled = false;
+//     btnStopRecording.disabled = true;
+    
+//     recorder.stopRecording(postFiles);
+// };
+
+// window.onbeforeunload = function() {
+//     startRecording.disabled = false;
+// };
+
+
+
+// >>>>>>> setup basic file uploading to s3
