@@ -25,6 +25,8 @@ import RecordRTC from 'recordrtc';
 var screenshots = [];
 var screenCount = 0;
 var errors = [];
+var recorder;
+var mediaStream = null;
 
 export default class Lesson extends Component{
   static propTypes = {
@@ -154,6 +156,11 @@ export default class Lesson extends Component{
     this.startStageRecord = this.startStageRecord.bind(this);
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
     this.showAlert = this.showAlert.bind(this);
+    this.captureUserMedia = this.captureUserMedia.bind(this);
+    this.postFiles = this.postFiles.bind(this);
+    this.xhr = this.xhr.bind(this);
+    this.handleProgress = this.handleProgress.bind(this);
+    this.generateRandomString = this.generateRandomString.bind(this);
   }
 
   componentDidMount() {
@@ -295,7 +302,24 @@ export default class Lesson extends Component{
 
   handleResourceCreated(file, video) {
     this.setState({video: video});
+      FileStore.createResource(file, { onProgress: this.handleProgress })
+
+
+      if(mediaStream) mediaStream.stop();
   }
+
+
+  
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -491,6 +515,21 @@ export default class Lesson extends Component{
   startStageRecord() {
     this.startRecord();
     
+
+
+    // this.captureUserMedia((stream) => {
+    //     mediaStream = stream;
+
+    //     recorder = RecordRTC(stream, {
+    //         type: 'video'
+    //     });
+
+    //     recorder.startRecording();
+
+    // });
+
+
+
     this.setState({stage: 'Record'});
     this.handleMicClick();
     this.handleLocalStream();
@@ -572,6 +611,7 @@ export default class Lesson extends Component{
     )
   }
 }
+
 
 
 
@@ -813,3 +853,5 @@ export default class Lesson extends Component{
 
 
 // >>>>>>> setup basic file uploading to s3
+// =======
+// >>>>>>> video record and upload s3 successful

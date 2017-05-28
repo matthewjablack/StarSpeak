@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
 export default class FileInput extends Component{
   static propTypes = {
@@ -48,22 +47,12 @@ export default class FileInput extends Component{
     })
     if (upload) { upload.loaded = loaded };
 
-    console.log('handle progress');
-
     let loader = 0;
     let size = 0;
     for (var i = 0; i < this.state.uploads.length; i++) {
-      console.log(this.state.uploads[i]);
-      console.log(this.state.uploads[i].loaded);
-      console.log(this.state.uploads[i].size);
       loader += this.state.uploads[i].loaded;
       size += this.state.uploads[i].size;
-      console.log(loader);
     }
-
-    console.log(this.state.uploads);
-    console.log(loader);
-    console.log(size);
 
     this.setState({
       percentLoaded: Math.round((loader) / (size) * 100) + '%'
@@ -71,8 +60,6 @@ export default class FileInput extends Component{
   }
 
   handleError(file, xhr) {
-    console.log(file);
-    console.log(xhr);
     this.setState({ errors: file.name + ' failed to upload' });
   }
 
