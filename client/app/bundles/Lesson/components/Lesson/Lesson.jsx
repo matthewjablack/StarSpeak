@@ -21,12 +21,15 @@ import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
 import RecordRTC from 'recordrtc';
 
+const uuidV1 = require('uuid/v1');
 
 var screenshots = [];
 var screenCount = 0;
 var errors = [];
 var recorder;
 var mediaStream = null;
+var recordVideo;
+var src;
 
 export default class Lesson extends Component{
   static propTypes = {
@@ -157,14 +160,23 @@ export default class Lesson extends Component{
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
     this.showAlert = this.showAlert.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
-    this.postFiles = this.postFiles.bind(this);
-    this.xhr = this.xhr.bind(this);
+
+    // this.postFiles = this.postFiles.bind(this);
+    // this.xhr = this.xhr.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
-    this.generateRandomString = this.generateRandomString.bind(this);
+    this.handleError = this.handleError.bind(this);
+    this.handleResourceCreated = this.handleResourceCreated.bind(this);
+    // this.generateRandomString = this.generateRandomString.bind(this);
+    this.captureUserMedia = this.captureUserMedia.bind(this);
+    this.requestUserMedia = this.requestUserMedia.bind(this);
+    this.startRecord = this.startRecord.bind(this);
+    this.stopRecord = this.stopRecord.bind(this);
   }
 
   componentDidMount() {
     this.fetchToken();
+
+    this.requestUserMedia();
 
     if (!isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
@@ -243,7 +255,8 @@ export default class Lesson extends Component{
     });
   };
 
-  requestUserMedia() {  
+
+  requestUserMedia() {
     this.captureUserMedia((stream) => {
       src = window.URL.createObjectURL(stream);
       // this.setState({ src: window.URL.createObjectURL(stream) });
@@ -251,7 +264,7 @@ export default class Lesson extends Component{
   }
 
 
-  startRecord() {  
+  startRecord() {
     this.captureUserMedia((stream) => {
       recordVideo = RecordRTC(stream, { type: 'video' });
       recordVideo.startRecording();
@@ -260,6 +273,11 @@ export default class Lesson extends Component{
 
   stopRecord() {
     recordVideo.stopRecording(() => {
+      // let params = {
+      //   type: 'video/webm',
+      //   data: recordVideo.blob,
+      //   id: Math.floor(Math.random()*90000) + 10000
+      // }
       var blob = recordVideo.getBlob();
 
       var fileName = uuidV1() + '.webm';
@@ -286,10 +304,10 @@ export default class Lesson extends Component{
   handleProgress(file, loaded) {
     var upload = this.state.upload;
     if (upload) { upload.loaded = loaded };
-      
+
     let loader = this.state.upload.loaded;
     let size = this.state.upload.size;
-      
+
     this.setState({
      percentUploaded: Math.round((loader) / (size) * 100)
     });
@@ -299,14 +317,12 @@ export default class Lesson extends Component{
     this.setState({ errors: file.name + ' failed to upload'});
   }
 
-
   handleResourceCreated(file, video) {
     this.setState({video: video});
-      FileStore.createResource(file, { onProgress: this.handleProgress })
-
-
-      if(mediaStream) mediaStream.stop();
   }
+
+
+
 
 
   
@@ -514,21 +530,6 @@ export default class Lesson extends Component{
 
   startStageRecord() {
     this.startRecord();
-    
-
-
-    // this.captureUserMedia((stream) => {
-    //     mediaStream = stream;
-
-    //     recorder = RecordRTC(stream, {
-    //         type: 'video'
-    //     });
-
-    //     recorder.startRecording();
-
-    // });
-
-
 
     this.setState({stage: 'Record'});
     this.handleMicClick();
@@ -588,7 +589,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
+      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} />;
     } else {
       lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]}/>;
     }
@@ -611,247 +612,3 @@ export default class Lesson extends Component{
     )
   }
 }
-
-
-
-
-
-
-
-
-
-
-// // fetching DOM references
-// var btnStartRecording = document.querySelector('#btn-start-recording');
-// var btnStopRecording  = document.querySelector('#btn-stop-recording');
-
-// var videoElement      = document.querySelector('video');
-
-// var progressBar = document.querySelector('#progress-bar');
-// var percentage = document.querySelector('#percentage');
-
-// var recorder;
-
-// // reusable helpers
-
-// // this function submits recorded blob to nodejs server
-// function postFiles() {
-//     var blob = recorder.getBlob();
-
-    // getting unique identifier for the file name
-    // var fileName = generateRandomString() + '.webm';
-
-    // var file = new File([blob], fileName, {
-    //     type: 'video/webm'
-    // });
-//     // getting unique identifier for the file name
-//     var fileName = generateRandomString() + '.webm';
-    
-//     var file = new File([blob], fileName, {
-//         type: 'video/webm'
-//     });
-
-//     videoElement.src = '';
-//     videoElement.poster = '/ajax-loader.gif';
-
-//     xhr('/uploadFile', file, function(responseText) {
-//         var fileURL = JSON.parse(responseText).fileURL;
-
-//         console.info('fileURL', fileURL);
-//         videoElement.src = fileURL;
-//         videoElement.play();
-//         videoElement.muted = false;
-//         videoElement.controls = true;
-
-// <<<<<<< HEAD
-//         document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
-//     });
-
-//     if(mediaStream) mediaStream.stop();
-// }
-
-// // XHR2/FormData
-// function xhr(url, data, callback) {
-//     var request = new XMLHttpRequest();
-//     request.onreadystatechange = function() {
-//         if (request.readyState == 4 && request.status == 200) {
-//             callback(request.responseText);
-//         }
-//     };
-
-//     request.upload.onprogress = function(event) {
-//         progressBar.max = event.total;
-//         progressBar.value = event.loaded;
-//         progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
-//     };
-
-//     request.upload.onload = function() {
-//         percentage.style.display = 'none';
-//         progressBar.style.display = 'none';
-//     };
-//     request.open('POST', url);
-
-//     var formData = new FormData();
-//     formData.append('file', data);
-//     request.send(formData);
-// }
-
-// // generating random string
-// function generateRandomString() {
-//     if (window.crypto) {
-//         var a = window.crypto.getRandomValues(new Uint32Array(3)),
-//             token = '';
-//         for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
-//         return token;
-//     } else {
-//         return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
-//     }
-// }
-
-// var mediaStream = null;
-// // reusable getUserMedia
-// function captureUserMedia(success_callback) {
-//     var session = {
-//         audio: true,
-//         video: true
-//     };
-
-//     navigator.getUserMedia(session, success_callback, function(error) {
-//         alert('Unable to capture your camera. Please check console logs.');
-//         console.error(error);
-//     });
-// }
-
-// // UI events handling
-// btnStartRecording.onclick = function() {
-//     btnStartRecording.disabled = true;
-
-//     captureUserMedia(function(stream) {
-//         mediaStream = stream;
-
-//         videoElement.src = window.URL.createObjectURL(stream);
-//         videoElement.play();
-//         videoElement.muted = true;
-//         videoElement.controls = false;
-
-//         recorder = RecordRTC(stream, {
-//             type: 'video'
-//         });
-
-//         recorder.startRecording();
-
-//         // enable stop-recording button
-//         btnStopRecording.disabled = false;
-//     });
-// };
-
-
-// btnStopRecording.onclick = function() {
-//     btnStartRecording.disabled = false;
-//     btnStopRecording.disabled = true;
-
-//     recorder.stopRecording(postFiles);
-// };
-
-// window.onbeforeunload = function() {
-//     startRecording.disabled = false;
-// };
-// =======
-//         document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
-//     });
-    
-//     if(mediaStream) mediaStream.stop();
-// }
-
-// // XHR2/FormData
-// function xhr(url, data, callback) {
-//     var request = new XMLHttpRequest();
-//     request.onreadystatechange = function() {
-//         if (request.readyState == 4 && request.status == 200) {
-//             callback(request.responseText);
-//         }
-//     };
-            
-//     request.upload.onprogress = function(event) {
-//         progressBar.max = event.total;
-//         progressBar.value = event.loaded;
-//         progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
-//     };
-            
-//     request.upload.onload = function() {
-//         percentage.style.display = 'none';
-//         progressBar.style.display = 'none';
-//     };
-//     request.open('POST', url);
-
-//     var formData = new FormData();
-//     formData.append('file', data);
-//     request.send(formData);
-// }
-
-// // generating random string
-// function generateRandomString() {
-//     if (window.crypto) {
-//         var a = window.crypto.getRandomValues(new Uint32Array(3)),
-//             token = '';
-//         for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
-//         return token;
-//     } else {
-//         return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
-//     }
-// }
-
-// var mediaStream = null;
-// // reusable getUserMedia
-// function captureUserMedia(success_callback) {
-//     var session = {
-//         audio: true,
-//         video: true
-//     };
-    
-//     navigator.getUserMedia(session, success_callback, function(error) {
-//         alert('Unable to capture your camera. Please check console logs.');
-//         console.error(error);
-//     });
-// }
-
-// // UI events handling
-// btnStartRecording.onclick = function() {
-//     btnStartRecording.disabled = true;
-    
-//     captureUserMedia(function(stream) {
-//         mediaStream = stream;
-        
-//         videoElement.src = window.URL.createObjectURL(stream);
-//         videoElement.play();
-//         videoElement.muted = true;
-//         videoElement.controls = false;
-        
-//         recorder = RecordRTC(stream, {
-//             type: 'video'
-//         });
-        
-//         recorder.startRecording();
-        
-//         // enable stop-recording button
-//         btnStopRecording.disabled = false;
-//     });
-// };
-
-
-// btnStopRecording.onclick = function() {
-//     btnStartRecording.disabled = false;
-//     btnStopRecording.disabled = true;
-    
-//     recorder.stopRecording(postFiles);
-// };
-
-// window.onbeforeunload = function() {
-//     startRecording.disabled = false;
-// };
-
-
-
-// >>>>>>> setup basic file uploading to s3
-// =======
-// >>>>>>> video record and upload s3 successful
