@@ -2,7 +2,7 @@ import React from 'react';
 
 export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser) {
 	if (user.auth_token !== null) {
-    let response3 = await fetch(
+    let response = await fetch(
       '/api/v1/speechstats.json?auth_token=' + user.auth_token +
       '&user_id=' + user.id +
       '&betacode_id=' + user.betacode_id + 
@@ -50,6 +50,10 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
         'Access-Control-Allow-Origin': '*',
       }
     }) 
+
+    let responseJson = await response.json();
+
+    return responseJson.data.speechstat;
   }
 }
 

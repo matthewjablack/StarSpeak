@@ -20,7 +20,7 @@ import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
 import RecordRTC from 'recordrtc';
-
+import uuidV1 from 'uuid/v1';
 
 var screenshots = [];
 var screenCount = 0;
@@ -141,6 +141,8 @@ export default class Lesson extends Component{
       alerts: [],
       percentage: 0.00,
       intervalId: 0,
+      percentUploaded: '0%',
+      upload: {},
     };
 
     this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
@@ -158,9 +160,11 @@ export default class Lesson extends Component{
     this.showAlert = this.showAlert.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
     this.postFiles = this.postFiles.bind(this);
-    this.xhr = this.xhr.bind(this);
+    // this.xhr = this.xhr.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
-    this.generateRandomString = this.generateRandomString.bind(this);
+    this.handleError = this.handleError.bind(this);
+    this.handleResourceCreated = this.handleResourceCreated.bind(this);
+    // this.generateRandomString = this.generateRandomString.bind(this);
   }
 
   componentDidMount() {
@@ -242,37 +246,59 @@ export default class Lesson extends Component{
   postFiles() {
       var blob = recorder.getBlob();
 
-      // getting unique identifier for the file name
-      var fileName = this.generateRandomString + '.webm';
+      var fileName = uuidV1() + '.webm';
       
       var file = new File([blob], fileName, {
           type: 'video/webm'
       });
 
-      FileStore.createResource(file, { onProgress: this.handleProgress })
+      this.setState({upload: {name: fileName, size: file.size, loaded: 0}})
 
-      
+      FileStore.createResource(file, { onProgress: this.handleProgress })
+      .then((data) => {
+        this.handleResourceCreated(file, data.video);
+      })
+      .fail((xhr) => {
+        this.handleError(file, xhr);
+      });
+
       if(mediaStream) mediaStream.stop();
   }
 
 
-  handleProgress() {
-    console.log('handling progress');
+  handleProgress(file, loaded) {
+    var upload = this.state.upload;
+    if (upload) { upload.loaded = loaded };
+
+    let loader = this.state.upload.loaded;
+    let size = this.state.upload.size;
+
+    this.setState({
+      percentUploaded: Math.round((loader) / (size) * 100)
+    });
+  }
+
+  handleError(file, xhr) {
+    this.setState({ errors: file.name + ' failed to upload' });
+  }
+
+  handleResourceCreated(file, video) {
+    this.setState({video: video});
   }
 
 
 
-  // generating random string
-  generateRandomString() {
-      if (window.crypto) {
-          var a = window.crypto.getRandomValues(new Uint32Array(3)),
-              token = '';
-          for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
-          return token;
-      } else {
-          return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
-      }
-  }
+  // // generating random string
+  // generateRandomString() {
+  //     if (window.crypto) {
+  //         var a = window.crypto.getRandomValues(new Uint32Array(3)),
+  //             token = '';
+  //         for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
+  //         return token;
+  //     } else {
+  //         return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
+  //     }
+  // }
 
 
   // reusable getUserMedia
@@ -571,7 +597,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
+      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} />;
     } else {
       lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]}/>;
     }

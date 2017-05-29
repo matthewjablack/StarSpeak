@@ -17,6 +17,21 @@ class Api::V1::VideosController < ApplicationController
     end
   end
 
+  def update
+    @video = Video.find(params[:id])
+    if @video.update_attributes(video_id: params[:video_id])
+      render :status => 200,
+               :json => { :success => true,
+                          :info => "Updated video attributes",
+                          :data => {video: @video} } 
+    else
+      render :status => 401,
+               :json => { :success => false,
+                          :info => "Error updating video attributes",
+                          :data => {} } 
+    end
+  end
+
   private
 
   def video_params

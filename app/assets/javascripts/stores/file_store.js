@@ -10,9 +10,6 @@ var FileStore = (function($) {
     });
   };
 
-  // 1. Generate signed upload URL
-  // 2. Upload to s3
-  // 3. Post uploaded file properties to API
   var createResource = function(file, callbacks) {
     return getSignedUploadUrl(file)
     .then(function(data) {
@@ -22,8 +19,6 @@ var FileStore = (function($) {
       return saveResource(file, downloadUrl, callbacks);
     });
   };
-
-  // private
 
   var getSignedUploadUrl = function(file) {
     return $.ajax({
