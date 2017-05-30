@@ -243,11 +243,6 @@ export default class Lesson extends Component{
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
-
-
-
-
-
   captureUserMedia(callback) {  
     var params = { audio: true, video: true };
     navigator.getUserMedia(params, callback, (error) => {
@@ -315,27 +310,6 @@ export default class Lesson extends Component{
   handleResourceCreated(file, video) {
     this.setState({video: video});
   }
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   reset() {
     if (this.state.audioSource) {
