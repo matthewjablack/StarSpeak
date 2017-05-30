@@ -273,11 +273,6 @@ export default class Lesson extends Component{
 
   stopRecord() {
     recordVideo.stopRecording(() => {
-      // let params = {
-      //   type: 'video/webm',
-      //   data: recordVideo.blob,
-      //   id: Math.floor(Math.random()*90000) + 10000
-      // }
       var blob = recordVideo.getBlob();
 
       var fileName = uuidV1() + '.webm';
@@ -566,8 +561,10 @@ export default class Lesson extends Component{
 
     this.setState({indico: indico, stage: 'Results'});
 
-    createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser);
+    let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
+      this.state.indico, this.state.watson, this.state.local, browser, this.state.video);
+
+    this.setState({speechstat: speechstat});
 
     for (var i = 0; i < indico.errors.length; i++) {
       this.createError('error', indico.errors[i]);
