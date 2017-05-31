@@ -1,94 +1,74 @@
 import React from 'react';
+import RecordRTC from 'recordrtc';
+const uuidV1 = require('uuid/v1');
+
+var src;
+var uploadDetails;
+
+function captureUserMedia(callback) {  
+  var params = { audio: true, video: true };
+  navigator.getUserMedia(params, callback, (error) => {
+    alert(JSON.stringify(error));
+  });
+};
 
 
-// fetching DOM references
+export function requestUserMedia() {
+  captureUserMedia((stream) => {
+    src = window.URL.createObjectURL(stream);
+    // this.setState({ src: window.URL.createObjectURL(stream) });
+  });
+}
 
-var videoElement      = document.querySelector('video');
 
-var progressBar = document.querySelector('#progress-bar');
-var percentage = document.querySelector('#percentage');
+export function startRecord(ctx) {
+  captureUserMedia((stream) => {
+    ctx.setState({recordVideo: RecordRTC(stream, { type: 'video' })});
+    ctx.state.recordVideo.startRecording();
+  });
+}
 
-var recorder;
+export function stopRecord(ctx) {
+  ctx.state.recordVideo.stopRecording(() => {
+    var blob = ctx.state.recordVideo.getBlob();
 
-// reusable helpers
-
-// this function submits recorded blob to nodejs server
-function postFiles() {
-    var blob = recorder.getBlob();
-
-    // getting unique identifier for the file name
-    var fileName = generateRandomString() + '.webm';
+    var fileName = uuidV1() + '.webm';
 
     var file = new File([blob], fileName, {
         type: 'video/webm'
     });
 
-    videoElement.src = '';
-    videoElement.poster = '/ajax-loader.gif';
+    ctx.setState({upload: {name: file.name, size: file.size, loaded: 0} });
 
-    xhr('/uploadFile', file, function(responseText) {
-        var fileURL = JSON.parse(responseText).fileURL;
-
-        console.info('fileURL', fileURL);
-        videoElement.src = fileURL;
-        videoElement.play();
-        videoElement.muted = false;
-        videoElement.controls = true;
-
-        document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
+    FileStore.createResource(file, ctx, { onProgress: handleProgress })
+    .then((data) => {
+      handleResourceCreated(file, data.video, ctx);
+    })
+    .fail((xhr) => {
+      handleError(file, xhr, ctx);
     });
 
-    if(mediaStream) mediaStream.stop();
+    ctx.setState({ uploading: true });
+  });
 }
 
-// XHR2/FormData
-function xhr(url, data, callback) {
-    var request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
-        if (request.readyState == 4 && request.status == 200) {
-            callback(request.responseText);
-        }
-    };
 
-    request.upload.onprogress = function(event) {
-        progressBar.max = event.total;
-        progressBar.value = event.loaded;
-        progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
-    };
+function handleProgress(file, loaded, ctx) {
+  var upload = ctx.state.upload;
+  if (upload) { ctx.state.upload.loaded = loaded };
 
-    request.upload.onload = function() {
-        percentage.style.display = 'none';
-        progressBar.style.display = 'none';
-    };
-    request.open('POST', url);
+  let loader = ctx.state.upload.loaded;
+  let size = ctx.state.upload.size;
 
-    var formData = new FormData();
-    formData.append('file', data);
-    request.send(formData);
+  ctx.setState({
+   percentUploaded: Math.round((loader) / (size) * 100)
+  });
 }
 
-// generating random string
-function generateRandomString() {
-    if (window.crypto) {
-        var a = window.crypto.getRandomValues(new Uint32Array(3)),
-            token = '';
-        for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
-        return token;
-    } else {
-        return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
-    }
+function handleError(file, xhr, ctx) {
+  ctx.setState({ errors: file.name + ' failed to upload'});
 }
 
-var mediaStream = null;
-// reusable getUserMedia
-function captureUserMedia(success_callback) {
-    var session = {
-        audio: true,
-        video: true
-    };
-
-    navigator.getUserMedia(session, success_callback, function(error) {
-        alert('Unable to capture your camera. Please check console logs.');
-        console.error(error);
-    });
+function handleResourceCreated(file, video, ctx) {
+  ctx.setState({video: video});
 }

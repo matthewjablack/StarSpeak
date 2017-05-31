@@ -13,10 +13,10 @@ var FileStore = (function($) {
   // 1. Generate signed upload URL
   // 2. Upload to s3
   // 3. Post uploaded file properties to API
-  var createResource = function(file, callbacks) {
+  var createResource = function(file, ctx,callbacks) {
     return getSignedUploadUrl(file)
     .then(function(data) {
-      return uploadFile(file, data.upload.url, data.upload.content_type, callbacks);
+      return uploadFile(file, data.upload.url, data.upload.content_type, callbacks, ctx);
     })
     .then(function(downloadUrl) {
       return saveResource(file, downloadUrl, callbacks);
@@ -36,7 +36,7 @@ var FileStore = (function($) {
     });
   };
 
-  var uploadFile = function(file, uploadUrl, contentType, callbacks) {
+  var uploadFile = function(file, uploadUrl, contentType, callbacks, ctx) {
     var deferred = $.Deferred();
 
     var xhr = new XMLHttpRequest();
@@ -45,7 +45,7 @@ var FileStore = (function($) {
 
     xhr.onload = function() {
       if (xhr.status === 200) {
-        callbacks.onProgress(file, file.size);
+        callbacks.onProgress(file, file.size, ctx);
         deferred.resolve(uploadUrl.split('?')[0]);
       } else {
         deferred.reject(xhr);
@@ -58,7 +58,7 @@ var FileStore = (function($) {
 
     xhr.upload.onprogress = function(e) {
       if (e.lengthComputable) {
-        callbacks.onProgress(file, e.loaded);
+        callbacks.onProgress(file, e.loaded, ctx);
       }
     };
 
