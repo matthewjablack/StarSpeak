@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import VideosList from './videos/videos_list';
-import FileInput from './forms/file_input';
+import VideosList from './videos/VideosList';
+import FileInput from './forms/FileInput';
 
 export default class Upload extends Component{
   constructor(props) {

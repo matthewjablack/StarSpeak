@@ -1,3 +1,0 @@
-json.documents(@videos) do |video|
-  json.partial!(video)
-end

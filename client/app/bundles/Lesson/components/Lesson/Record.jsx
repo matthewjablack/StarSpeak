@@ -16,7 +16,6 @@ function captureUserMedia(callback) {
 export function requestUserMedia() {
   captureUserMedia((stream) => {
     src = window.URL.createObjectURL(stream);
-    // this.setState({ src: window.URL.createObjectURL(stream) });
   });
 }
 

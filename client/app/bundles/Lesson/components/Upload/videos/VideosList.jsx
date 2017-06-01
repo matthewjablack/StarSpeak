@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import VideoItem from './video_item';
+import VideoItem from './VideoItem';
 
 export default class VideosList extends Component{
   static propTypes = {

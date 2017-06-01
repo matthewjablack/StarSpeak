@@ -25,18 +25,16 @@ export default class FileInput extends Component{
       uploads.push({name: e.target.files[i].name, size: e.target.files[i].size, loaded: 0})
     }
 
-    var _this = this;
-
     this.setState({uploads: uploads});
 
     for (var i = 0; i < e.target.files.length; i++) {
       let file = e.target.files[i];
-      FileStore.createResource(file, { onProgress: _this.handleProgress })
+      FileStore.createResource(file, { onProgress: this.handleProgress })
       .then(function(data) {
-        _this.handleResourceCreated(file, data.video);
+        this.handleResourceCreated(file, data.video);
       })
       .fail(function(xhr) {
-        _this.handleError(file, xhr);
+        this.handleError(file, xhr);
       });
     }
   }
@@ -75,7 +73,6 @@ export default class FileInput extends Component{
   }
 
   render() {
-    var _this = this;
     return (
       <div>
         <input ref="fileElement" type="file" multiple={true} onChange={this.handleUploadFiles} />
