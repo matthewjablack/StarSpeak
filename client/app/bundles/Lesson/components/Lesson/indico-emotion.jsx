@@ -10,44 +10,38 @@ let CAMERA_ERROR = "Looks like your camera isn't on";
 
 
 export async function getIndicoEmotions(screenshots, txt, ctx) {
-  let percentageCount = screenshots.length + 2;
-	let facialEmotion = {eCount: 0, happy: 0, sad: 0, angry: 0, fear: 0, surprise: 0, neutral: 0, errors: []};
-	for (var i = 0; i < screenshots.length; i++) {
-		facialEmotion = await getFacialEmotion(screenshots[i], facialEmotion);
-    ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)});
-	}
-	let speechEmotion = await getSpeechEmotion(txt);
-  ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)});
-	let personality = await getPersonality(txt);
-  ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)});
+  let percentageCount = 5;
+  let facialEmotion = await getFacialEmotion(screenshots);
+  ctx.setState({percentage: ctx.state.percentage + (100/percentageCount)*3});
 
-  let errors = facialEmotion.errors.concat(speechEmotion.errors).concat(personality.errors);
+  let errors = facialEmotion.errors;
   errors = errors.filter((val,i)=>{
     return errors.indexOf(val)==i;
   });
 
-	return {facialEmotion: facialEmotion, speechEmotion: speechEmotion, personality: personality, errors: errors};
+  return {facialEmotion: facialEmotion, errors: errors};
 }
 
-async function getFacialEmotion(screenshot, facialEmotion) {
-  if (screenshot === null) {
+async function getFacialEmotion(screenshots) {
+  let facialEmotion = {eCount: 0, happy: 0, sad: 0, angry: 0, fear: 0, surprise: 0, neutral: 0, errors: []};
+  if (screenshots.length === 0) {
     facialEmotion.errors.push(CAMERA_ERROR);
   } else {
     try {
-      let response = await fetch('https://apiv2.indico.io/fer', {
+      let response = await fetch('https://apiv2.indico.io/fer/batch', {
         method: 'POST',
         body: JSON.stringify({
           'api_key': "016fe87430f6925ba984a78f83b93fe1",
-          'data': screenshot,
-          'detect': true
+          'data': screenshots
         })
       })
 
       let responseJson = await response.json();
 
       if (responseJson.results) {
-        if (responseJson.results[0] && typeof responseJson.results[0].emotions != 'undefined') {
-          var emotions = responseJson.results[0].emotions;
+        let results = responseJson.results;
+        for (var i = 0; i < results.length; i++) {
+          var emotions = results[i];
           var count = facialEmotion.eCount + 1;
           facialEmotion.eCount += 1;
           facialEmotion.happy = (facialEmotion.happy * (count-1) + num(emotions['Happy'])) / count;
@@ -56,6 +50,17 @@ async function getFacialEmotion(screenshot, facialEmotion) {
           facialEmotion.fear = (facialEmotion.fear * (count-1) + num(emotions['Fear'])) / count;
           facialEmotion.surprise = (facialEmotion.surprise * (count-1) + num(emotions['Surprise'])) / count;
           facialEmotion.neutral = (facialEmotion.neutral * (count-1) + num(emotions['Neutral'])) / count;
+          
+        }
+
+        if ((facialEmotion.happy * 2) < 1) {
+          facialEmotion.happy *= 2;
+        }
+        facialEmotion.sad *= 0.5;
+        facialEmotion.angry *= 0.5;
+        facialEmotion.fear *= 0.5;
+        if ((facialEmotion.neutral * 2) < 1) {
+          facialEmotion.neutral *= 2;
         }
       } else {
         facialEmotion.errors.push(FACE_ERROR);

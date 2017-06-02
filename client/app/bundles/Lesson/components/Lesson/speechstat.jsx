@@ -1,7 +1,7 @@
 import React from 'react';
 
 export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, video) {
-	if (user.auth_token !== null) {
+  if (user.auth_token !== null) {
     let response = await fetch(
       '/api/v1/speechstats.json?auth_token=' + user.auth_token +
       '&user_id=' + user.id +
@@ -14,15 +14,6 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       '&fear_facial_indico=' + indico.facialEmotion.fear + 
       '&surprise_facial_indico=' + indico.facialEmotion.surprise + 
       '&neutral_facial_indico=' + indico.facialEmotion.neutral + 
-      '&happy_speech_indico=' + indico.speechEmotion.happy + 
-      '&sad_speech_indico=' + indico.speechEmotion.sad + 
-      '&angry_speech_indico=' + indico.speechEmotion.angry + 
-      '&fear_speech_indico=' + indico.speechEmotion.fear + 
-      '&surprise_speech_indico=' + indico.speechEmotion.surprise + 
-      '&agreeableness_indico=' + indico.personality.agreeableness + 
-      '&conscientiousness_indico=' + indico.personality.conscientiousness + 
-      '&extraversion_indico=' + indico.personality.extraversion + 
-      '&openness_indico=' + indico.personality.openness + 
       '&watson_text=' + watson.stt + 
       '&local_text=' + local.stt + 
       '&watson_text_pace=' + watson.pace + 
