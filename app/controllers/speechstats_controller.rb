@@ -6,9 +6,4 @@ class SpeechstatsController < ApplicationController
 	def show
 		@speechstat = Speechstat.find(params[:id])
 	end
-
-	def update
-		@speechstat = Speechstat.find(params[:id])
-		@speechstat.save
-	end
 end

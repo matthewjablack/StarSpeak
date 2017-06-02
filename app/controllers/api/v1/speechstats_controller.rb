@@ -74,10 +74,10 @@ class Api::V1::SpeechstatsController < ApplicationController
 
   def update
     @rating = Speechstat.last
-    @rating.update(facial_emotions_rating: params[:facial_emotions_rating],
-                      social_tone_rating: params[:social_tone_rating],
-                      language_tone_rating: params[:language_tone_rating],
-                      emotion_tone_rating: params[:emotion_tone_rating])
+    @rating.update_columns(facial_emotions_rating: params[:facial_emotions_rating],
+                           social_tone_rating: params[:social_tone_rating],
+                           language_tone_rating: params[:language_tone_rating],
+                           emotion_tone_rating: params[:emotion_tone_rating])
     render json: @rating, status: 200
   end
 
