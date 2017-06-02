@@ -1,4 +1,6 @@
 class Video < ApplicationRecord
+  has_one :speechstat
+
 	DIRECT_UPLOAD_URL_FORMAT = %r{
     \A
     https:\/\/
