@@ -147,6 +147,6 @@ export function Stats(props) {
 }
 
 Stats.propTypes = {
-  indico: React.PropTypes.object.isRequired,
-  stage: React.PropTypes.string.isRequired,
+  indico: PropTypes.object.isRequired,
+  stage: PropTypes.string.isRequired,
 };

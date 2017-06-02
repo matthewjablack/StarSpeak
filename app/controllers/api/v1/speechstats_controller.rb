@@ -52,7 +52,8 @@ class Api::V1::SpeechstatsController < ApplicationController
       conscientiousness_speech_watson: params[:conscientiousness_speech_watson],
       extraversion_speech_watson: params[:extraversion_speech_watson],
       agreeableness_speech_watson: params[:agreeableness_speech_watson], 
-      emotional_range_speech_watson: params[:emotional_range_speech_watson]
+      emotional_range_speech_watson: params[:emotional_range_speech_watson],
+      video_id: params[:video_id]
     )
 
     if @speechstat.save

@@ -19,11 +19,18 @@ import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
-
+import RecordRTC from 'recordrtc';
+import {requestUserMedia, startRecord, stopRecord} from './Record';
+import {handleLocalStream} from './LocalStt';
+import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 
 var screenshots = [];
 var screenCount = 0;
 var errors = [];
+var recorder;
+var mediaStream = null;
+var recordVideo;
+var src;
 
 export default class Lesson extends Component{
   static propTypes = {
@@ -138,16 +145,11 @@ export default class Lesson extends Component{
       alerts: [],
       percentage: 0.00,
       intervalId: 0,
+      stream: null
     };
 
-    this.handleFormattedMessage = this.handleFormattedMessage.bind(this);
-    this.handleRawdMessage = this.handleRawdMessage.bind(this);
-    this.handleTranscriptEnd = this.handleTranscriptEnd.bind(this);
-    this.handleMicClick = this.handleMicClick.bind(this);
-    this.stopTranscription = this.stopTranscription.bind(this);
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.handleLocalStream = this.handleLocalStream.bind(this);
     this.startStageAdjust = this.startStageAdjust.bind(this);
     this.startStageDevelop = this.startStageDevelop.bind(this);
     this.startStageRecord = this.startStageRecord.bind(this);
@@ -157,6 +159,7 @@ export default class Lesson extends Component{
 
   componentDidMount() {
     this.fetchToken();
+    requestUserMedia();
 
     if (!isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
@@ -191,7 +194,7 @@ export default class Lesson extends Component{
         }
       } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
         this.startStageAnalyze();
-        this.handleMicClick();
+        handleMicClick(this);
       }
 
       if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
@@ -209,9 +212,7 @@ export default class Lesson extends Component{
       }
     }, 1000)
 
-
     this.setState({intervalId: refreshIntervalId})
-
   }
 
   componentWillUnmount() {
@@ -221,13 +222,6 @@ export default class Lesson extends Component{
 
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
-  }
-
-  reset() {
-    if (this.state.audioSource) {
-      this.stopTranscription();
-    }
-    this.setState({rawMessages: [], formattedMessages: [], error: null});
   }
 
   createError(type, txt) {
@@ -250,111 +244,6 @@ export default class Lesson extends Component{
     }
   }
 
-  captureSettings() {
-    this.setState({
-      settingsAtStreamStart: {
-        model: this.state.model,
-        keywords: [],
-        speakerLabels: this.state.speakerLabels
-      }
-    });
-  }
-
-  stopTranscription() {
-    this.stream && this.stream.stop();
-    this.setState({audioSource: null});
-  }
-
-  getRecognizeOptions(extra) {
-    return Object.assign({
-      token: this.state.token, smart_formatting: true, // formats phone numbers, currency, etc. (server-side)
-      format: true, // adds capitals, periods, and a few other things (client-side)
-      model: this.state.model,
-      objectMode: true,
-      interim_results: true,
-      continuous: true,
-      word_alternatives_threshold: 0.01, // note: in normal usage, you'd probably set this a bit higher
-      keywords: [],
-      keywords_threshold: 0
-        ? 0.01
-        : undefined, // note: in normal usage, you'd probably set this a bit higher
-      timestamps: true, // set timestamps for each word - automatically turned on by speaker_labels
-      speaker_labels: this.state.speakerLabels, // includes the speaker_labels in separate objects unless resultsBySpeaker is enabled
-      resultsBySpeaker: this.state.speakerLabels, // combines speaker_labels and results together into single objects, making for easier transcript outputting
-      speakerlessInterim: this.state.speakerLabels // allow interim results through before the speaker has been determined
-    }, extra);
-  }
-
-  handleMicClick() {
-    if (this.state.audioSource === 'mic') {
-      return this.stopTranscription();
-    }
-    this.reset();
-    this.setState({audioSource: 'mic'});
-    this.handleStream(recognizeMicrophone(this.getRecognizeOptions()));
-  }
-
-  handleLocalStream() {
-    const onAnythingSaid = text => {
-      if (this.state.stage == 'Record') {
-        let newLocal = this.state.local;
-        newLocal.sttInterim = text;
-        this.setState({local: newLocal});
-        console.log(`Interim text: ${text}`);
-      }
-    }
-    const onFinalised = text => {
-      if (this.state.stage == 'Record') {
-        let newLocal = this.state.local;
-        newLocal.sttFinal[newLocal.sttFinal.length] = text;
-        this.setState({local: newLocal});
-        console.log(`Finalised text: ${text}`);
-      }
-    }
-    try {
-      const listener = new SpeechToText(onAnythingSaid, onFinalised);
-      listener.startListening();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  handleStream(stream) {
-    if (this.stream) {
-      this.stream.stop();
-      this.stream.removeAllListeners();
-      this.stream.recognizeStream.removeAllListeners();
-    }
-    this.stream = stream;
-    this.captureSettings();
-
-    stream.on('data', this.handleFormattedMessage).on('end', this.handleTranscriptEnd).on('error', this.handleError);
-
-    stream.recognizeStream.on('end', () => {
-      if (this.state.error) {this.handleTranscriptEnd()};
-    });
-
-    stream.recognizeStream
-      .on('message', (frame, json) => this.handleRawdMessage({sent: false, frame, json}))
-      .on('send-json', json => this.handleRawdMessage({sent: true, json}))
-      .once('send-data', () => this.handleRawdMessage({
-        sent: true, binary: true, data: true // discard the binary data to avoid waisting memory
-      }))
-      .on('close', (code, message) => this.handleRawdMessage({close: true, code, message}));
-  }
-
-  handleRawdMessage(msg) {
-    this.setState({rawMessages: this.state.rawMessages.concat(msg)});
-  }
-
-  handleFormattedMessage(msg) {
-    this.setState({formattedMessages: this.state.formattedMessages.concat(msg)});
-  }
-
-  handleTranscriptEnd() {
-    this.setState({audioSource: null})
-  }
-
   fetchToken() {
     return fetch('https://view.starspeak.io/api/token').then(res => {
       if (res.status != 200) {
@@ -363,42 +252,6 @@ export default class Lesson extends Component{
       return res.text();
     }). // todo: throw here if non-200 status
     then(token => this.setState({token})).catch(this.handleError);
-  }
-
-  getFinalResults() {
-    return this.state.formattedMessages.filter(r => r.results && r.results.length && r.results[0].final);
-  }
-
-  getCurrentInterimResult() {
-    const r = this.state.formattedMessages[this.state.formattedMessages.length - 1];
-    if (!r || !r.results || !r.results.length || r.results[0].final) {
-      return null;
-    }
-    return r;
-  }
-
-  getFinalAndLatestInterimResult() {
-    const final = this.getFinalResults();
-    const interim = this.getCurrentInterimResult();
-    if (interim) {
-      final.push(interim);
-    }
-    return final;
-  }
-
-  handleError(err, extra) {
-    try {
-      if (err.name == 'UNRECOGNIZED_FORMAT') {
-        err = 'Unable to determine content type from file header; only wav, flac, and ogg/opus are supported. Please choose a different file.';
-      } else if (err.name === 'NotSupportedError' && this.state.audioSource === 'mic') {
-        err = 'This browser does not support microphone input.';
-      } else if (err.message === '(\'UpsamplingNotAllowed\', 8000, 16000)') {
-        err = 'Please select a narrowband voice model to transcribe 8KHz audio files.';
-      }
-      this.setState({ error: err.message || err });
-    } catch(error) {
-      console.log(error);
-    }
   }
 
   startStageAdjust() {
@@ -410,12 +263,15 @@ export default class Lesson extends Component{
   }
 
   startStageRecord() {
+    startRecord(this);
     this.setState({stage: 'Record'});
-    this.handleMicClick();
-    this.handleLocalStream();
+    handleMicClick(this);
+    handleLocalStream(this);
   }
 
   async startStageAnalyze() {
+    stopRecord(this);
+
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
     newLocal.stt = newLocal.sttFinal.toString();
@@ -428,7 +284,7 @@ export default class Lesson extends Component{
     } catch(error) {
       console.log(error);
     }
-    newWatson.stt = parseWatson(this.getFinalAndLatestInterimResult());
+    newWatson.stt = parseWatson(getFinalAndLatestInterimResult(this));
     newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
     newWatson.pace = calculatePace(newWatson.stt,  this.state.length - this.state.presentCount);
 
@@ -437,14 +293,16 @@ export default class Lesson extends Component{
     newWatson.tone = WatsonTone;
 
     this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
-    this.handleMicClick();
+    handleMicClick(this);
 
     let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
 
     this.setState({indico: indico, stage: 'Results'});
 
-    createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser);
+    let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
+      this.state.indico, this.state.watson, this.state.local, browser, this.state.video);
+
+    this.setState({speechstat: speechstat});
 
     for (var i = 0; i < indico.errors.length; i++) {
       this.createError('error', indico.errors[i]);
@@ -466,7 +324,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} />;
+      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} />;
     } else {
       lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]}/>;
     }

@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 StarSpeak::Application.routes.draw do
   get 'hello_world', to: 'hello_world#index'
   ActiveAdmin.routes(self)
@@ -9,13 +11,15 @@ StarSpeak::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-
+  mount Sidekiq::Web => '/sidekiq'
 
   namespace :api do
-    namespace :v1 do
+    namespace :v1, defaults: { format: 'json' } do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api
       post 'speechstats' => 'speechstats#create'
       post 'watson_tone' => 'services#watson_tone'
+      resources :videos, only: [:index, :create]
+      resources :uploads, only: [:create]
     end
   end
 
@@ -31,6 +35,7 @@ StarSpeak::Application.routes.draw do
   get '/privacy' => 'pages#privacy', via: [:get], as: :privacy
   get '/terms' => 'pages#terms', via: [:get], as: :terms
   get '/help' => 'pages#help', via: [:get], as: :help
+  get '/upload' => 'pages#upload', via: [:get], as: :upload
 
 
   resources :users, only: [:show]
