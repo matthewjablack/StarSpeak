@@ -49,6 +49,7 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
 
 export async function updateRating(ratingName, ratingValue, user) {
 	if (user.auth_token !== null) {
+		console.log('send');
     let response3 = await fetch(
       '/api/v1/speechstats_rating.json?auth_token=' + user.auth_token +
       '&'+ ratingName + '=' + ratingValue

@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 import { ProgressBar, Card, Col, Row } from 'react-materialize';
-import {Rating} from 'react-rating';
+import {updateRating} from './speechstat';
+import Rating from 'react-rating';
 
 function pacePercentage(pace) {
   let score = 0;

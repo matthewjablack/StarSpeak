@@ -90,8 +90,8 @@ ActiveRecord::Schema.define(version: 20170602231255) do
     t.float    "conscientiousness_indico"
     t.float    "extraversion_indico"
     t.float    "openness_indico"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.text     "watson_text"
     t.text     "local_text"
     t.string   "browser_name"
@@ -111,10 +111,10 @@ ActiveRecord::Schema.define(version: 20170602231255) do
     t.float    "extraversion_speech_watson"
     t.float    "agreeableness_speech_watson"
     t.float    "emotional_range_speech_watson"
-    t.integer  "facial_emotions_rating"
-    t.integer  "social_tone_rating"
-    t.integer  "language_tone_rating"
-    t.integer  "emotion_tone_rating"
+    t.integer  "facial_emotions_rating",          default: 0
+    t.integer  "social_tone_rating",              default: 0
+    t.integer  "language_tone_rating",            default: 0
+    t.integer  "emotion_tone_rating",             default: 0
     t.string   "video_file_name"
     t.string   "video_content_type"
     t.integer  "video_file_size"
