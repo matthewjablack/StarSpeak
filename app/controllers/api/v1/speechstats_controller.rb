@@ -53,10 +53,13 @@ class Api::V1::SpeechstatsController < ApplicationController
       extraversion_speech_watson: params[:extraversion_speech_watson],
       agreeableness_speech_watson: params[:agreeableness_speech_watson], 
       emotional_range_speech_watson: params[:emotional_range_speech_watson],
-      video_id: params[:video_id]
+      uuid: params[:uuid]
     )
 
     if @speechstat.save
+
+      ProcessSpeechstatJob.perform_in(1.second, @speechstat.id, 0)
+
       render :status => 200, 
              :json => { :success => true,
                         :info => "Successfully created speechstat",

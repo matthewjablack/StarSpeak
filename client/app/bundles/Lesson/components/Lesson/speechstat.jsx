@@ -1,6 +1,6 @@
 import React from 'react';
 
-export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, video) {
+export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid) {
   if (user.auth_token !== null) {
     let response = await fetch(
       '/api/v1/speechstats.json?auth_token=' + user.auth_token +
@@ -33,7 +33,7 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       '&extraversion_speech_watson=' + watson.tone.social.extraversion + 
       '&agreeableness_speech_watson=' + watson.tone.social.agreeableness + 
       '&emotional_range_speech_watson=' + watson.tone.social.emotionalRange + 
-      '&video_id=' + video.id
+      '&uuid=' + uuid
       , {
       method: 'POST',
       header: {

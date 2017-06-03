@@ -7,5 +7,4 @@ class ProcessVideoJob
     video.status = "processed"
     video.save!
   end
-
 end
