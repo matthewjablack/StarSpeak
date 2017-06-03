@@ -58,7 +58,7 @@ class Api::V1::SpeechstatsController < ApplicationController
 
     if @speechstat.save
 
-      ProcessSpeechstatJob.perform_in(1.second, @speechstat.id)
+      ProcessSpeechstatJob.perform_in(1.second, @speechstat.id, 0)
 
       render :status => 200, 
              :json => { :success => true,
