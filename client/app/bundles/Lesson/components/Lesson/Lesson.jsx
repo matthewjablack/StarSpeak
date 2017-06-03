@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone';
-import FontAwesome from 'react-fontawesome';
 import Webcam from 'react-webcam';
-import {formatSeconds} from './format-time';
-import SpeechToText from 'speech-to-text';
 import browser from 'detect-browser';
 import {isObjectEmpty} from './params';
 import {getIndicoEmotions} from './indico-emotion';
 import {parseWatson} from './watson-parse';
 import {createSpeechstat, calculatePace} from './speechstat';
-import {Stats} from './stats';
 import RenderIntro from './RenderIntro';
 import RenderAdjust from './RenderAdjust';
 import RenderDevelop from './RenderDevelop';
@@ -19,10 +14,11 @@ import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
-import RecordRTC from 'recordrtc';
 import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
+
+const uuidV1 = require('uuid/v1');
 
 var screenshots = [];
 var screenCount = 0;
@@ -31,6 +27,7 @@ var recorder;
 var mediaStream = null;
 var recordVideo;
 var src;
+var uuid = uuidV1();
 
 export default class Lesson extends Component{
   static propTypes = {
@@ -270,7 +267,7 @@ export default class Lesson extends Component{
   }
 
   async startStageAnalyze() {
-    stopRecord(this);
+    stopRecord(this, uuid);
 
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
@@ -300,7 +297,7 @@ export default class Lesson extends Component{
     this.setState({indico: indico, stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser, this.state.video);
+      this.state.indico, this.state.watson, this.state.local, browser, uuid);
 
     this.setState({speechstat: speechstat});
 

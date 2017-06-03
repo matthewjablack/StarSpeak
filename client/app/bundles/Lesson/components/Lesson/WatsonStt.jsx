@@ -67,7 +67,7 @@ function handleStream(stream, ctx) {
       ctx.setState({formattedMessages: ctx.state.formattedMessages.concat(msg)});
     }
     ).on('end', 
-    function(){
+    function(msg){
       ctx.setState({rawMessages: ctx.state.rawMessages.concat(msg)});
     }
     ).on('error', handleError.bind(ctx));

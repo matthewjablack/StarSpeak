@@ -27,11 +27,11 @@ export function startRecord(ctx) {
   });
 }
 
-export function stopRecord(ctx) {
+export function stopRecord(ctx, uuid) {
   ctx.state.recordVideo.stopRecording(() => {
     var blob = ctx.state.recordVideo.getBlob();
 
-    var fileName = uuidV1() + '.webm';
+    var fileName = uuid + '.webm';
 
     var file = new File([blob], fileName, {
         type: 'video/webm'
