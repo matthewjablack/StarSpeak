@@ -1,5 +1,5 @@
 class Api::V1::SpeechstatsController < ApplicationController
-  skip_before_filter :verify_authenticity_token,
+  skip_before_action :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
   before_filter :check_authentication
 
@@ -73,12 +73,9 @@ class Api::V1::SpeechstatsController < ApplicationController
   end
 
   def update
-    @rating = Speechstat.last
-    @rating.update_columns(facial_emotions_rating: params[:facial_emotions_rating],
-                           social_tone_rating: params[:social_tone_rating],
-                           language_tone_rating: params[:language_tone_rating],
-                           emotion_tone_rating: params[:emotion_tone_rating])
-    render json: @rating, status: 200
+    @speechstat = Speechstat.find(params[:id])
+    @speechstat.update_attributes(speechstat_params)
+    render json: @speechstat, status: 200
   end
 
   private
@@ -94,6 +91,10 @@ class Api::V1::SpeechstatsController < ApplicationController
        end
 
    end
+
+  def speechstat_params
+    params.require(:speechstat).permit(:facial_emotions_rating, :social_tone_rating, :language_tone_rating, :emotion_tone_rating)
+  end
 
 
 

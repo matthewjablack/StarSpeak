@@ -98,7 +98,7 @@ export function Stats(props) {
               <Rating
                 empty="fa fa-star-o fa-2x"
                 full="fa fa-star fa-2x"
-                onChange={(rate) => updateRating('emotion_tone_rating', rate, props.user) || ''}
+                onChange={(rate) => updateRating('emotion_tone_rating', rate, props.user, props.speechstat.id) || ''}
               />
             </Card>
           </Col>
@@ -114,7 +114,7 @@ export function Stats(props) {
               <Rating
                 empty="fa fa-star-o fa-2x"
                 full="fa fa-star fa-2x"
-                onChange={(rate) => updateRating('language_tone_rating', rate, props.user) || ''}
+                onChange={(rate) => updateRating('language_tone_rating', rate, props.user, props.speechstat.id) || ''}
               />
             </Card>
           </Col>
@@ -136,7 +136,7 @@ export function Stats(props) {
               <Rating
                 empty="fa fa-star-o fa-2x"
                 full="fa fa-star fa-2x"
-                onChange={(rate) => updateRating('social_tone_rating', rate, props.user) || ''}
+                onChange={(rate) => updateRating('social_tone_rating', rate, props.user, props.speechstat.id) || ''}
               />
             </Card>
           </Col>
@@ -158,7 +158,7 @@ export function Stats(props) {
               <Rating
                 empty="fa fa-star-o fa-2x"
                 full="fa fa-star fa-2x"
-                onChange={(rate) => updateRating('facial_emotions_rating', rate, props.user) || ''}
+                onChange={(rate) => updateRating('facial_emotions_rating', rate, props.user, props.speechstat.id) || ''}
               />
             </Card>
           </Col>

@@ -42,24 +42,30 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
         'Access-Control-Allow-Origin': '*',
       }
     }) 
-    let responseJson = response.json();
-    return responseJson.speechstat;
+    let responseJson = await response.json();
+    console.log(responseJson.data.speechstat);
+    return responseJson.data.speechstat;
   }
 }
 
-export async function updateRating(ratingName, ratingValue, user) {
+export async function updateRating(ratingName, ratingValue, user, speechstat_id) {
 	if (user.auth_token !== null) {
+
+    let ratingBody = {}
+    ratingBody["speechstat"] = {}
+    ratingBody["speechstat"][ratingName] = ratingValue;
+
+    console.log(JSON.stringify(ratingBody))
+
 		console.log('send');
-    let response3 = await fetch(
-      '/api/v1/speechstats_rating.json?auth_token=' + user.auth_token +
-      '&'+ ratingName + '=' + ratingValue
-      , {
+
+    fetch('/api/v1/speechstats/' + speechstat_id + '.json?auth_token=' + user.auth_token, {
       method: 'PUT',
-      header: {
-        'Content-Type': 'application/json',
+      headers: {
         'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ratingBody)
     })
   }
 }
