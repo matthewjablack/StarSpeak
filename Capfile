@@ -7,9 +7,6 @@ require "capistrano/deploy"
 require 'capistrano/rails'
 require 'capistrano/passenger'
 
-require 'capistrano/sidekiq'
-require 'capistrano/sidekiq/monit'
-
 require 'capistrano/rbenv'
 set :rbenv_type, :user
 set :rbenv_ruby, '2.4.0'

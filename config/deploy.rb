@@ -9,7 +9,6 @@ set :deploy_to, '/home/deploy/StarSpeak'
 set :linked_files, %w{config/database.yml config/webapi.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-
 namespace :deploy do
 
   desc 'Restart application'
