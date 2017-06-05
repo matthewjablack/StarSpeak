@@ -299,11 +299,6 @@ export default class Lesson extends Component{
     let speechstat = await createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser, uuid);
 
-    console.log('speechstat');
-    console.log(speechstat);
-
-    console.log(speechstat.id);
-
     this.setState({speechstat: speechstat, stage: 'Results'});
 
     for (var i = 0; i < indico.errors.length; i++) {

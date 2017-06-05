@@ -43,7 +43,6 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       }
     }) 
     let responseJson = await response.json();
-    console.log(responseJson.data.speechstat);
     return responseJson.data.speechstat;
   }
 }
@@ -54,10 +53,6 @@ export async function updateRating(ratingName, ratingValue, user, speechstat_id)
     let ratingBody = {}
     ratingBody["speechstat"] = {}
     ratingBody["speechstat"][ratingName] = ratingValue;
-
-    console.log(JSON.stringify(ratingBody))
-
-		console.log('send');
 
     fetch('/api/v1/speechstats/' + speechstat_id + '.json?auth_token=' + user.auth_token, {
       method: 'PUT',
