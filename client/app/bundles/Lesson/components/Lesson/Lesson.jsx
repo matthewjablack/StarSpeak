@@ -330,7 +330,7 @@ export default class Lesson extends Component{
     if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results') {
       commonContent = (
         <div>
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.height * 0.75} />
         </div>
       )
     }

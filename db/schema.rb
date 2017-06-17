@@ -36,14 +36,6 @@ ActiveRecord::Schema.define(version: 20170602231255) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "images", force: :cascade do |t|
-    t.string   "image"
-    t.integer  "speechstat_id"
-    t.integer  "user_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
     t.integer  "level_id"
@@ -115,10 +107,6 @@ ActiveRecord::Schema.define(version: 20170602231255) do
     t.integer  "social_tone_rating",              default: 0
     t.integer  "language_tone_rating",            default: 0
     t.integer  "emotion_tone_rating",             default: 0
-    t.string   "video_file_name"
-    t.string   "video_content_type"
-    t.integer  "video_file_size"
-    t.datetime "video_updated_at"
     t.integer  "video_id"
     t.string   "uuid"
   end
