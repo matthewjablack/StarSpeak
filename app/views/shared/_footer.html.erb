@@ -3,31 +3,38 @@
   <div class="container">
     <div class="row">
       <div class="col s6 m3">
-        <img class="materialize-logo" src="images/materialize-teal.png" alt="">
-        <p>Made with love by Materialize.</p>
+        <img class="materialize-logo" src="" alt="StarSpeak">
+        <!-- <p>Made with love by Materialize.</p> -->
       </div>
       <div class="col s6 m3">
-        <h5>About</h5>
+        <h5>Menu</h5>
         <ul>
-          <li><a href="#!">Blog</a></li>
-          <li><a href="#!">Pricing</a></li>
-          <li><a href="#!">Docs</a></li>
+          <% unless user_signed_in? %>
+              <li><%= link_to "Sign in", new_user_session_path %></li>
+              <li><a href="#modal1">Sign up</a></li>
+            <% else %>
+              <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
+              <li><%= link_to "Speech Results", speechstats_path %></li>
+              <li><%= link_to "My Profile", user_path(current_user) %></li>
+              <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+              </ul>
+          <% end %>
         </ul>
       </div>
       <div class="col s6 m3">
-        <h5>Connect</h5>
+        <h5>Other</h5>
         <ul>
-          <li><a href="#!">Community</a></li>
-          <li><a href="#!">Subscribe</a></li>
-          <li><a href="#!">Email</a></li>
+          <li><%= link_to "Help", help_url %></li>
+          <li><%= link_to "Privacy", privacy_url %></li>
+          <li><%= link_to "Terms of Service", terms_url %></li>
         </ul>
       </div>
       <div class="col s6 m3">
         <h5>Contact</h5>
         <ul>
-          <li><a href="#!">Twitter</a></li>
-          <li><a href="#!">Facebook</a></li>
-          <li><a href="#!">Github</a></li>
+          <li><a href="">Email</a></li>
+          <li><a href="">Twitter</a></li>
+          <!-- <li><a href="">Facebook</a></li> -->
         </ul>
       </div>
     </div>

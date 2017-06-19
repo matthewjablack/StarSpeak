@@ -36,7 +36,7 @@
           <%= yield %>
       <% end %>
 
-    <% if (params[:controller] == "home" && params[:action] == "index") %>
+    <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby")%>
       <%= render :partial => "shared/footer" %>
     <% end %>
 
