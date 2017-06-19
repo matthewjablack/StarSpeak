@@ -30,20 +30,11 @@
   <body class="light-theme">
     <%= render 'shared/header' %>
 
-    <% if (params[:controller] != "home" && params[:action] != "index")%>
-      <main>
-    <% end %>
-
       <% if (params[:controller] == "lessons" && params[:action] == "show") || (params[:controller] == "hello_world") %>
           <%= yield %>
       <% else %>
           <%= yield %>
       <% end %>
-
-    <% if (params[:controller] != "home" && params[:action] != "index")%>
-      </main>
-    <% end %>
-
 
     <% if (params[:controller] == "home" && params[:action] == "index") %>
       <%= render :partial => "shared/footer" %>
