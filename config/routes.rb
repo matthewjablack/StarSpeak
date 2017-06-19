@@ -5,7 +5,7 @@ StarSpeak::Application.routes.draw do
   ActiveAdmin.routes(self)
   devise_for :users, :controllers => {
     :registrations => "users/registrations",
-    :omniauth_callbacks => "users/omniauth_callbacks" 
+    :omniauth_callbacks => "users/omniauth_callbacks"
   }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -28,6 +28,8 @@ StarSpeak::Application.routes.draw do
   root 'home#index'
 
   get "dashboard" => "home#dashboard"
+  get "appleby" => "home#appleby"
+
 
   match '/levels' => 'levels#index', via: [:get], as: :levels
 
@@ -43,7 +45,7 @@ StarSpeak::Application.routes.draw do
   resources :speechstats, only: [:index, :show]
 
   resources :levels, only: [:show], path: '' do
-    resources :modulers, only: [:index], path: '' do 
+    resources :modulers, only: [:index], path: '' do
       resources :lessons, only: [:index, :show]
     end
   end
@@ -85,7 +87,7 @@ StarSpeak::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
-  
+
   # Example resource route with concerns:
   #   concern :toggleable do
   #     post 'toggle'
