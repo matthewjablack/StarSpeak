@@ -12,7 +12,7 @@
     <%= stylesheet_link_tag "application", media: "all" %>
     <%= javascript_include_tag "application" %>
 
-    <% if (params[:controller] == "home" && params[:action] == "index") && params[:controller] != "devise" %>
+    <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby") %>
       <%= stylesheet_link_tag "startup-standalone" %>
     <% else %>
       <%= stylesheet_link_tag "home" %>
@@ -36,7 +36,7 @@
           <%= yield %>
       <% end %>
 
-    <% if (params[:controller] == "home" && params[:action] == "index") %>
+    <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby")%>
       <%= render :partial => "shared/footer" %>
     <% end %>
 
