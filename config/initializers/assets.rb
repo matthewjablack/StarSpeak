@@ -5,6 +5,7 @@
 # If you have a different server bundle file than your client bundle, you'll
 # need to add it here, like this:
 # Rails.application.config.assets.precompile += %w( server-bundle.js )
+Rails.application.config.assets.precompile += %w( startup-standalone.css.scss home.css.scss)
 
 # Add folder with webpack generated assets to assets.paths
 Rails.application.config.assets.paths << Rails.root.join("app", "assets", "webpack")

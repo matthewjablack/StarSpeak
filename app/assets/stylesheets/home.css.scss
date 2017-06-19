@@ -7,6 +7,9 @@
 	margin-bottom: 0px !important;
 }
 
+.nav-wrapper {
+	padding: 0 15px;
+}
 .root {
   padding-left: 20px;
   padding-right: 20px;
@@ -17,7 +20,13 @@ body {
     font-family: "Helvetica Neue",Helvetica,"Open Sans",Arial,"Lucida Grande",Roboto,sans-serif !important;
     background:none;
     font-size:16px;
+		display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
+main {
+    flex: 1 0 auto;
+  }
 
 /* general styles */
 .base--hr {
@@ -191,12 +200,12 @@ dialog, dd, dt {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.header {
-    width:100%;
-    height:70px;
-    background-color: #e74c3c;
-    color:white;
-}
+// .header {
+//     width:100%;
+//     height:70px;
+//     background-color: #e74c3c;
+//     color:white;
+// }
 
 
 .brand {
@@ -271,6 +280,7 @@ body.view {
   -o-background-size: cover;
   background-size: cover;
 }
+
 
 .white {
     color:white !important;
