@@ -11,6 +11,12 @@
     <title>StarSpeak</title>
     <%= stylesheet_link_tag "application", media: "all" %>
     <%= javascript_include_tag "application" %>
+
+    <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby") %>
+      <%= stylesheet_link_tag "startup-standalone" %>
+    <% else %>
+      <%= stylesheet_link_tag "home" %>
+    <% end %>
     <!-- Custom styles for this template -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -21,27 +27,25 @@
     <![endif]-->
     <%= csrf_meta_tags %>
   </head>
-  <body class="<%= get_body_class %>">
-    
-
+  <body class="light-theme">
     <%= render 'shared/header' %>
-    
 
-    <% if (params[:controller] == "lessons" && params[:action] == "show") || (params[:controller] == "hello_world") %>
-        <%= yield %>
-    <% else %>
-        <div class="container">
-            <%= yield %>
-        </div>
+      <% if (params[:controller] == "lessons" && params[:action] == "show") || (params[:controller] == "hello_world") %>
+          <%= yield %>
+      <% else %>
+          <%= yield %>
+      <% end %>
+
+    <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby")%>
+      <%= render :partial => "shared/footer" %>
     <% end %>
-    
 
-    <%= render :partial => "shared/footer" %>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    
-    
+
+
   </body>
 </html>

@@ -1,3 +1,42 @@
-<!--     <div id="footer">
-      <div class="container text-center"><div>© 2017 StarSpeak, Inc.</div>
-    </div> -->
+<!-- Footer -->
+<footer class="page-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col s6 m3">
+        <img class="materialize-logo" src="starspeak_logo_yellow.png" alt="StarSpeak" width="30">
+        <!-- <p>Made with love by Materialize.</p> -->
+      </div>
+      <div class="col s6 m3">
+        <h5>Menu</h5>
+        <ul>
+          <% unless user_signed_in? %>
+              <li><%= link_to "Sign in", new_user_session_path %></li>
+              <li><a href="#modal1">Sign up</a></li>
+            <% else %>
+              <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
+              <li><%= link_to "Speech Results", speechstats_path %></li>
+              <li><%= link_to "My Profile", user_path(current_user) %></li>
+              <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+              </ul>
+          <% end %>
+        </ul>
+      </div>
+      <div class="col s6 m3">
+        <h5>Other</h5>
+        <ul>
+          <li><%= link_to "Help", help_url %></li>
+          <li><%= link_to "Privacy", privacy_url %></li>
+          <li><%= link_to "Terms of Service", terms_url %></li>
+        </ul>
+      </div>
+      <div class="col s6 m3">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="">Email</a></li>
+          <li><a href="">Twitter</a></li>
+          <!-- <li><a href="">Facebook</a></li> -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
