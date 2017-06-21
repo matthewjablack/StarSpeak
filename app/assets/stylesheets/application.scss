@@ -1,12 +1,12 @@
 // @import "bootstrap-sprockets";
 // @import "bootstrap";
+
 @import "font-awesome";
 @import "select2";
 // @import "home";
 @import "material_icons";
 @import "materialize";
-
-
+// @import "startup-standalone";
 
 
 @font-face {
@@ -49,6 +49,8 @@ body, h1, h2, h3, h4, h5, h6, p {
   }
   color: #222;
 }
+
+
 //
 // h1 {
 // 	font-size: 60px;
