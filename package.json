@@ -8,8 +8,8 @@
   },
   "scripts": {
     "postinstall": "cd client && yarn install",
-    "rails-server": "echo 'visit http://localhost:3000/hello_world' && sh -c 'rm app/assets/webpack/* || true && cd client && bundle exec rake react_on_rails:locale && yarn run build:development'",
-    "test": "rspec"
+    "rails-server": "echo 'visit http://localhost:3000/hello_world' && sh -c 'rm app/assets/webpack/* || true && cd client && bundle exec rake react_on_rails:locale && yarn run build:development'"
+    // "test": "rspec"
   },
   "dependencies": {
     "create-react-class": "^15.5.3",
