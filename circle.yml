@@ -1,9 +1,9 @@
-# dependencies:
-#   override:
-#     - bundle install: # note the colon here
-#         timeout: 240
-#     - yarn postinstall:
-#         timeout: 240
+dependencies:
+  override:
+    - bundle install: # note the colon here
+        timeout: 240
+    - yarn postinstall:
+        timeout: 240
 
 deployment:
   production:
