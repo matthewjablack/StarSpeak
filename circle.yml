@@ -1,8 +1,4 @@
 dependencies:
-  pre: 
-    - rm -rf ~/.yarn
-    - npm install -g yarn
-    - yarn -v
   override:
     - bundle install: # note the colon here
         timeout: 240
@@ -16,3 +12,7 @@ deployment:
     branch: master
     commands:
       - bundle exec cap production deploy
+
+machine:
+  node:
+    version: 6.10.2
