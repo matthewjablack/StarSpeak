@@ -4,7 +4,7 @@ dependencies:
         timeout: 240
     - npm i -g yarn:
         timeout: 240
-    - cd client && yarn install:
+    - yarn postinstall:
         timeout: 240
 
 deployment:
