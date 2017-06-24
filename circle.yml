@@ -1,0 +1,12 @@
+dependencies:
+  override:
+    - bundle install: # note the colon here
+        timeout: 240
+    - yarn postinstall:
+        timeout: 240
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - bundle exec cap production deploy
