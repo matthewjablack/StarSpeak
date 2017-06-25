@@ -30,8 +30,4 @@ $(document).ready(function() {
 
 $(document).on('turbolinks:load', function(event) {
   Waves.displayEffect();
-  if (typeof ga === 'function') {
-    ga('set', 'location', event.data.url);
-    return ga('send', 'pageview');
-  }
 });
