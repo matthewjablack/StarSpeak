@@ -34,8 +34,6 @@ gem 'jbuilder', '2.6.2'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 
-gem 'google-analytics-rails', '1.1.0'
-
 gem 'paperclip', '4.2'
 gem 'aws-sdk', '< 2.0'
 
