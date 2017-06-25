@@ -5,7 +5,7 @@ set :application, 'StarSpeak'
 set :repo_url, 'git@github.com:mattBlackDesign/StarSpeak.git'
 
 set :deploy_to, '/home/deploy/StarSpeak'
-set :ssh_options, {:forward_agent => true}
+set :use_sudo, false
 
 set :linked_files, %w{config/database.yml config/webapi.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
