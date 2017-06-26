@@ -294,12 +294,12 @@ export default class Lesson extends Component{
 
     let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
 
-    this.setState({indico: indico, stage: 'Results'});
+    this.setState({indico: indico});
 
-    let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
+    let speechstat = await createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser, uuid);
 
-    this.setState({speechstat: speechstat});
+    this.setState({speechstat: speechstat, stage: 'Results'});
 
     for (var i = 0; i < indico.errors.length; i++) {
       this.createError('error', indico.errors[i]);
@@ -323,14 +323,14 @@ export default class Lesson extends Component{
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} />;
     } else {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]}/>;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} speechstat={this.state.speechstat} screenshot={screenshots[screenshots.length - 1]}/>;
     }
 
     let commonContent;
     if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results') {
       commonContent = (
         <div>
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
+          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.height * 0.75} />
         </div>
       )
     }

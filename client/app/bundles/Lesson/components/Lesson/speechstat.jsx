@@ -42,11 +42,28 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
         'Access-Control-Allow-Origin': '*',
       }
     }) 
-    let responseJson = response.json();
-    return responseJson.speechstat;
+    let responseJson = await response.json();
+    return responseJson.data.speechstat;
   }
 }
 
+export async function updateRating(ratingName, ratingValue, user, speechstat_id) {
+	if (user.auth_token !== null) {
+
+    let ratingBody = {}
+    ratingBody["speechstat"] = {}
+    ratingBody["speechstat"][ratingName] = ratingValue;
+
+    fetch('/api/v1/speechstats/' + speechstat_id + '.json?auth_token=' + user.auth_token, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ratingBody)
+    })
+  }
+}
 
 export function calculatePace(txt, length) {
   const pace = (60 / length) * txt.split(" ").length;

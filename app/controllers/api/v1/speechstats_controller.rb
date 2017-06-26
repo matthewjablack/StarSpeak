@@ -1,5 +1,5 @@
 class Api::V1::SpeechstatsController < ApplicationController
-  skip_before_filter :verify_authenticity_token,
+  skip_before_action :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
   before_filter :check_authentication
 
@@ -15,11 +15,11 @@ class Api::V1::SpeechstatsController < ApplicationController
 
   def create
     @speechstat = Speechstat.new(
-      user_id: params[:user_id], 
-      betacode_id: params[:betacode_id], 
-      lesson_id: params[:lesson_id], 
-      moduler_id: params[:moduler_id], 
-      happy_facial_indico: params[:happy_facial_indico], 
+      user_id: params[:user_id],
+      betacode_id: params[:betacode_id],
+      lesson_id: params[:lesson_id],
+      moduler_id: params[:moduler_id],
+      happy_facial_indico: params[:happy_facial_indico],
       sad_facial_indico: params[:sad_facial_indico],
       angry_facial_indico: params[:angry_facial_indico],
       fear_facial_indico: params[:fear_facial_indico],
@@ -41,7 +41,7 @@ class Api::V1::SpeechstatsController < ApplicationController
       browser_name: params[:browser_name],
       browser_version: params[:browser_version],
       anger_speech_watson: params[:anger_speech_watson],
-      disgust_speech_watson: params[:disgust_speech_watson], 
+      disgust_speech_watson: params[:disgust_speech_watson],
       fear_speech_watson: params[:fear_speech_watson],
       joy_speech_watson: params[:joy_speech_watson],
       sadness_speech_watson: params[:sadness_speech_watson],
@@ -65,13 +65,18 @@ class Api::V1::SpeechstatsController < ApplicationController
                         :info => "Successfully created speechstat",
                         :data => { speechstat: @speechstat } }
     else
-      render :status => 200, 
+      render :status => 200,
              :json => { :success => false,
                         :info => "Error: " + @speechstat.errors.full_messages,
                         :data => {} }
     end
   end
 
+  def update
+    @speechstat = Speechstat.find(params[:id])
+    @speechstat.update_attributes(speechstat_params)
+    render json: @speechstat, status: 200
+  end
 
   private
 
@@ -86,6 +91,10 @@ class Api::V1::SpeechstatsController < ApplicationController
        end
 
    end
+
+  def speechstat_params
+    params.require(:speechstat).permit(:facial_emotions_rating, :social_tone_rating, :language_tone_rating, :emotion_tone_rating)
+  end
 
 
 

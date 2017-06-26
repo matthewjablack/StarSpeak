@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 import { ProgressBar, Card, Col, Row } from 'react-materialize';
+import {updateRating} from './speechstat';
+import Rating from 'react-rating';
 
 function pacePercentage(pace) {
   let score = 0;
@@ -93,6 +95,12 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.emotion.disgust * 100} />
               <p>Anger</p>
               <ProgressBar className="red" progress={props.watson.tone.emotion.anger * 100} />
+              <Rating
+                empty="fa fa-star-o fa-2x"
+                full="fa fa-star fa-2x"
+                style={{color: '#EE6E73'}}
+                onChange={(rate) => updateRating('emotion_tone_rating', rate, props.user, props.speechstat.id) || ''}
+              />
             </Card>
           </Col>
           <Col m={6} s={12}>
@@ -104,6 +112,12 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.language.confident * 100} />
               <p>Tentative</p>
               <ProgressBar className="red" progress={props.watson.tone.language.tentative * 100} />
+              <Rating
+                empty="fa fa-star-o fa-2x"
+                full="fa fa-star fa-2x"
+                style={{color: '#EE6E73'}}
+                onChange={(rate) => updateRating('language_tone_rating', rate, props.user, props.speechstat.id) || ''}
+              />
             </Card>
           </Col>
         </Row>
@@ -121,6 +135,12 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.watson.tone.social.agreeableness * 100} />
               <p>Emotional Range</p>
               <ProgressBar className="red" progress={props.watson.tone.social.emotionalRange * 100} />
+              <Rating
+                empty="fa fa-star-o fa-2x"
+                full="fa fa-star fa-2x"
+                style={{color: '#EE6E73'}}
+                onChange={(rate) => updateRating('social_tone_rating', rate, props.user, props.speechstat.id) || ''}
+              />
             </Card>
           </Col>
           <Col m={6} s={12}>
@@ -138,9 +158,15 @@ export function Stats(props) {
               <ProgressBar className="red" progress={props.indico.facialEmotion.surprise * 100} />
               <p>Neutral</p>
               <ProgressBar className="red" progress={props.indico.facialEmotion.neutral * 100} />
+              <Rating
+                empty="fa fa-star-o fa-2x"
+                full="fa fa-star fa-2x"
+                style={{color: '#EE6E73'}}
+                onChange={(rate) => updateRating('facial_emotions_rating', rate, props.user, props.speechstat.id) || ''}
+              />
             </Card>
           </Col>
-          </Row>
+        </Row>
       </div>
     )
   }

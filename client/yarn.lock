@@ -2504,6 +2504,10 @@ react-radio-group@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-radio-group/-/react-radio-group-3.0.1.tgz#b8890cc7c159de4522a918e548dde38bc2493bc1"
 
+react-rating@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/react-rating/-/react-rating-0.7.1.tgz#2e6d683fe6872c62e7eec8894a3c0ec72f75a594"
+
 react-s-alert@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-s-alert/-/react-s-alert-1.3.0.tgz#d81224a474f15e89c35c0ea6c2a73f232a767128"
