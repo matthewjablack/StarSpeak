@@ -16,7 +16,6 @@ export default class RenderResults extends Component {
           <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} user={this.props.user} screenshot={this.props.screenshot} local={this.props.local} />
           {this.props.children}
           <br/><br/>
-          <h2>Understanding your results</h2>
           <p></p>
         </div>
       </div>

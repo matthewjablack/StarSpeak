@@ -5,13 +5,14 @@ import browser from 'detect-browser';
 import {isObjectEmpty} from './params';
 import {getIndicoEmotions} from './indico-emotion';
 import {parseWatson} from './watson-parse';
-import {createSpeechstat, calculatePace} from './speechstat';
+import {createSpeechstat, checkIpSession, calculatePace} from './speechstat';
 import RenderIntro from './RenderIntro';
 import RenderAdjust from './RenderAdjust';
 import RenderDevelop from './RenderDevelop';
 import RenderRecord from './RenderRecord';
 import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
+import RenderDemoExceeded from './RenderDemoExceeded';
 import AlertContainer from 'react-alert';
 import {watsonTone} from './watsonTone';
 import {requestUserMedia, startRecord, stopRecord} from './Record';
@@ -31,10 +32,7 @@ var uuid = uuidV1();
 
 export default class Lesson extends Component{
   static propTypes = {
-    lesson: PropTypes.object.isRequired,
-    moduler: PropTypes.object.isRequired,
-    level: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
+    mode: PropTypes.string.isRequired,
   };
 
   alertOptions = {
@@ -137,12 +135,12 @@ export default class Lesson extends Component{
       moduler: this.props.moduler,
       level: this.props.level,
       user: this.props.user,
-      linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons',
       errors: [],
       alerts: [],
       percentage: 0.00,
       intervalId: 0,
-      stream: null
+      stream: null,
+      mode: this.props.mode
     };
 
     this.fetchToken = this.fetchToken.bind(this);
@@ -154,20 +152,31 @@ export default class Lesson extends Component{
     this.showAlert = this.showAlert.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.fetchToken();
     requestUserMedia();
 
-    if (!isObjectEmpty(this.state.lesson)) {
+    if (this.state.lesson && !isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
         alert("Please download the latest version of Google Chrome");
         history.go(-1);
       }
-      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length})
+      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length, 
+        linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons'})
+    } else {
+      this.setState({presentCount: 20, length: 20, linkback: ''})
     }
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+
+    let checkIpSessionResult = await checkIpSession();
+
+    console.log(checkIpSessionResult);
+
+    if (!checkIpSessionResult && this.state.mode == "StarLight") {
+      this.setState({stage: 'DemoLimitExceeded'})
+    }
 
     var refreshIntervalId = setInterval(() => {
       if (this.state.loadCount === 0) {
@@ -251,7 +260,9 @@ export default class Lesson extends Component{
     then(token => this.setState({token})).catch(this.handleError);
   }
 
-  startStageAdjust() {
+
+
+  async startStageAdjust() {
     this.setState({stage: 'Adjust'});
   }
 
@@ -285,7 +296,7 @@ export default class Lesson extends Component{
     newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
     newWatson.pace = calculatePace(newWatson.stt,  this.state.length - this.state.presentCount);
 
-    let WatsonTone = await watsonTone(this.state.user.auth_token, newLocal.stt);
+    let WatsonTone = await watsonTone(this.state.user, newLocal.stt, this.state.mode);
 
     newWatson.tone = WatsonTone;
 
@@ -297,7 +308,7 @@ export default class Lesson extends Component{
     this.setState({indico: indico, stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser, uuid);
+      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode);
 
     this.setState({speechstat: speechstat});
 
@@ -317,17 +328,19 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Adjust') {
       lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} />;
     } else if (this.state.stage === 'Develop') {
-      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} />;
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} />;
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} />;
-    } else {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]}/>;
+      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} />;
+    } else if (this.state.stage == 'Results') {
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode}/>;
+    } else if (this.state.stage == 'DemoLimitExceeded') {
+      lessonContent = <RenderDemoExceeded/>;
     }
 
     let commonContent;
-    if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results') {
+    if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results' && this.state.stage !== 'DemoLimitExceeded') {
       commonContent = (
         <div>
           <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
