@@ -140,11 +140,8 @@ export default class Lesson extends Component{
       percentage: 0.00,
       intervalId: 0,
       stream: null,
-<<<<<<< HEAD
-      mode: this.props.mode
-=======
+      mode: this.props.mode,
       umCount: 0
->>>>>>> finish basic watson hesitation
     };
 
     this.fetchToken = this.fetchToken.bind(this);
