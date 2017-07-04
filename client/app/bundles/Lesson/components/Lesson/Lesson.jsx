@@ -158,8 +158,6 @@ export default class Lesson extends Component{
     this.fetchToken();
     requestUserMedia();
 
-    console.log(affdex);
-
     if (this.state.lesson && !isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
         alert("Please download the latest version of Google Chrome");
@@ -334,7 +332,7 @@ export default class Lesson extends Component{
   }
 
   render() {
-    // console.log(affdex);
+    console.log(affdex);
     // var detector = new affdex.CameraDetector(this.refs.webcam, this.state.width, this.state.height);
     // console.log(detector);
 
