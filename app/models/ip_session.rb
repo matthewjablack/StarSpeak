@@ -1,0 +1,2 @@
+class IpSession < ApplicationRecord
+end

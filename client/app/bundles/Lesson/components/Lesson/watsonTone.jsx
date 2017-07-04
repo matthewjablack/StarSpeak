@@ -4,7 +4,7 @@ let STT_ERROR = "There seems to be a problem with Speech to Text. Try freshing a
 let STT_EMPTY = "We didn't pickup enough text to analyze your presentation. Try reshing, and present a little longer. ";
 let CONNECTION_ERROR = "There was a problem with your internet connection. Try refreshing and try again.";
 
-export async function watsonTone(auth_token, text) {
+export async function watsonTone(user, text, mode) {
   let emotion = {
           anger: 0.00, 
           disgust: 0.00,
@@ -29,7 +29,12 @@ export async function watsonTone(auth_token, text) {
     errors.push(STT_EMPTY);
   } else if (text.length > 10) {
     try {
-      let response = await fetch('/api/v1/watson_tone.json?auth_token=' + auth_token, {
+      let auth_token_str = ''
+      if (mode == "StarView") {
+        let auth_token_str = '?auth_token=' + user.auth_token;
+      }
+
+      let response = await fetch('/api/v1/watson_tone.json' + auth_token_str, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

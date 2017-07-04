@@ -34,13 +34,7 @@ class Api::V1::ServicesController < ApplicationController
     def check_authentication
        if User.where(auth_token: params[:auth_token]).count == 1
         @user = User.where(auth_token: params[:auth_token]).first
-       else
-        render :status => 401,
-               :json => { :success => false,
-                          :info => "Authentication failed",
-                          :data => {} }
        end
-
    end
 
 

@@ -20,6 +20,7 @@ StarSpeak::Application.routes.draw do
       post 'watson_tone' => 'services#watson_tone'
       resources :videos, only: [:index, :create]
       resources :uploads, only: [:create]
+      resources :ip_sessions, only: [:create]
     end
   end
 
@@ -38,6 +39,8 @@ StarSpeak::Application.routes.draw do
   get '/terms' => 'pages#terms', via: [:get], as: :terms
   get '/help' => 'pages#help', via: [:get], as: :help
   get '/upload' => 'pages#upload', via: [:get], as: :upload
+
+  get '/demo/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 
 
   resources :users, only: [:show]

@@ -15,7 +15,7 @@ export default class RenderAnalyze extends Component {
           <p>{this.props.local.stt}</p>
           <Pace pace={this.props.local.pace} />
           <br/>
-          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} local={this.props.local} />
+          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} local={this.props.local} user={this.props.user} mode={this.props.mode} />
           <h2>Uploading...{Math.floor(this.props.percentUploaded)}%</h2>
           <ProgressBar className="red" progress={this.props.percentUploaded}/>
           <h2>Loading...{Math.floor(this.props.percentage)}%</h2>

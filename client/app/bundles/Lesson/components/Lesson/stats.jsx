@@ -20,6 +20,10 @@ function pacePercentage(pace) {
 }
 
 export function Stats(props) {
+  let userName = '';
+  if (props.mode === "StarView") {
+    userName = props.user.name;
+  }
 
   if (props.stage === 'Analyze') {
     return (
@@ -74,7 +78,7 @@ export function Stats(props) {
         <Row>
           <Card className="hoverable center">
             <h3>Summary Card</h3>
-            <h5>{props.user.name}</h5>
+            <h5>{userName}</h5>
             <img src={props.screenshot} style={{objectFit: 'cover', borderRadius:100, width: 150, height: 150}}/>
             <h5>Score {Math.round((props.watson.tone.language.confident/2)* 100 + pacePercentage(props.local.pace)/2 )}%</h5>
           </Card>
