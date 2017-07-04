@@ -15,4 +15,7 @@ class PagesController < ApplicationController
 		@lesson_props = { mode: "StarLight" }
 	end
 
+	def render_result_dev
+
+	end
 end
