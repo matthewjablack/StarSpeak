@@ -18,6 +18,7 @@ import {watsonTone} from './watsonTone';
 import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
+import affdex from './affdex';
 
 const uuidV1 = require('uuid/v1');
 
@@ -157,12 +158,14 @@ export default class Lesson extends Component{
     this.fetchToken();
     requestUserMedia();
 
+    console.log(affdex);
+
     if (this.state.lesson && !isObjectEmpty(this.state.lesson)) {
       if (!('webkitSpeechRecognition' in window)) {
         alert("Please download the latest version of Google Chrome");
         history.go(-1);
       }
-      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length, 
+      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length,
         linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons'})
     } else {
       this.setState({presentCount: 20, length: 20, linkback: ''})
@@ -331,6 +334,41 @@ export default class Lesson extends Component{
   }
 
   render() {
+    // console.log(affdex);
+    // var detector = new affdex.CameraDetector(this.refs.webcam, this.state.width, this.state.height);
+    // console.log(detector);
+
+    //Enable detection of all Expressions, Emotions and Emojis classifiers.
+    // detector.detectAllEmotions();
+    // detector.detectAllExpressions();
+    // detector.detectAllEmojis();
+    // detector.detectAllAppearance();
+
+
+    // To start detector
+    // detector.start();
+
+
+    // FINAL EMOTION RESULTS
+
+    // detector.addEventListener("onImageResultsSuccess", function(faces, image, timestamp) {
+    //     $('#results').html("");
+    //     log('#results', "Timestamp: " + timestamp.toFixed(2));
+    //     log('#results', "Number of faces found: " + faces.length);
+    //     if (faces.length > 0) {
+    //       log('#results', "Appearance: " + JSON.stringify(faces[0].appearance));
+    //       log('#results', "Emotions: " + JSON.stringify(faces[0].emotions, function(key, val) {
+    //         return val.toFixed ? Number(val.toFixed(0)) : val;
+    //       }));
+    //       log('#results', "Expressions: " + JSON.stringify(faces[0].expressions, function(key, val) {
+    //         return val.toFixed ? Number(val.toFixed(0)) : val;
+    //       }));
+    //       log('#results', "Emoji: " + faces[0].emojis.dominantEmoji);
+    //       drawFeaturePoints(image, faces[0].featurePoints);
+    //     }
+    //   });
+
+
     let lessonContent;
     if (this.state.stage === 'Intro') {
       lessonContent = <RenderIntro startStageAdjust={this.startStageAdjust} />;
