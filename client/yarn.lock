@@ -1085,6 +1085,14 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
+concat-stream@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.0.tgz#0aac662fd52be78964d5532f694784e70110acf7"
+  dependencies:
+    inherits "^2.0.3"
+    readable-stream "^2.2.2"
+    typedarray "^0.0.6"
+
 console-browserify@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-browserify/-/console-browserify-1.1.0.tgz#f0241c45730a9fc6323b206dbf38edc741d0bb10"
@@ -1258,10 +1266,6 @@ dom-helpers@^3.2.0:
 domain-browser@^1.1.1:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
-
-dotenv@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
 duplexer@~0.1.1:
   version "0.1.1"
@@ -1700,7 +1704,7 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
-inherits@2, inherits@^2.0.1, inherits@~2.0.0, inherits@~2.0.1:
+inherits@2, inherits@^2.0.1, inherits@^2.0.3, inherits@~2.0.0, inherits@~2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
 
@@ -2159,12 +2163,14 @@ node-pre-gyp@^0.6.29:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
-nodeify-fetch@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/nodeify-fetch/-/nodeify-fetch-0.1.2.tgz#63fe5194a6e17f39ba9048926a77a8823f8996a9"
+nodeify-fetch@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/nodeify-fetch/-/nodeify-fetch-1.0.1.tgz#0f8e7b4a1127350ebc9a4cf771f4f5b1231400ce"
   dependencies:
-    inherits "^2.0.1"
+    concat-stream "^1.6.0"
+    inherits "^2.0.3"
     isomorphic-fetch "^2.2.1"
+    readable-stream "^2.2.6"
 
 nopt@^4.0.1:
   version "4.0.1"
@@ -2565,7 +2571,7 @@ readable-blob-stream@^1.1.0:
   dependencies:
     inherits "^2.0.1"
 
-readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.4, readable-stream@^2.2.6:
+readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.4, readable-stream@^2.2.2, readable-stream@^2.2.6:
   version "2.2.9"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.9.tgz#cf78ec6f4a6d1eb43d26488cac97f042e74b7fc8"
   dependencies:
@@ -2982,6 +2988,10 @@ typedarray-to-buffer@^3.1.2:
   dependencies:
     is-typedarray "^1.0.0"
 
+typedarray@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
 ua-parser-js@^0.7.9:
   version "0.7.12"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.12.tgz#04c81a99bdd5dc52263ea29d24c6bf8d4818a4bb"
@@ -3108,15 +3118,15 @@ watson-react-components@^0.6.9:
     watson-ui-components "^0.6.0"
 
 watson-speech@^0.33.0:
-  version "0.33.0"
-  resolved "https://registry.yarnpkg.com/watson-speech/-/watson-speech-0.33.0.tgz#2dee6fd0c9b51701cfb0b3f2d3d5315cc5a0e678"
+  version "0.33.1"
+  resolved "https://registry.yarnpkg.com/watson-speech/-/watson-speech-0.33.1.tgz#6acab34c77b1c9da12b487392bca1e24cf1af1c5"
   dependencies:
     clone "^2.1.0"
     defaults "^1.0.3"
     get-user-media-promise "^1.1.0"
     lodash.pullallwith "^4.7.0"
     microphone-stream "^3.0.5"
-    nodeify-fetch "^0.1.2"
+    nodeify-fetch "^1.0.1"
     object.assign "^4.0.4"
     object.pick "^1.2.0"
     readable-blob-stream "^1.1.0"

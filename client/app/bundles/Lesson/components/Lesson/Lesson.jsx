@@ -140,7 +140,8 @@ export default class Lesson extends Component{
       percentage: 0.00,
       intervalId: 0,
       stream: null,
-      mode: this.props.mode
+      mode: this.props.mode,
+      umCount: 0
     };
 
     this.fetchToken = this.fetchToken.bind(this);
@@ -309,6 +310,14 @@ export default class Lesson extends Component{
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode);
+
+    try {
+      let reUm = / um ?/g;
+      let umCount = this.state.watson.stt.match(reUm).length;
+      this.setState({umCount: umCount})
+    } catch(error) {
+      console.log(error);
+    }
 
     this.setState({speechstat: speechstat});
 
