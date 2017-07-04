@@ -183,9 +183,6 @@ export default class Lesson extends Component{
     }
 
     var refreshIntervalId = setInterval(() => {
-      console.log(this.state.rawMessages);
-      console.log(this.state.formattedMessages);
-      console.log(this.state.formattedMessages[this.state.formattedMessages.length - 1].results[0].alternatives[0].transcript);
       if (this.state.loadCount === 0) {
         if (this.state.stage == 'Adjust') {
           let screenshot = this.refs.webcam.getScreenshot();
