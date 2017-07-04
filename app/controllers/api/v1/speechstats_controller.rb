@@ -1,14 +1,14 @@
+require 'eventmachine'
+require 'rubygems'
+require 'websocket-client-simple'
+require 'json'
+require 'uri'
+require 'net/http'
+
 class Api::V1::SpeechstatsController < ApplicationController
   skip_before_filter :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
   before_filter :check_authentication
-
-  # include Serializers::V1::ItemsSerializer
-
-  # Just skip the authentication for now
-  # before_filter :authenticate_user!
-
-  # include ActionView::Helpers::TextHelper
 
   respond_to :json
 
@@ -72,14 +72,13 @@ class Api::V1::SpeechstatsController < ApplicationController
     end
   end
 
-
   private
 
-    def check_authentication
-      if User.where(auth_token: params[:auth_token]).count == 1
-        @user = User.where(auth_token: params[:auth_token]).first
-      end
-   end
+  def check_authentication
+    if User.where(auth_token: params[:auth_token]).count == 1
+      @user = User.where(auth_token: params[:auth_token]).first
+    end
+  end
 
 
 

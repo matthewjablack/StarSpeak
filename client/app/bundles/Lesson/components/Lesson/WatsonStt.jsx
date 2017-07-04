@@ -28,6 +28,7 @@ function getRecognizeOptions(ctx, extra) {
     token: ctx.state.token, smart_formatting: true, 
     format: true, 
     model: ctx.state.model,
+    hesitation: 'um',
     objectMode: true,
     interim_results: true,
     continuous: true,
