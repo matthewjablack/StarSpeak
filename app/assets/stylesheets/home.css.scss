@@ -2,384 +2,386 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.main {
 
-.navbar-static-top {
-	margin-bottom: 0px !important;
-}
-
-.nav-wrapper {
-	padding: 0 15px;
-}
-.root {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-
-body {
-    font-family: "Helvetica Neue",Helvetica,"Open Sans",Arial,"Lucida Grande",Roboto,sans-serif !important;
-    background:none;
-    font-size:16px;
-		display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-main {
-    flex: 1 0 auto;
+  .navbar-static-top {
+  	margin-bottom: 0px !important;
   }
 
-/* general styles */
-.base--hr {
-    margin-top: 1em;
-}
-
-.tab-panels--tab-content {
-    min-height: 250px;
-}
-
-.arrow-box-container {
-    position: relative;
-}
-
-sup {
-    vertical-align: super;
-    font-size: 0.8rem;
-}
-
-/* override strange defaults in chrome */
-dialog, dd, dt {
-    position: static;
-    display: block;
-    border: 0;
-    padding: 0;
-}
+  .nav-wrapper {
+  	padding: 0 15px;
+  }
+  .root {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
 
-
-/* drag-drop styles */
-._container {
-    position: relative;
-}
-.base--checkbox + label, .base--radio + label, .prism {
-    position: static;
-}
-.drop-info-container {
-    position: absolute;
-    display: none;
-    /* This div also gets our container classnames in order to be the correct width.
-    But, it isn't exactly correct until we fiddle with the padding */
-    padding-right: 1rem;
-}
-
-.dropzone.dropzone-active .drop-info-container,
-.dropzone.dropzone-reject .drop-info-container {
-    display: block;
-}
-
-.drop-info {
-    background-color: white;
-    opacity: 0.9;
-    padding: 60px;
-    min-height: 800px;
-    border: 10px dashed #959595; /* gray_40 */
-    border-radius: 10px;
-    z-index: 1;
-}
-.drop-info h1 {
-    font-size: 60px;
-}
-.drop-info p {
-    font-size: 30px;
-}
-.dropzone.dropzone-reject .drop-info{
-    background-color: #E71D32; /* red_50 */
-}
-
-/* settings */
-
-.base--input {
-    border: 2px solid #464646;
-}
-
-.base--input:hover, .base--input:focus {
-    border-width: 2px;
-}
-
-.flex > * {
-    margin: 6px 6px 0 0;
-}
-.flex > *:last-child {
-    margin-right: 0;
-}
-
-@media (min-width: 1024px) {
-    .flex {
-        display: flex;
+  body {
+      font-family: "Helvetica Neue",Helvetica,"Open Sans",Arial,"Lucida Grande",Roboto,sans-serif !important;
+      background:none;
+      font-size:16px;
+  		display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+  }
+  main {
+      flex: 1 0 auto;
     }
-    .flex > * {
-        flex: 1;
-        margin: 0 6px 0 0;
-    }
-    .flex > *:last-child {
-        margin-right: 0;
-    }
-    .base--input, .base--select {
-        max-width: 100%;
-    }
-}
 
-.base--button:focus {
-  outline: 0;
-}
+  /* general styles */
+  .base--hr {
+      margin-top: 1em;
+  }
 
+  .tab-panels--tab-content {
+      min-height: 250px;
+  }
 
-.base--button.mic-active {
-    background-color: #E71D32;
-    color: white;
-    border-color: #E71D32
-}
+  .arrow-box-container {
+      position: relative;
+  }
 
-/* Speaker View styles */
-.speaker-labels dt {
-    font-weight: bold;
-    display: inline;
-}
-.speaker-labels dd {
-    display: inline;
-}
+  sup {
+      vertical-align: super;
+      font-size: 0.8rem;
+  }
 
-/* JSONView styles */
-.jsonview .options > div {
-    display: inline-block;
-}
-.jsonview .options > div > div {
-    display: inline-block;
-    margin-right: 1em;
-}
-.jsonview .options div:before {
-    display: none;
-}
-.json-link--span code {
-    word-wrap: break-word;
-}
-
-/* Word Timings and Alternatives view styles */
-.word-timings-alternatives .word {
-    padding-right: 1ex; /*I tried just putting a space in the HTML, but chrome and safari hide it :( */
-    display: inline-block;
-    margin-top: 0;
-}
+  /* override strange defaults in chrome */
+  dialog, dd, dt {
+      position: static;
+      display: block;
+      border: 0;
+      padding: 0;
+  }
 
 
 
+  /* drag-drop styles */
+  ._container {
+      position: relative;
+  }
+  .base--checkbox + label, .base--radio + label, .prism {
+      position: static;
+  }
+  .drop-info-container {
+      position: absolute;
+      display: none;
+      /* This div also gets our container classnames in order to be the correct width.
+      But, it isn't exactly correct until we fiddle with the padding */
+      padding-right: 1rem;
+  }
+
+  .dropzone.dropzone-active .drop-info-container,
+  .dropzone.dropzone-reject .drop-info-container {
+      display: block;
+  }
+
+  .drop-info {
+      background-color: white;
+      opacity: 0.9;
+      padding: 60px;
+      min-height: 800px;
+      border: 10px dashed #959595; /* gray_40 */
+      border-radius: 10px;
+      z-index: 1;
+  }
+  .drop-info h1 {
+      font-size: 60px;
+  }
+  .drop-info p {
+      font-size: 30px;
+  }
+  .dropzone.dropzone-reject .drop-info{
+      background-color: #E71D32; /* red_50 */
+  }
+
+  /* settings */
+
+  .base--input {
+      border: 2px solid #464646;
+  }
+
+  .base--input:hover, .base--input:focus {
+      border-width: 2px;
+  }
+
+  .flex > * {
+      margin: 6px 6px 0 0;
+  }
+  .flex > *:last-child {
+      margin-right: 0;
+  }
+
+  @media (min-width: 1024px) {
+      .flex {
+          display: flex;
+      }
+      .flex > * {
+          flex: 1;
+          margin: 0 6px 0 0;
+      }
+      .flex > *:last-child {
+          margin-right: 0;
+      }
+      .base--input, .base--select {
+          max-width: 100%;
+      }
+  }
+
+  .base--button:focus {
+    outline: 0;
+  }
+
+
+  .base--button.mic-active {
+      background-color: #E71D32;
+      color: white;
+      border-color: #E71D32
+  }
+
+  /* Speaker View styles */
+  .speaker-labels dt {
+      font-weight: bold;
+      display: inline;
+  }
+  .speaker-labels dd {
+      display: inline;
+  }
+
+  /* JSONView styles */
+  .jsonview .options > div {
+      display: inline-block;
+  }
+  .jsonview .options > div > div {
+      display: inline-block;
+      margin-right: 1em;
+  }
+  .jsonview .options div:before {
+      display: none;
+  }
+  .json-link--span code {
+      word-wrap: break-word;
+  }
+
+  /* Word Timings and Alternatives view styles */
+  .word-timings-alternatives .word {
+      padding-right: 1ex; /*I tried just putting a space in the HTML, but chrome and safari hide it :( */
+      display: inline-block;
+      margin-top: 0;
+  }
 
 
 
 
 
-.reactWebcam {
-    width: 100%;
-    position: fixed;
-    top: 64px;
-    left: 0;
-    z-index: 1;
-}
-
-.center {
-    text-align:center;
-}
-
-
-.centerFixed {
-    text-align:center;
-    z-index: 10;
-    position:fixed;
-    width:100%;
-    color:white;
-    margin-top: -1px;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-// .header {
-//     width:100%;
-//     height:70px;
-//     background-color: #e74c3c;
-//     color:white;
-// }
-
-
-.brand {
-    font-size: 30px;
-}
-
-
-.whiteBtn {
-    color:white;
-    border: 2px solid white;
-    padding:3px 9px;
-    background:none;
-    border-radius:10px;
-    font-size: 17px;
-    min-height: 150%;
-}
-
-.whiteBtn:hover {
-    color:#ec8176;
-    border: 2px solid #ec8176;
-}
-
-
-.whiteBtnSpace {
-    color:white;
-    border: 2px solid white;
-    padding:3px 9px;
-    background:none;
-    border-radius:10px;
-    font-size: 17px;
-    min-height: 150%;
-    margin-top: -10px;
-    margin-left:10px;
-}
-
-.whiteBtnSpace:hover {
-    color:#ec8176;
-    border: 2px solid #ec8176;
-}
 
 
 
-.super-crazy-colors {
-    color:white;
-    position:fixed;
-}
+  .reactWebcam {
+      width: 100%;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      z-index: 1;
+  }
 
-.hidden {
-    visibility:hidden;
-}
-
-.super-crazy-colors {
-    color: red;
-}
-
+  .center {
+      text-align:center;
+  }
 
 
-.refresh {
-    color: black;
+  .centerFixed {
+      text-align:center;
+      z-index: 10;
+      position:fixed;
+      width:100%;
+      color:white;
+      margin-top: -1px;
+      background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  // .header {
+  //     width:100%;
+  //     height:70px;
+  //     background-color: #e74c3c;
+  //     color:white;
+  // }
+
+
+  .brand {
+      font-size: 30px;
+  }
+
+
+  .whiteBtn {
+      color:white;
+      border: 2px solid white;
+      padding:3px 9px;
+      background:none;
+      border-radius:10px;
+      font-size: 17px;
+      min-height: 150%;
+  }
+
+  .whiteBtn:hover {
+      color:#ec8176;
+      border: 2px solid #ec8176;
+  }
+
+
+  .whiteBtnSpace {
+      color:white;
+      border: 2px solid white;
+      padding:3px 9px;
+      background:none;
+      border-radius:10px;
+      font-size: 17px;
+      min-height: 150%;
+      margin-top: -10px;
+      margin-left:10px;
+  }
+
+  .whiteBtnSpace:hover {
+      color:#ec8176;
+      border: 2px solid #ec8176;
+  }
+
+
+
+  .super-crazy-colors {
+      color:white;
+      position:fixed;
+  }
+
+  .hidden {
+      visibility:hidden;
+  }
+
+  .super-crazy-colors {
+      color: red;
+  }
+
+
+
+  .refresh {
+      color: black;
+      text-align: center;
+      font-size: 25px;
+  }
+
+  .bg-image {
+      background: none !important;
+  }
+
+  body.view {
+    background: url(/images/microphone.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+
+  .white {
+      color:white !important;
+  }
+
+  .frontPg {
+  	font-family: "Helvetica Neue",Helvetica,"Open Sans",Arial,"Lucida Grande",Roboto,sans-serif !important;
+      text-align:center;
+  }
+
+  .bgWhite {
+      background:white;
+      height:100%;
+      width:100%;
+      margin-top: -0px;
+      padding-top: 20px;
+  }
+
+  .header-toolbar {
+      float:right;
+      background: none;
+      color:white;
+  }
+
+
+  .dropdown {
+      float:right;
+      background: none;
+      position:fixed;
+      right: 0;
+  }
+
+
+
+  .finishedLink {
+      float:right;
+      text-align:right;
+  }
+
+  .css-132hx50 {
+      margin-top: 52px !important;
+  }
+
+
+  .css-hx30u2 {
+      width: 400px !important;
+      font-size: 13px !important;
+  }
+
+  // .css-1lf6zld {
+  //     background-color: #c0392b !important;
+  // }
+
+
+
+  .alignBottom {
+      width: 100%;
+      position:fixed;
+      bottom: 20px;
+      text-align:center;
+  }
+
+  .red-txt {
+      color: #c0392b;
+  }
+
+  .yellow-txt {
+      color: #d35400;
+  }
+
+  .green-txt {
+      color: #16a085;
+  }
+
+
+  #speech-stats-table tbody tr th {
     text-align: center;
-    font-size: 25px;
-}
+  }
 
-.bg-image {
-    background: none !important;
-}
+  .breadcrumb:first-child {
+  	padding-left:20px;
+  }
+  .breadcrumb{
+  	background-color: transparent;
+  	padding: 0 0 0 0;
+  }
 
-body.view {
-  background: url(/images/microphone.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
+  #breadcrumb-nav {
+  	margin-top: 20px;
+  }
 
+  .full-width {
+      width:100%;
+  }
 
-.white {
-    color:white !important;
-}
+  .flex-1 {
+      flex: 1
+  }
 
-.frontPg {
-	font-family: "Helvetica Neue",Helvetica,"Open Sans",Arial,"Lucida Grande",Roboto,sans-serif !important;
-    text-align:center;
-}
-
-.bgWhite {
-    background:white;
-    height:100%;
-    width:100%;
-    margin-top: -0px;
-    padding-top: 20px;
-}
-
-.header-toolbar {
-    float:right;
-    background: none;
-    color:white;
-}
-
-
-.dropdown {
-    float:right;
-    background: none;
-    position:fixed;
-    right: 0;
-}
-
-
-
-.finishedLink {
-    float:right;
-    text-align:right;
-}
-
-.css-132hx50 {
-    margin-top: 52px !important;
-}
-
-
-.css-hx30u2 {
-    width: 400px !important;
-    font-size: 13px !important;
-}
-
-// .css-1lf6zld {
-//     background-color: #c0392b !important;
-// }
-
-
-
-.alignBottom {
-    width: 100%;
-    position:fixed;
-    bottom: 20px;
-    text-align:center;
-}
-
-.red-txt {
-    color: #c0392b;
-}
-
-.yellow-txt {
-    color: #d35400;
-}
-
-.green-txt {
-    color: #16a085;
-}
-
-
-#speech-stats-table tbody tr th {
-  text-align: center;
-}
-
-.breadcrumb:first-child {
-	padding-left:20px;
-}
-.breadcrumb{
-	background-color: transparent;
-	padding: 0 0 0 0;
-}
-
-#breadcrumb-nav {
-	margin-top: 20px;
-}
-
-.full-width {
-    width:100%;
-}
-
-.flex-1 {
-    flex: 1
-}
-
-#dropdown1 {
-	z-index: 11;
+  #dropdown1 {
+  	z-index: 11;
+  }
 }

@@ -13,11 +13,6 @@
     <%= stylesheet_link_tag "application", media: "all" %>
     <%= javascript_include_tag "application" %>
 
-    <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby") %>
-      <%= stylesheet_link_tag "startup-standalone", "data-turbolinks-track" => false %>
-    <% else %>
-      <%= stylesheet_link_tag "home", "data-turbolinks-track" => false %>
-    <% end %>
     <!-- Custom styles for this template -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -39,7 +34,7 @@
       </script>
     <% end %>
   </head>
-  <body class="light-theme" <%= yield(:body_attributes) %>>
+  <body class="light-theme <%= get_body_class %>" <%= yield(:body_attributes) %>>
 
     <%= render 'shared/header' %>
 

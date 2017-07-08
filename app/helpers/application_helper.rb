@@ -10,4 +10,12 @@ module ApplicationHelper
 		end
 	end
 
+	def get_body_class()
+		if params[:controller] == "home" && params[:action] == "index"
+			"startup-home"
+		else
+			"main"
+		end
+	end
+
 end
