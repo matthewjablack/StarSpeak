@@ -7,8 +7,14 @@ set :repo_url, 'git@github.com:mattBlackDesign/StarSpeak.git'
 set :deploy_to, '/home/deploy/StarSpeak'
 set :use_sudo, false
 
-set :linked_files, %w{config/database.yml config/webapi.yml config/application.yml}
+set :linked_files, %w{config/database.yml config/webapi.yml config/application.yml config/sidekiq.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+
+set :rbenv_map_bins, %w{rake gem bundle ruby rails sidekiq sidekiqctl}
+
+set pty: false
+
+set sidekiq_config: '/home/deploy/StarSpeak/shared/config/sidekiq.yml'
 
 namespace :deploy do
 
