@@ -10,106 +10,109 @@ $transitions-map:
    "rotate-y": ("property": transform, "in": "rotateY(0deg)", "out": "rotateY(-90deg)"),
    "rotate-x": ("property": transform, "in": "rotateX(0deg)", "out": "rotateX(-90deg)"));
 
-// Directional origin
-.center-transform-origin {
-  transform-origin: 50% 50%;
-}
-.right-transform-origin {
-  transform-origin: 0% 50%;
-}
-.top-transform-origin {
-  transform-origin: 50% 100%;
-}
-.bottom-transform-origin {
-  transform-origin: 50% 0%;
-}
-.left-transform-origin {
-  transform-origin: 100% 50%;
-}
 
-
-// Fade
-
-
-// Scale
-
-
-// Translates
-
-
-// Rotates
-.perspective-wrapper {
-  perspective: 1000px;
-}
-
-.rotate-y-in-out {
-  &.right-transform-origin {
-    transform: rotateY(90deg);
+.startup-home {
+  // Directional origin
+  .center-transform-origin {
+    transform-origin: 50% 50%;
   }
-}
-
-.rotate-x-in-out {
-  &.top-transform-origin {
-    transform: rotateX(90deg);
+  .right-transform-origin {
+    transform-origin: 0% 50%;
   }
-}
+  .top-transform-origin {
+    transform-origin: 50% 100%;
+  }
+  .bottom-transform-origin {
+    transform-origin: 50% 0%;
+  }
+  .left-transform-origin {
+    transform-origin: 100% 50%;
+  }
 
 
-// Device transitions
-.perspective-wrapper {
-  .laptop-preview-sizer {
-    &.lid-tilt-in-out {
-      &.active {
-        transform: rotateX(0deg);
-      }
-      transform: rotateX(45deg);
-      transform-origin: 50% 100%;
+  // Fade
+
+
+  // Scale
+
+
+  // Translates
+
+
+  // Rotates
+  .perspective-wrapper {
+    perspective: 1000px;
+  }
+
+  .rotate-y-in-out {
+    &.right-transform-origin {
+      transform: rotateY(90deg);
     }
   }
-  .phone-preview-sizer {
-    &.phone-arc-in-out {
-      &.active {
-        transform: translateX(1000px) rotateY(-30deg);
-      }
-      max-width: 200px;
-      transform: rotateY(30deg);
+
+  .rotate-x-in-out {
+    &.top-transform-origin {
+      transform: rotateX(90deg);
     }
   }
-}
 
-@each $transition, $val in $transitions-map {
-  .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-in-out,
-  .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-in {
-    #{map-get($val, "property")}: #{map-get($val, "in")};
-  }
-  .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-out-in,
-  .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-out {
-    #{map-get($val, "property")}: #{map-get($val, "out")};
+
+  // Device transitions
+  .perspective-wrapper {
+    .laptop-preview-sizer {
+      &.lid-tilt-in-out {
+        &.active {
+          transform: rotateX(0deg);
+        }
+        transform: rotateX(45deg);
+        transform-origin: 50% 100%;
+      }
+    }
+    .phone-preview-sizer {
+      &.phone-arc-in-out {
+        &.active {
+          transform: translateX(1000px) rotateY(-30deg);
+        }
+        max-width: 200px;
+        transform: rotateY(30deg);
+      }
+    }
   }
 
-  .#{$transition}-in-out,
-  .#{$transition}-in {
-    &.active,
-    &[data-disabled="true"] {
+  @each $transition, $val in $transitions-map {
+    .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-in-out,
+    .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-in {
       #{map-get($val, "property")}: #{map-get($val, "in")};
     }
-    &.no-tween {
-      transition: map-get($val, "property") $transitions-duration;
-    }
-
-    #{map-get($val, "property")}: #{map-get($val, "out")};
-  }
-  .#{$transition}-out-in,
-  .#{$transition}-out {
-    &.active,
-    &[data-disabled="true"] {
+    .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-out-in,
+    .staggered-transition-wrapper[data-disabled="true"] .#{$transition}-out {
       #{map-get($val, "property")}: #{map-get($val, "out")};
     }
-    &.no-tween {
-      transition: map-get($val, "property") $transitions-duration;
-    }
 
-    #{map-get($val, "property")}: #{map-get($val, "in")};
+    .#{$transition}-in-out,
+    .#{$transition}-in {
+      &.active,
+      &[data-disabled="true"] {
+        #{map-get($val, "property")}: #{map-get($val, "in")};
+      }
+      &.no-tween {
+        transition: map-get($val, "property") $transitions-duration;
+      }
+
+      #{map-get($val, "property")}: #{map-get($val, "out")};
+    }
+    .#{$transition}-out-in,
+    .#{$transition}-out {
+      &.active,
+      &[data-disabled="true"] {
+        #{map-get($val, "property")}: #{map-get($val, "out")};
+      }
+      &.no-tween {
+        transition: map-get($val, "property") $transitions-duration;
+      }
+
+      #{map-get($val, "property")}: #{map-get($val, "in")};
+    }
   }
 }
 

@@ -30,4 +30,5 @@ $(document).ready(function() {
 
 $(document).on('turbolinks:load', function(event) {
   Waves.displayEffect();
+  $('.modal').modal();
 });
