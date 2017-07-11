@@ -73,7 +73,17 @@ body.startup-home {
 
 .startup-home {
 
-  
+  .section.light, .page-footer .section.footer-copyright, .section.footer-copyright {
+    background-color: #FF5252 !important;
+  }
+
+  nav.navbar.solid.dark, nav.navbar.solid {
+    background-color: #FF5252 !important;
+  }
+
+  .parallax-container {
+    margin-top: -3px;
+  }
 
   button {
     background: none;
