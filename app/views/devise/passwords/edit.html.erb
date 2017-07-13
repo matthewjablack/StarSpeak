@@ -1,16 +1,40 @@
-<h2>Change your password</h2>
+<div class="container">
+  <div class="col-md-6 col-md-offset-3">
 
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
+    <% reset_password_token = Devise.token_generator.digest(User.class, :reset_password_token, params[:reset_password_token]) %>
+    <% user = User.find_by(reset_password_token: reset_password_token) %>
 
-  <div><%= f.label :password, "New password" %><br />
-  <%= f.password_field :password, :autofocus => true %></div>
+    <% if user.sign_in_count == 0 %>
+      <h2>Welcome to StarSpeak <%= user.first_name %></h2>
+      <p>Go ahead and choose a password</p>
+    <% else %>
+      <h2>Change your password</h2>
+    <% end %>
 
-  <div><%= f.label :password_confirmation, "Confirm new password" %><br />
-  <%= f.password_field :password_confirmation %></div>
 
-  <div><%= f.submit "Change my password" %></div>
-<% end %>
 
-<%= render "devise/shared/links" %>
+	<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
+	  <%= devise_error_messages! %>
+	  <%= f.hidden_field :reset_password_token %>
+
+	  <div><%= f.label :password, "New password" %><br />
+	  <%= f.password_field :password, :autofocus => true %></div>
+
+	  <div><%= f.label :password_confirmation, "Confirm new password" %><br />
+	  <%= f.password_field :password_confirmation %></div>
+
+      <% if user.sign_in_count == 0 %>
+        <div><%= f.submit "Next", class: 'btn red lighten-2 waves-effect waves-light' %></div>
+      <% else %>
+        <div><%= f.submit "Change my password", class: 'btn red lighten-2 waves-effect waves-light' %></div>
+
+        <br>
+
+        <%= render "devise/shared/links" %>
+      <% end %>
+	<% end %>
+
+
+
+	</div>
+</div>

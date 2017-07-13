@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  attr_accessor :skip_password_validation
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, 
@@ -61,15 +62,31 @@ class User < ActiveRecord::Base
     end
   end
 
+  def generate_reset_token
+    raw, enc = Devise.token_generator.generate(self.class, :reset_password_token)
+
+    self.reset_password_token   = enc
+    self.reset_password_sent_at = Time.now.utc
+    self.save(validate: false)
+
+    return raw
+  end
 
   private
 
-    def generate_authentication_token
-      loop do
-        token = Devise.friendly_token
-        break token unless User.where(auth_token: token).first
-      end
+  def generate_authentication_token
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(auth_token: token).first
     end
+  end
+
+  protected
+
+  def password_required?
+    return false if skip_password_validation
+    super
+  end
 
 
 end
