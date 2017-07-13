@@ -44,7 +44,15 @@ StarSpeak::Application.routes.draw do
   get '/demo/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 
 
-  resources :users, only: [:show]
+  resources :users, only: [:show, :create] do
+    collection do
+      get :magic_link
+      post :magic_create
+    end
+    member do
+      get :magic_link_show
+    end
+  end
 
   resources :speechstats, only: [:index, :show]
 
