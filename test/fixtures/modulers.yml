@@ -3,9 +3,7 @@
 one:
   name: MyString
   level_id: 1
-  order: 1
 
 two:
   name: MyString
   level_id: 1
-  order: 1
