@@ -15,6 +15,8 @@ class HomeController < ApplicationController
   def dashboard
   	if !user_signed_in?
 			redirect_to root_path
+    else
+      redirect_to level_path(current_user.level)
 		end
   end
 
