@@ -18,6 +18,22 @@ export async function checkIpSession(){
   }
 }
 
+export async function getGradeScore(text){
+  let response = await fetch('/api/v1/dalechall.json', {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'same-origin',
+    body: JSON.stringify({
+      text: text
+    })
+  })
+  let responseJson = await response.json();
+  return responseJson.data.score;
+}
+
 export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode) {
   if (user.auth_token !== null) {
 

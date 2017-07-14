@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {Stats} from './stats';
 import Pace from './Pace';
 import UmCount from './UmCount';
+import GradeLevel from './GradeLevel';
 import { ProgressBar } from 'react-materialize';
 
 
 export default class RenderAnalyze extends Component {
   render() {
+    console.log(this.props.gradeScore);
     return (
       <div className="bgWhite">
         <div className="container">
@@ -15,6 +17,8 @@ export default class RenderAnalyze extends Component {
           <h1>Results</h1>
           <p>{this.props.local.stt}</p>
           <Pace pace={this.props.local.pace} />
+          <br/>
+          <GradeLevel gradeScore={this.props.gradeScore} />
           <br/>
           <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} local={this.props.local} user={this.props.user} mode={this.props.mode} />
           <h2>Uploading...{Math.floor(this.props.percentUploaded)}%</h2>
