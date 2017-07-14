@@ -1,10 +1,3 @@
-require 'eventmachine'
-require 'rubygems'
-require 'websocket-client-simple'
-require 'json'
-require 'uri'
-require 'net/http'
-
 class Api::V1::SpeechstatsController < ApplicationController
   skip_before_filter :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
@@ -72,6 +65,27 @@ class Api::V1::SpeechstatsController < ApplicationController
     end
   end
 
+  def dale_chall
+    @dalechall ||= set_list_content(Rails.root.join("config", "dalechall.yml"))
+
+    word_count = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split.size.to_f
+
+    difficult_word_count = (params[:text].gsub(/[^-a-z'A-Z]/, ' ').split - @dalechall).count.to_f
+
+    sentences = word_count / 7
+
+    difficult_ratio = difficult_word_count / word_count
+
+    difficult_weight = difficult_ratio > 0.05 ? 3.6365 : 0
+
+    score = 0.1579 * (difficult_ratio * 100) + 0.0496* (word_count / sentences) + difficult_weight
+
+    render :status => 200, 
+             :json => { :success => true,
+                        :info => "Successfully returned score",
+                        :data => { score: score } }
+  end
+
   private
 
   def check_authentication
@@ -80,6 +94,11 @@ class Api::V1::SpeechstatsController < ApplicationController
     end
   end
 
-
-
+  def set_list_content(list)
+    case list
+    when Array then list
+    when String, Pathname then YAML.load_file( list.to_s )
+    else []
+    end
+  end
 end
