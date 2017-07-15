@@ -22,6 +22,9 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       execute :touch, release_path.join('tmp/restart.txt')
+      within "#{deploy_to}/current" do 
+        execute :rake, 'db:migrate RAILS_ENV=production'
+      end
     end
   end
 
