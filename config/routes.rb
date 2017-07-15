@@ -21,6 +21,7 @@ StarSpeak::Application.routes.draw do
       resources :videos, only: [:index, :create]
       resources :uploads, only: [:create]
       resources :ip_sessions, only: [:create]
+      post 'dalechall' => 'speechstats#dale_chall'
     end
   end
 
@@ -42,6 +43,8 @@ StarSpeak::Application.routes.draw do
   get '/render_result_dev' => 'pages#render_result_dev', via: [:get], as: :render_result_dev
 
   get '/demo/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
+
+  get 'dalechall' => 'speechstats#dale_chall'
 
 
   resources :users, only: [:show, :create] do
