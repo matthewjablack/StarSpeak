@@ -10,7 +10,6 @@ export default class RenderDevelop extends Component {
         Continue
       </Button>
     )
-
     if (this.props.mode == "StarView") {
       return (
         <div>
