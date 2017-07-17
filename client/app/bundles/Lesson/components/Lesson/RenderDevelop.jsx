@@ -5,6 +5,20 @@ import { Button } from 'react-materialize';
 
 export default class RenderDevelop extends Component {
   render() {
+    let continueButton;
+    if (this.props.affectivaLoaded) {
+      continueButton = (
+        <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>
+          Continue
+        </Button>
+      )
+    } else {
+      continueButton = (
+        <Button className="red lighten-2" waves="light" onClick={this.props.startStagePreload}>
+          Continue
+        </Button>
+      )
+    }
     console.log(this.props.mode);
     if (this.props.mode == "StarView") {
       return (

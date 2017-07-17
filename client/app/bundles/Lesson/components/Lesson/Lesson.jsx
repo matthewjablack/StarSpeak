@@ -9,6 +9,7 @@ import {createSpeechstat, getGradeScore, calculatePace} from './speechstat';
 import RenderIntro from './RenderIntro';
 import RenderAdjust from './RenderAdjust';
 import RenderDevelop from './RenderDevelop';
+import RenderPreload from './RenderPreload';
 import RenderRecord from './RenderRecord';
 import RenderAnalyze from './RenderAnalyze';
 import RenderResults from './RenderResults';
@@ -18,12 +19,20 @@ import {watsonTone} from './watsonTone';
 import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
+import $ from 'jquery';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
 var screenshots = [];
 var screenCount = 0;
 var uuid = uuidV1();
+
+
+
+//Construct a CameraDetector and specify the image width / height and face detector mode.
+var detector;
+
+
 
 export default class Lesson extends Component{
   static get propTypes() {
@@ -146,17 +155,70 @@ export default class Lesson extends Component{
       mode: this.props.mode,
       umCount: 0,
       gradeScore: 0,
+      affectivaLoaded: false,
     };
 
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.startStageAdjust = this.startStageAdjust.bind(this);
     this.startStageDevelop = this.startStageDevelop.bind(this);
+    this.startStagePreload = this.startStagePreload.bind(this);
     this.startStageRecord = this.startStageRecord.bind(this);
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
     this.showAlert = this.showAlert.bind(this);
     this.updatePresentCount = this.updatePresentCount.bind(this);
     this.setPresentCount = this.setPresentCount.bind(this);
+  }
+
+  componentWillMount() {
+    var self = this;
+
+    var divRoot = $("#affdex_elements")[0];
+    var width = 640;
+    var height = 480;
+    var faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+
+    detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+
+    //Enable detection of all Expressions, Emotions and Emojis classifiers.
+    detector.detectAllEmotions();
+    detector.detectAllExpressions();
+    detector.detectAllEmojis();
+    detector.detectAllAppearance();
+
+
+    console.log('testing detector');
+
+    this.onStart();
+
+    console.log('detector testing');
+
+    detector.addEventListener("onWebcamConnectSuccess", function() {
+      console.log("I was able to connect to the camera successfully.");
+    });
+
+    detector.addEventListener("onImageResultsSuccess", function(faces, image, timestamp) {
+      self.setState({affectivaLoaded: true});
+      console.log(JSON.stringify(faces[0].appearance));
+      console.log(JSON.stringify(faces[0].emotions, function(key, val) {
+          return val.toFixed ? Number(val.toFixed(0)) : val;
+        }));
+      console.log()
+      $('#results').html("");
+      this.loggerInfo('#results', "Timestamp: " + timestamp.toFixed(2));
+      this.loggerInfo('#results', "Number of faces found: " + faces.length);
+      if (faces.length > 0) {
+        this.loggerInfo('#results', "Appearance: " + JSON.stringify(faces[0].appearance));
+        this.loggerInfo('#results', "Emotions: " + JSON.stringify(faces[0].emotions, function(key, val) {
+          return val.toFixed ? Number(val.toFixed(0)) : val;
+        }));
+        this.loggerInfo('#results', "Expressions: " + JSON.stringify(faces[0].expressions, function(key, val) {
+          return val.toFixed ? Number(val.toFixed(0)) : val;
+        }));
+        this.loggerInfo('#results', "Emoji: " + faces[0].emojis.dominantEmoji);
+        drawFeaturePoints(image, faces[0].featurePoints);
+      }
+    });
   }
 
   async componentDidMount() {
@@ -272,12 +334,66 @@ export default class Lesson extends Component{
     this.setState({length: parseInt(num)});
   }
 
+  loggerInfo(node_name, msg) {
+    $(node_name).append("<span>" + msg + "</span><br />");
+  }
+
+  //function executes when Start button is pushed.
+  onStart() {
+    if (detector && !detector.isRunning) {
+      $("#logs").html("");
+      detector.start();
+    }
+    this.loggerInfo('#logs', "Clicked the start button");
+  }
+
+  //function executes when the Stop button is pushed.
+  onStop() {
+    this.loggerInfo('#logs', "Clicked the stop button");
+    if (detector && detector.isRunning) {
+      detector.removeEventListener();
+      detector.stop();
+    }
+  };
+
+  //function executes when the Reset button is pushed.
+  onReset() {
+    this.loggerInfo('#logs', "Clicked the reset button");
+    if (detector && detector.isRunning) {
+      detector.reset();
+
+      $('#results').html("");
+    }
+  };
+
+  //Draw the detected facial feature points on the image
+  drawFeaturePoints(img, featurePoints) {
+    var contxt = $('#face_video_canvas')[0].getContext('2d');
+
+    var hRatio = contxt.canvas.width / img.width;
+    var vRatio = contxt.canvas.height / img.height;
+    var ratio = Math.min(hRatio, vRatio);
+
+    contxt.strokeStyle = "#FFFFFF";
+    for (var id in featurePoints) {
+      contxt.beginPath();
+      contxt.arc(featurePoints[id].x,
+        featurePoints[id].y, 2, 0, 2 * Math.PI);
+      contxt.stroke();
+
+    }
+  }
+
   startStageAdjust() {
     this.setState({stage: 'Adjust'});
   }
 
   startStageDevelop() {
     this.setState({stage: 'Develop'});
+  }
+
+  startStagePreload() {
+    this.setState({stage: 'Preload'})
   }
 
   startStageRecord() {
@@ -289,6 +405,7 @@ export default class Lesson extends Component{
 
   async startStageAnalyze() {
     stopRecord(this, uuid);
+    detector.stop();
 
     let newLocal = this.state.local;
     let newWatson = this.state.watson;
@@ -350,7 +467,9 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Adjust') {
       lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} mode={this.state.mode} updatePresentCount={(x) => this.updatePresentCount(x)} presentCount={this.state.presentCount} />;
     } else if (this.state.stage === 'Develop') {
-      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} presentCount={this.state.presentCount} />;
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} />;
+    } else if (this.state.stage === 'Preload'){
+      lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} />
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
