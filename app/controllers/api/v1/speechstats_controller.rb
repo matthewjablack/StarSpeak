@@ -78,19 +78,24 @@ class Api::V1::SpeechstatsController < ApplicationController
 
     difficult_weight = difficult_ratio > 0.05 ? 3.6365 : 0
 
+    words = params[:text].split(/[^a-zA-Z]/)
+
+    wf = Hash.new(0).tap { |h| words.each { |word| h[word] += 1 } }
+
     score = 0.1579 * (difficult_ratio * 100) + 0.0496* (word_count / sentences) + difficult_weight
 
     render :status => 200, 
              :json => { :success => true,
                         :info => "Successfully returned score",
-                        :data => { score: score } }
+                        :data => {score: score,
+                                  keyword_density: wf} }
   end
 
   private
 
   def check_authentication
     if User.where(auth_token: params[:auth_token]).count == 1
-      @user = User.where(auth_token: params[:auth_token]).first
+      @user = User.where(auth_token: params[:auth_token]).first   
     end
   end
 
