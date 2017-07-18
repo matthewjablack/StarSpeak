@@ -1,0 +1,16 @@
+development:
+  adapter: postgresql
+  host: 127.0.0.1
+  database: my_app_name_development
+  username: username
+  password: PASSWORD
+  encoding: unicode
+  pool: 5
+production:
+  adapter: postgresql
+  host: 127.0.0.1
+  database: my_app_name_production
+  username: deploy
+  password: YOUR_POSTGRES_PASSWORD
+  encoding: unicode
+  pool: 5
