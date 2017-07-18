@@ -18,7 +18,7 @@ export async function checkIpSession(){
   }
 }
 
-export async function getGradeScore(text){
+export async function getGradeScore(text, count){
   let response = await fetch('/api/v1/dalechall.json', {
     method: 'POST', 
     headers: {
@@ -27,7 +27,8 @@ export async function getGradeScore(text){
     },
     credentials: 'same-origin',
     body: JSON.stringify({
-      text: text
+      text: text,
+      count: count
     })
   })
   let responseJson = await response.json();
