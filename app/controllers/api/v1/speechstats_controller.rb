@@ -78,12 +78,26 @@ class Api::V1::SpeechstatsController < ApplicationController
 
     difficult_weight = difficult_ratio > 0.05 ? 3.6365 : 0
 
-    score = 0.1579 * (difficult_ratio * 100) + 0.0496* (word_count / sentences) + difficult_weight
+     words = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split #splits the array   
+ 
+     wf = Hash.new(0).tap { |h| words.each { |word| h[word] += 1 } } #turns array of words into dictionary hash which makes the frequency
+
+     unique = wf.count #counts the number of unique words
+
+     minute = Float(params[:count] / 60.0)
+
+     wpm = word_count / minute #calculates words per minute
+
+    score = 0.1579 * (difficult_ratio * 100) + 0.0496* (word_count / sentences) + difficult_weight #Final Score calculation for dalechall
 
     render :status => 200, 
              :json => { :success => true,
                         :info => "Successfully returned score",
-                        :data => { score: score } }
+                        :data => { score: score,
+                                   frequency: wf,
+                                   unique_words: unique,
+                                   words_per_minute: wpm,
+                                   time: params[:count]} }
   end
 
   private
