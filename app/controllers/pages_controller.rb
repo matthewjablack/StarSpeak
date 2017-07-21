@@ -12,7 +12,7 @@ class PagesController < ApplicationController
 	end
 
 	def starlight
-		@lesson_props = { mode: "StarLight" }
+		@lesson_props = { mode: "StarLight", user: current_user }
 	end
 
 	def render_result_dev

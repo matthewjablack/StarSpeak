@@ -38,11 +38,20 @@ export async function getGradeScore(text, count){
 export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode) {
   if (user.auth_token !== null) {
 
-    let starViewData = {
-      user_id: user.id,
-      betacode_id: user.betacode_id, 
-      lesson_id: lesson.id,
-      moduler_id: moduler.id
+    let starViewData = {};
+
+    if (mode === "StarView") {
+      starViewData = {
+        user_id: user.id,
+        betacode_id: user.betacode_id, 
+        lesson_id: lesson.id,
+        moduler_id: moduler.id
+      }
+    } else {
+      starViewData = {
+        user_id: user.id,
+        betacode_id: user.betacode_id, 
+      }
     }
 
     let speechStatData = {

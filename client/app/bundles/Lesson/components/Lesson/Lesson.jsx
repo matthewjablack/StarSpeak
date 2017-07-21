@@ -302,7 +302,7 @@ export default class Lesson extends Component{
     newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
     newWatson.pace = calculatePace(newWatson.stt,  this.state.length - this.state.presentCount);
 
-    let gradeScore = await getGradeScore(newLocal.stt, this.state.length - this.state.presentCounts);
+    let gradeScore = await getGradeScore(newLocal.stt, this.state.length - this.state.presentCount);
 
     this.setState({gradeScore: gradeScore});
 
