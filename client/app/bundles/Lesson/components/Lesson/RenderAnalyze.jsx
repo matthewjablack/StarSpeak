@@ -6,10 +6,8 @@ import UmCount from './UmCount';
 import GradeLevel from './GradeLevel';
 import { ProgressBar } from 'react-materialize';
 
-
 export default class RenderAnalyze extends Component {
   render() {
-    console.log(this.props.gradeScore);
     return (
       <div className="bgWhite">
         <div className="container">

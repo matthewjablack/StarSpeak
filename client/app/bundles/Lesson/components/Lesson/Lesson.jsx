@@ -264,10 +264,8 @@ export default class Lesson extends Component{
   }
 
   updatePresentCount(num) {
-    console.log(num);
-    this.setState({presentCount: num});
-    console.log('state for present count');
-    console.log(this.state.presentCount);
+    this.setState({presentCount: parseInt(num)});
+    this.setState({length: parseInt(num)})
   }
 
   async startStageAdjust() {
@@ -348,7 +346,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Adjust') {
       lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} mode={this.state.mode} updatePresentCount={(x) => this.updatePresentCount(x)} presentCount={this.state.presentCount} />;
     } else if (this.state.stage === 'Develop') {
-      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} />;
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} presentCount={this.state.presentCount} />;
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
