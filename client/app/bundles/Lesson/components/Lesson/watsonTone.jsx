@@ -29,10 +29,7 @@ export async function watsonTone(user, text, mode) {
     errors.push(STT_EMPTY);
   } else if (text.length > 10) {
     try {
-      let auth_token_str = ''
-      if (mode == "StarView") {
-        let auth_token_str = '?auth_token=' + user.auth_token;
-      }
+      let auth_token_str = '?auth_token=' + user.auth_token;
 
       let response = await fetch('/api/v1/watson_tone.json' + auth_token_str, {
         method: 'POST',

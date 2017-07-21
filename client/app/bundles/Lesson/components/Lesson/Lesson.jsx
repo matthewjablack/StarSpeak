@@ -152,6 +152,7 @@ export default class Lesson extends Component{
     this.startStageRecord = this.startStageRecord.bind(this);
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
     this.showAlert = this.showAlert.bind(this);
+    this.updatePresentCount = this.updatePresentCount.bind(this);
   }
 
   async componentDidMount() {
@@ -172,13 +173,13 @@ export default class Lesson extends Component{
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
-    let checkIpSessionResult = await checkIpSession();
+    // let checkIpSessionResult = await checkIpSession();
 
-    console.log(checkIpSessionResult);
+    // console.log(checkIpSessionResult);
 
-    if (!checkIpSessionResult && this.state.mode == "StarLight") {
-      this.setState({stage: 'DemoLimitExceeded'})
-    }
+    // if (!checkIpSessionResult && this.state.mode == "StarLight") {
+    //   this.setState({stage: 'DemoLimitExceeded'})
+    // }
 
     var refreshIntervalId = setInterval(() => {
       if (this.state.loadCount === 0) {
@@ -262,7 +263,10 @@ export default class Lesson extends Component{
     then(token => this.setState({token})).catch(this.handleError);
   }
 
-
+  updatePresentCount(num) {
+    this.setState({presentCount: parseInt(num)});
+    this.setState({length: parseInt(num)})
+  }
 
   async startStageAdjust() {
     this.setState({stage: 'Adjust'});
@@ -340,9 +344,9 @@ export default class Lesson extends Component{
     if (this.state.stage === 'Intro') {
       lessonContent = <RenderIntro startStageAdjust={this.startStageAdjust} />;
     } else if (this.state.stage === 'Adjust') {
-      lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} />;
+      lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} mode={this.state.mode} updatePresentCount={(x) => this.updatePresentCount(x)} presentCount={this.state.presentCount} />;
     } else if (this.state.stage === 'Develop') {
-      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} />;
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} presentCount={this.state.presentCount} />;
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {
