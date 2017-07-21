@@ -42,7 +42,7 @@ StarSpeak::Application.routes.draw do
   get '/upload' => 'pages#upload', via: [:get], as: :upload
   get '/render_result_dev' => 'pages#render_result_dev', via: [:get], as: :render_result_dev
 
-  get '/demo/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
+  get '/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 
   get 'dalechall' => 'speechstats#dale_chall'
 

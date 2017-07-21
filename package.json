@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "create-react-class": "^15.5.3",
+    "react-dropdown": "^1.2.5",
     "speech-to-text": "^0.4.4"
   }
 }

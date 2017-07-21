@@ -24,7 +24,7 @@ export default class RenderDevelop extends Component {
       return (
         <div>
           <div className="centerFixed">
-            <h1>StarLight Demo</h1>
+            <h1>StarLight</h1>
             <h4>You'll have 20 seconds to present a quick speech.</h4>
             <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>Continue</Button>
 
