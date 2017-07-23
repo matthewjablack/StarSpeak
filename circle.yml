@@ -16,7 +16,7 @@ dependencies:
 test:
   pre:
     - sudo service redis-server start
-    - bundle exec sidekiq -d RAILS_ENV=test
+    - bundle exec sidekiq -d RAILS_ENV=test -L sidekiq.log
 
 deployment:
   production:
