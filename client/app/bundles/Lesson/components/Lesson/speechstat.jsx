@@ -90,7 +90,7 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin',
-      body: JSON.stringify(Object.assign(speechStatData, starViewData))
+      body: JSON.stringify({speechstat: Object.assign(speechStatData, starViewData)})
     })
 
     let responseJson = await response.json();
