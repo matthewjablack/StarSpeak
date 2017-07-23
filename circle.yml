@@ -1,4 +1,10 @@
 dependencies:
+  pre: 
+    - wget http://download.redis.io/releases/redis-3.2.9.tar.gz
+    - tar xzf redis-3.2.9.tar.gz
+    - cd redis-3.2.9 && make
+  cache_directories:
+    - redis-3.2.9
   override:
     - bundle install: # note the colon here
         timeout: 240
@@ -6,6 +12,11 @@ dependencies:
         timeout: 240
     - yarn postinstall:
         timeout: 240
+
+test:
+  pre:
+    - sudo service redis-server start
+    - bundle exec sidekiq -d RAILS_ENV=test -L sidekiq.log
 
 deployment:
   production:

@@ -1,11 +1,22 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+main:
+  user_id: 1
+  betacode_id: 1
+  lesson_id: 1
+  moduler_id: 1
+  happy_facial_indico: 1.5
+  sad_facial_indico: 1.5
+  angry_facial_indico: 1.5
+  fear_facial_indico: 1.5
+  surprise_facial_indico: 1.5
+  neutral_facial_indico: 1.5
+
 one:
   user_id: 1
   betacode_id: 1
   lesson_id: 1
   moduler_id: 1
-  lesson_id: 1
   happy_facial_indico: 1.5
   sad_facial_indico: 1.5
   angry_facial_indico: 1.5
