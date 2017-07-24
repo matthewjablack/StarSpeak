@@ -5,7 +5,7 @@ import browser from 'detect-browser';
 import {isObjectEmpty} from './params';
 import {getIndicoEmotions} from './indico-emotion';
 import {parseWatson} from './watson-parse';
-import {createSpeechstat, getGradeScore, checkIpSession, calculatePace} from './speechstat';
+import {createSpeechstat, getGradeScore, calculatePace} from './speechstat';
 import RenderIntro from './RenderIntro';
 import RenderAdjust from './RenderAdjust';
 import RenderDevelop from './RenderDevelop';
@@ -19,36 +19,39 @@ import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 
-const uuidV1 = require('uuid/v1');
+const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
 var screenshots = [];
 var screenCount = 0;
-var errors = [];
-var recorder;
-var mediaStream = null;
-var recordVideo;
-var src;
 var uuid = uuidV1();
 
 export default class Lesson extends Component{
-  static propTypes = {
-    mode: PropTypes.string.isRequired,
-  };
+  static get propTypes() {
+    return {
+      mode: PropTypes.string.isRequired,
+      lesson: PropTypes.string,
+      level: PropTypes.string,
+      user: PropTypes.string,
+      moduler: PropTypes.string,
+    };
+  }
 
-  alertOptions = {
-    offset: 14,
-    position: 'top right',
-    theme: 'light',
-    time: 5000,
-    transition: 'scale'
-  };
+  get alertOptions() {
+    return {
+      offset: 14,
+      position: 'top right',
+      theme: 'light',
+      time: 5000,
+      transition: 'scale'
+    };
+  }
 
-  showAlert = (type, txt) => {
+  showAlert(type, txt) {
     this.msg.show(txt, {
       time: 200000,
       type: type,
-    })
-  };
+    });
+  }
 
   constructor(props) {
     super(props);
@@ -94,7 +97,7 @@ export default class Lesson extends Component{
         confidence: 0.00,
       },
       watson: {
-        stt: "",
+        stt: '',
         pace: 0.00,
         tone: {
           emotion: {
@@ -120,8 +123,8 @@ export default class Lesson extends Component{
         }
       },
       local: {
-        stt: "",
-        sttInterim: [""],
+        stt: '',
+        sttInterim: [''],
         sttFinal: [],
         pace: 0.00,
       },
@@ -153,75 +156,19 @@ export default class Lesson extends Component{
     this.startStageAnalyze = this.startStageAnalyze.bind(this);
     this.showAlert = this.showAlert.bind(this);
     this.updatePresentCount = this.updatePresentCount.bind(this);
+    this.setPresentCount = this.setPresentCount.bind(this);
   }
 
   async componentDidMount() {
     this.fetchToken();
     requestUserMedia();
 
-    if (this.state.lesson && !isObjectEmpty(this.state.lesson)) {
-      if (!('webkitSpeechRecognition' in window)) {
-        alert("Please download the latest version of Google Chrome");
-        history.go(-1);
-      }
-      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length, 
-        linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons'})
-    } else {
-      this.setState({presentCount: 20, length: 20, linkback: ''})
-    }
+    this.setPresentCount();
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
-    // let checkIpSessionResult = await checkIpSession();
-
-    // console.log(checkIpSessionResult);
-
-    // if (!checkIpSessionResult && this.state.mode == "StarLight") {
-    //   this.setState({stage: 'DemoLimitExceeded'})
-    // }
-
-    var refreshIntervalId = setInterval(() => {
-      if (this.state.loadCount === 0) {
-        if (this.state.stage == 'Adjust') {
-          let screenshot = this.refs.webcam.getScreenshot();
-          if (this.refs.webcam && screenshot === null) {
-            this.createError('error', "Looks like your Webcam isn't turned on.");
-          } else {
-            this.createAlert('success', "Webcam loaded successfully");
-          }
-        }
-      } else {
-        this.setState({ loadCount: this.state.loadCount - 1 });
-      }
-
-
-      if (this.state.stage == 'Record' && this.state.presentCount > 0) {
-        this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === "") {
-          this.createError('error', "We aren't picking up any words from your presentation. Double check that your microphone is working properly ");
-        }
-      } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
-        this.startStageAnalyze();
-        handleMicClick(this);
-      }
-
-      if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
-        try {
-          let screenshot = this.refs.webcam.getScreenshot();
-          if (screenshot === null) {
-            this.createError('error', "Error using webcam. Make sure it's turned on");
-          }
-          screenshots[screenCount] = screenshot;
-          screenCount += 1;
-        } catch(error) {
-          this.createError('error', "Error using webcam. Make sure it's turned on");
-        }
-
-      }
-    }, 1000)
-
-    this.setState({intervalId: refreshIntervalId})
+    this.setRefreshIntervalId();
   }
 
   componentWillUnmount() {
@@ -253,6 +200,63 @@ export default class Lesson extends Component{
     }
   }
 
+  setPresentCount() {
+    if (this.state.lesson && !isObjectEmpty(this.state.lesson)) {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert('Please download the latest version of Google Chrome');
+        history.go(-1);
+      }
+      this.setState({presentCount: this.state.lesson.length, length: this.state.lesson.length, 
+        linkback: '/' + this.props.level.id + '/' + this.props.moduler.id + '/lessons'});
+    } else {
+      this.setState({presentCount: 20, length: 20, linkback: ''});
+    }
+  }
+
+  setRefreshIntervalId() {
+    var refreshIntervalId = setInterval(() => {
+      if (this.state.loadCount === 0) {
+        if (this.state.stage == 'Adjust') {
+          let screenshot = this.refs.webcam.getScreenshot();
+          if (this.refs.webcam && screenshot === null) {
+            this.createError('error', 'Looks like your Webcam isn\'t turned on.');
+          } else {
+            this.createAlert('success', 'Webcam loaded successfully');
+          }
+        }
+      } else {
+        this.setState({ loadCount: this.state.loadCount - 1 });
+      }
+
+
+      if (this.state.stage == 'Record' && this.state.presentCount > 0) {
+        this.setState({ presentCount: this.state.presentCount - 1 });
+        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === '') {
+          this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
+        }
+      } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
+        this.startStageAnalyze();
+        handleMicClick(this);
+      }
+
+      if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
+        try {
+          let screenshot = this.refs.webcam.getScreenshot();
+          if (screenshot === null) {
+            this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+          }
+          screenshots[screenCount] = screenshot;
+          screenCount += 1;
+        } catch(error) {
+          this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+        }
+
+      }
+    }, 1000);
+
+    this.setState({intervalId: refreshIntervalId});
+  }
+
   fetchToken() {
     return fetch('https://view.starspeak.io/api/token').then(res => {
       if (res.status != 200) {
@@ -265,10 +269,10 @@ export default class Lesson extends Component{
 
   updatePresentCount(num) {
     this.setState({presentCount: parseInt(num)});
-    this.setState({length: parseInt(num)})
+    this.setState({length: parseInt(num)});
   }
 
-  async startStageAdjust() {
+  startStageAdjust() {
     this.setState({stage: 'Adjust'});
   }
 
@@ -296,7 +300,7 @@ export default class Lesson extends Component{
         newLocal.stt += newLocal.sttInterim;
       }
     } catch(error) {
-      console.log(error);
+      console.log(error); // eslint-disable-line
     }
     newWatson.stt = parseWatson(getFinalAndLatestInterimResult(this));
     newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
@@ -323,9 +327,9 @@ export default class Lesson extends Component{
     try {
       let reUm = / um ?/g;
       let umCount = this.state.watson.stt.match(reUm).length;
-      this.setState({umCount: umCount})
+      this.setState({umCount: umCount});
     } catch(error) {
-      console.log(error);
+      console.log(error); // eslint-disable-line
     }
 
     this.setState({speechstat: speechstat});
@@ -334,8 +338,8 @@ export default class Lesson extends Component{
       this.createError('error', indico.errors[i]);
     }
 
-    for (var i = 0; i < WatsonTone.errors.length; i++) {
-      this.createError('error', WatsonTone.errors[i]);
+    for (var j = 0; j < WatsonTone.errors.length; j++) {
+      this.createError('error', WatsonTone.errors[j]);
     }
   }
 
@@ -363,7 +367,7 @@ export default class Lesson extends Component{
         <div>
           <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
         </div>
-      )
+      );
     }
 
     return (
@@ -372,6 +376,6 @@ export default class Lesson extends Component{
         {lessonContent}
         {commonContent}
       </div>
-    )
+    );
   }
 }
