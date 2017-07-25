@@ -17,8 +17,6 @@ test:
   pre:
     - sudo service redis-server start
     - bundle exec sidekiq -d RAILS_ENV=test -L sidekiq.log
-  post:
-    - yarn test
 
 deployment:
   production:
