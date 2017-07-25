@@ -7,6 +7,7 @@
     "npm": "4.1.1"
   },
   "scripts": {
+    "test": "cd client && yarn test",
     "postinstall": "cd client && yarn install",
     "rails-server": "echo 'visit http://localhost:3000/hello_world' && sh -c 'rm app/assets/webpack/* || true && cd client && bundle exec rake react_on_rails:locale && yarn run build:development'"
   },
