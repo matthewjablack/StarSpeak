@@ -14,6 +14,8 @@ https://starspeak.io
 4. Edit database.yml and application.yml
 5. `bundle && yarn`
 6. `rake db:migrate`
-7. `yarn rails-server`
-8. Open another console window
-9. `rails s`
+7. `brew install redis`
+8. `redis-server /usr/local/etc/redis.conf` 
+9. `bundle exec sidekiq` (in new tab)
+10. `yarn rails-server` (in new tab)
+11. `rails s` (in new tab)
