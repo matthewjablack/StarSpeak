@@ -5,12 +5,26 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   before_filter :configure_permitted_parameters
+  before_filter :validation_and_redirect, only: [:create]
 
   protected
 
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :first_name, :last_name, :level_id, :betacode_id) }
+  end
+
+  def validation_and_redirect
+    build_resource(sign_up_params)
+
+    if resource.invalid? && !resource.betacode_id.nil?
+      betacode = Betacode.find(resource.betacode_id)
+      redirect_to new_user_registration_path(beta_code: betacode.token)
+      resource.errors.full_messages.each do |message|
+        flash[:warning] = message
+      end
+    end
+
   end
 
 
