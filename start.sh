@@ -27,4 +27,3 @@ osascript -e 'tell application "Terminal"
     do script "cd dirname '$0'" in selected tab of the front window
     do script "rails s" in selected tab of the front window
 end tell'
-

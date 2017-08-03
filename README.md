@@ -23,8 +23,13 @@ https://starspeak.io
 6. `rake db:create`
 7. `rake db:migrate`
 8. `rake db:seed`
-6. `rake db:migrate`
-8. `redis-server /usr/local/etc/redis.conf` (Required for Sidekiq)
-9. `bundle exec sidekiq` (in new tab) (Required for video uploading)
-10. `yarn rails-server` (in new tab) (Required for React assets)
-11. `rails s` (in new tab) (Required for rails server)
+9. `rake db:migrate`
+10. `chmod +x  ./start.sh`
+11. `./start.sh`
+
+If the startup script does not work, try running these commands manually:
+
+1. `redis-server /usr/local/etc/redis.conf` (Required for Sidekiq)
+2. `bundle exec sidekiq` (in new tab) (Required for video uploading)
+3. `yarn rails-server` (in new tab) (Required for React assets)
+4. `rails s` (in new tab) (Required for rails server)
