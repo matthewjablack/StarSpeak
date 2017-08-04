@@ -1,8 +1,16 @@
+
+
 <%= content_for(:body_attributes, 'data-no-turbolink') %>
 
 <div class="container">
 
 <div class="col-md-6 col-md-offset-3 main-signup">
+<br><br>
+<% unless flash[:error].blank? %>
+  <% flash[:error].each do |value| %>
+    <div class="alert-error"><%= value %></div>
+  <% end %>
+<% end %>
 
 <% params[:beta_code] = params[:beta_code].split.join if params[:beta_code] %>
 
