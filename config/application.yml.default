@@ -1,0 +1,5 @@
+watson_tone_username: "555
+watson_tone_password: "555"
+s3_access_key_id: '555'
+s3_bucket_name: 'starspeak-dev'
+s3_secret_access_key: '555'
