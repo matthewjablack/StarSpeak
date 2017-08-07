@@ -1,4 +1,6 @@
 
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 
 <%= content_for(:body_attributes, 'data-no-turbolink') %>
 
@@ -6,11 +8,8 @@
 
 <div class="col-md-6 col-md-offset-3 main-signup">
 <br><br>
-<% unless flash[:error].blank? %>
-  <% flash[:error].each do |value| %>
-    <div class="alert-error"><%= value %></div>
-  <% end %>
-<% end %>
+
+
 
 <% params[:beta_code] = params[:beta_code].split.join if params[:beta_code] %>
 
@@ -21,22 +20,24 @@
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), validate: true) do |f| %>
   <%= devise_error_messages! %>
 
-  <%= f.text_field :first_name, :autofocus => true, class: 'form-control', placeholder: 'First Name' %>
+
+  <%= f.text_field :first_name, :autofocus => true, class: 'form-control, validate', placeholder: 'First Name' %>
 
   <br />
-  <%= f.text_field :last_name, :autofocus => true, class: 'form-control', placeholder: 'Last Name' %>
+  <%= f.text_field :last_name, :autofocus => true, class: 'form-control, validate', placeholder: 'Last Name' %>
 
   <br />
-  <%= f.email_field :email, :autofocus => true, class: 'form-control', placeholder: 'Email' %>
-
+  <div class="" >
+    <%= f.email_field :email, :autofocus => false, class: 'form-control, validate', placeholder: 'email' %>
+  </div>
   <br />
 
   <%= f.hidden_field :betacode_id, value: Betacode.where(token: params[:beta_code]).first.id %>
 
-  <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
+  <%= f.password_field :password, class: 'form-control, validate', placeholder: 'Password', id: 'password_field', type: 'password' %>
 
   <br />
-  <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Password Confirmation' %>
+  <%= f.password_field :password_confirmation, class: 'form-control, validate', placeholder: 'Password Confirmation', id: 'password_confirmation_field' %>
   <br />
 
   <%= f.select :level_id, Level.all.collect { |p| [ p.name, p.id ] },  id: 'select-level' %>
@@ -59,6 +60,15 @@
 
 <h2>Invalid beta access token</h2>
 
+<% end %>
+
+<% unless flash[:error].blank? %>
+  <% flash[:error].each do |key, value| %>
+    <script>
+    alert_with_inputfieldsfield("<%= key %>", "<%= key %> <%= value %>")
+    </script>
+
+  <% end %>
 <% end %>
 
 </div>
