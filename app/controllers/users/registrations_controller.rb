@@ -22,9 +22,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.invalid? && !resource.betacode_id.nil?
       betacode = Betacode.find(resource.betacode_id)
       redirect_to new_user_registration_path(beta_code: betacode.token)
-      flash[:error] = []
-      resource.errors.each do |key, message|
-        flash[:error] << [key, message]
+      resource.errors.full_messages.each do |message|
+        flash[:warning] = message
       end
     end
 
