@@ -21,23 +21,21 @@
   <%= devise_error_messages! %>
 
 
-  <%= f.text_field :first_name, :autofocus => true, class: 'form-control, validate', placeholder: 'First Name' %>
+  <%= f.text_field :first_name, :autofocus => true, class: 'validate', placeholder: 'First Name' %>
 
   <br />
-  <%= f.text_field :last_name, :autofocus => true, class: 'form-control, validate', placeholder: 'Last Name' %>
+  <%= f.text_field :last_name, :autofocus => true, class: 'validate', placeholder: 'Last Name' %>
 
   <br />
-  <div class="" >
-    <%= f.email_field :email, :autofocus => false, class: 'form-control, validate', placeholder: 'email' %>
-  </div>
+  <%= f.email_field :email, :autofocus => true, class: 'validate', placeholder: 'Email' %>
   <br />
 
   <%= f.hidden_field :betacode_id, value: Betacode.where(token: params[:beta_code]).first.id %>
 
-  <%= f.password_field :password, class: 'form-control, validate', placeholder: 'Password', id: 'password_field', type: 'password' %>
+  <%= f.password_field :password, class: 'validate', placeholder: 'Password', id: 'password_field', type: 'password' %>
 
   <br />
-  <%= f.password_field :password_confirmation, class: 'form-control, validate', placeholder: 'Password Confirmation', id: 'password_confirmation_field' %>
+  <%= f.password_field :password_confirmation, class: 'validate', placeholder: 'Password Confirmation', id: 'password_confirmation_field' %>
   <br />
 
   <%= f.select :level_id, Level.all.collect { |p| [ p.name, p.id ] },  id: 'select-level' %>
@@ -62,10 +60,10 @@
 
 <% end %>
 
-<% unless flash[:error].blank? %>
-  <% flash[:error].each do |key, value| %>
+<% unless flash[:warning].blank? %>
+  <% flash[:warning].each do |value| %>
     <script>
-    alert_with_inputfieldsfield("<%= key %>", "<%= key %> <%= value %>")
+      alert_with_toast("<%= value %>");
     </script>
 
   <% end %>

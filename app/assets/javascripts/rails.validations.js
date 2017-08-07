@@ -290,7 +290,7 @@
             labelErrorField.insertAfter(label);
             labelErrorField.find('label#label_tag').replaceWith(label);
           }
-          return form.find("label.message[for='" + (element.attr('id')) + "']").text(message);
+          return form.find("label.message[for='" + (element.attr('id')) + "']").text(element.attr('placeholder')+" "+message);
         },
         remove: function(element, settings) {
           var errorFieldClass, form, inputErrorField, label, labelErrorField;
