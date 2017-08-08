@@ -5,6 +5,7 @@
         <% unless user_signed_in? %>
             <li><%= link_to "Sign in", new_user_session_path %></li>
             <li><a href="#modal1">Sign up</a></li>
+            <li><a class="scroll-button" data-link="test">Testimonial</a></li>
           <% else %>
             <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
             <li><%= link_to "Speech Results", speechstats_path %></li>
