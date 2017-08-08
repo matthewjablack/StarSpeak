@@ -6,10 +6,11 @@ class ApplicationController < ActionController::Base
 
 
   def render_flashes
-  	flash[:warning] = []
-    resource.errors.full_messages.each do |message|
-        flash[:warning] << message
-    end
+  	# flash[:warning] = []
+   #  resource.errors.full_messages.each do |message|
+   #    binding.pry
+   #    flash[:warning] << message
+   #  end
   end
 
   helper_method :render_flashes
