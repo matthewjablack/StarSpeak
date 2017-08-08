@@ -51,8 +51,8 @@
       <%= render :partial => "shared/footer" %>
     <% end %>
     
-    <% unless flash[:warning].nil? %>
-      <% flash[:warning].each do |value| %>
+    <% unless flash.nil? %>
+      <% flash.each do |key, value| %>
         <script>
           alert_with_toast("<%= value %>");
         </script>
