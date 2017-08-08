@@ -58,14 +58,7 @@
 
 <% end %>
 
-<% unless flash[:warning].nil? %>
-  <% flash[:warning].each do |value| %>
-    <script>
-      alert_with_toast("<%= value %>");
-    </script>
 
-  <% end %>
-<% end %>
 
 </div>
 

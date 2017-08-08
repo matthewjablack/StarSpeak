@@ -50,7 +50,14 @@
     <% if params[:controller] == "home" && (params[:action] == "index" || params[:action] == "appleby")%>
       <%= render :partial => "shared/footer" %>
     <% end %>
-
+    
+    <% unless flash[:warning].nil? %>
+      <% flash[:warning].each do |value| %>
+        <script>
+          alert_with_toast("<%= value %>");
+        </script>
+      <% end %>
+    <% end %>
 
 
     <!-- Bootstrap core JavaScript
