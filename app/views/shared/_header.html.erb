@@ -3,12 +3,13 @@
       <a href="/" class="brand-logo">StarSpeak</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <% if is_home_page? %>
-          <li><a class="scroll-button" data-link="test">Testimonial</a></li>
+          <li><a class="scroll-button" data-link="home">Home</a></li>
+          <li><a class="scroll-button" data-link="product">Product</a></li>
+          <li><a class="scroll-button" data-link="testimonials">Testimonials</a></li>
         <% end %>
         <% unless user_signed_in? %>
             <li><%= link_to "Sign in", new_user_session_path %></li>
             <li><a href="#modal1">Sign up</a></li>
-            <li><a class="scroll-button" data-link="test">Testimonial</a></li>
           <% else %>
             <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
             <li><%= link_to "Speech Results", speechstats_path %></li>
