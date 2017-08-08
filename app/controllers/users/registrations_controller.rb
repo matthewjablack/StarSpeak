@@ -1,4 +1,4 @@
-require 'active_support/core_ext/object/blank'
+
 
 class Users::RegistrationsController < Devise::RegistrationsController
   def build_resource(hash=nil)
