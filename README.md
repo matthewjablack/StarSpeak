@@ -33,3 +33,7 @@ If the startup script does not work, try running these commands manually:
 2. `bundle exec sidekiq` (in new tab) (Required for video uploading)
 3. `yarn rails-server` (in new tab) (Required for React assets)
 4. `rails s` (in new tab) (Required for rails server)
+
+### Learning Resources
+
+https://www.sitepoint.com/getting-started-react-jsx/
