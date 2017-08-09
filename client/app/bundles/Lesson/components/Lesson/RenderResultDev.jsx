@@ -58,10 +58,12 @@ export default class RenderResultDev extends Component{
       linkback: '/1/1/lessons',
       percentage: 0.00,
       user: {
-        name: "Test User"
+        name: "Test User",
+        first_name: "Matthew",
       },
       screenshot: '/images/user_demo.png',
-      umCount: 2
+      umCount: 2,
+      gradeScore: 6.0
     };
   }
 
@@ -76,7 +78,8 @@ export default class RenderResultDev extends Component{
         percentage={this.state.percentage}
         user={this.state.user}
         screenshot={this.state.screenshot}
-        umCount={this.state.umCount} />
+        umCount={this.state.umCount} 
+        gradeScore={this.state.gradeScore} />
     )
   }
 }
