@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Webcam from 'react-webcam';
-import { Button } from 'react-materialize';
+import { Button } from '@mblackmblack/react-materialize';
 
 export default class RenderDevelop extends Component {
   render() {

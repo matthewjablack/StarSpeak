@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Webcam from 'react-webcam';
-import { Button, Dropdown, NavItem } from 'react-materialize';
+import { Button, Dropdown, NavItem } from '@mblackmblack/react-materialize';
 import FontAwesome from 'react-fontawesome'
 
 export default class RenderAdjust extends Component {

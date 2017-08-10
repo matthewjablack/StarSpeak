@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import { ProgressBar, Card, Col, Row } from 'react-materialize';
+import { ProgressBar, Card, Col, Row } from '@mblackmblack/react-materialize';
 
 function pacePercentage(pace) {
   let score = 0;
@@ -75,14 +75,6 @@ export function Stats(props) {
   } else {
     return (
       <div>
-        <Row>
-          <Card className="hoverable center">
-            <h3>Summary Card</h3>
-            <h5>{userName}</h5>
-            <img src={props.screenshot} style={{objectFit: 'cover', borderRadius:100, width: 150, height: 150}}/>
-            <h5>Score {Math.round((props.watson.tone.language.confident/2)* 100 + pacePercentage(props.local.pace)/2 )}%</h5>
-          </Card>
-        </Row>
         <Row>
           <Col m={6} s={12}>
             <Card className="hoverable">
