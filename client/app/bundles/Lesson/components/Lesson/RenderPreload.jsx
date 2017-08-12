@@ -4,25 +4,33 @@ import Webcam from 'react-webcam';
 import { Button } from '@mblackmblack/react-materialize';
 
 export default class RenderPreload extends Component {
-  render() {
-    let continueButton;
-    console.log("VINIT VINIT VINIT"+this.props.affectivaLoaded);
+
+  setElements() {
     if (this.props.affectivaLoaded) {
-      continueButton = (
-        <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>
-          Continue FROM PRELOAD
-        </Button>
+      this.speechAnalyticsSection = (
+        <div>
+          <p>loaded!</p>
+          <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>
+            Continue FROM PRELOAD
+          </Button>
+        </div>
       )
     } else {
-      continueButton = (
-        <p></p>
+      this.speechAnalyticsSection = (
+        <p>Loading...</p>
       )
     }
+  }
+
+  render() {
+    this.setElements();
+
+
+    /* TODO: 'children' removable? */
     return (
       <div>
         <div className="centerFixed">
-          <h2>Loading Speech Analytics</h2>
-          {continueButton}
+          {this.speechAnalyticsSection}
 
         </div>
         {this.props.children}
