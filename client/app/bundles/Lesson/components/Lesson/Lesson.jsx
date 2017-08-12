@@ -32,7 +32,7 @@ var uuid = uuidV1();
 //Construct a CameraDetector and specify the image width / height and face detector mode.
 var detector;
 
-
+var basicCount = 0;
 
 export default class Lesson extends Component{
   static get propTypes() {
@@ -168,6 +168,7 @@ export default class Lesson extends Component{
     this.showAlert = this.showAlert.bind(this);
     this.updatePresentCount = this.updatePresentCount.bind(this);
     this.setPresentCount = this.setPresentCount.bind(this);
+    this.collectEmotions = this.collectEmotions.bind(this);
   }
 
   componentWillMount() {
@@ -222,6 +223,7 @@ export default class Lesson extends Component{
   }
 
   async componentDidMount() {
+
     this.fetchToken();
     requestUserMedia();
 
@@ -276,48 +278,89 @@ export default class Lesson extends Component{
   }
 
   setRefreshIntervalId() {
-    var refreshIntervalId = setInterval(() => {
-      if (this.state.loadCount === 0) {
-        if (this.state.stage == 'Adjust') {
-          let screenshot = this.refs.webcam.getScreenshot();
-          if (this.refs.webcam && screenshot === null) {
-            this.createError('error', 'Looks like your Webcam isn\'t turned on.');
-          } else {
-            this.createAlert('success', 'Webcam loaded successfully');
+    var interval = 1000; // ms
+    var expected = Date.now() + interval;
+    setTimeout(step, interval);
+    function step() {
+        var dt = Date.now() - expected; // the drift (positive for overshooting)
+        if (dt > interval) {
+            // something really bad happened. Maybe the browser (tab) was inactive?
+            // possibly special handling to avoid futile "catch up" run
+        }
+
+        if (this.state.loadCount === 0) {
+          if (this.state.stage == 'Adjust') {
+            let screenshot = this.refs.webcam.getScreenshot();
+            if (this.refs.webcam && screenshot === null) {
+              this.createError('error', 'Looks like your Webcam isn\'t turned on.');
+            } else {
+              this.createAlert('success', 'Webcam loaded successfully');
+            }
           }
+        } else {
+          this.setState({ loadCount: this.state.loadCount - 1 });
         }
-      } else {
-        this.setState({ loadCount: this.state.loadCount - 1 });
-      }
 
 
-      if (this.state.stage == 'Record' && this.state.presentCount > 0) {
-        this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === '') {
-          this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
+        if (this.state.stage == 'Record' && this.state.presentCount > 0) {
+          this.setState({ presentCount: this.state.presentCount - 1 });
+          if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === '') {
+            this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
+          }
+        } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
+          this.startStageAnalyze();
+          handleMicClick(this);
         }
-      } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
-        this.startStageAnalyze();
-        handleMicClick(this);
-      }
 
-      if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
-        try {
-          let screenshot = this.refs.webcam.getScreenshot();
-          if (screenshot === null) {
+        if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
+          try {
+            let screenshot = this.refs.webcam.getScreenshot();
+            if (screenshot === null) {
+              this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+            }
+            screenshots[screenCount] = screenshot;
+            screenCount += 1;
+          } catch(error) {
             this.createError('error', 'Error using webcam. Make sure it\'s turned on');
           }
-          screenshots[screenCount] = screenshot;
-          screenCount += 1;
-        } catch(error) {
-          this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+
         }
 
-      }
-    }, 1000);
+        expected += interval;
+        setTimeout(step, Math.max(0, interval - dt)); // take into account drift
+    }
 
-    this.setState({intervalId: refreshIntervalId});
+    // this.setState({intervalId: refreshIntervalId});
   }
+
+  collectEmotions() {
+    var newCounter = 0;
+    var interval = 100; // ms
+    var expected = Date.now() + interval;
+    setTimeout(step, interval);
+    function step() {
+        var dt = Date.now() - expected; // the drift (positive for overshooting)
+        if (dt > interval) {
+            // something really bad happened. Maybe the browser (tab) was inactive?
+            // possibly special handling to avoid futile "catch up" run
+        }
+        newCounter += 1;
+        console.log(newCounter);
+
+        expected += interval;
+        setTimeout(step, Math.max(0, interval - dt)); // take into account drift
+    }
+  }
+
+  //   // var refreshIntervalId = setInterval(() => {
+
+  //   //   if (this.state.stage == 'Record' && this.state.presentCount >= 5 && this.state.presentCount < 15) {
+  //   //     basicCount += 1;
+  //   //     console.log(basicCount);
+  //   //   }
+
+  //   // }, 30);
+  // }
 
   fetchToken() {
     return fetch('https://view.starspeak.io/api/token').then(res => {
@@ -399,6 +442,7 @@ export default class Lesson extends Component{
   startStageRecord() {
     startRecord(this);
     this.setState({stage: 'Record'});
+    this.collectEmotions();
     handleMicClick(this);
     handleLocalStream(this);
   }
