@@ -31,4 +31,9 @@ $(document).ready(function() {
 $(document).on('turbolinks:load', function(event) {
   Waves.displayEffect();
   $('.modal').modal();
+  $('.scroll-button').click(function() {
+	  $('html, body').animate({
+	    scrollTop: $("#" + $(this).data('link')).offset().top
+	  }, 1000);
+	});
 });
