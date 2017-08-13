@@ -28,10 +28,6 @@ const uuidV1 = require('uuid/v1'); // eslint-disable-line
 var screenshots = [];
 var screenCount = 0;
 var uuid = uuidV1();
-
-
-
-//Construct a CameraDetector and specify the image width / height and face detector mode.
 var detector;
 
 export default class Lesson extends Component{
@@ -364,14 +360,12 @@ export default class Lesson extends Component{
     this.setState({length: parseInt(num)});
   }
 
-  //function executes when Start button is pushed.
   onStart() {
     if (detector && !detector.isRunning) {
       detector.start();
     }
   }
 
-  //function executes when the Stop button is pushed.
   onStop() {
     if (detector && detector.isRunning) {
       detector.removeEventListener();
@@ -379,30 +373,11 @@ export default class Lesson extends Component{
     }
   };
 
-  //function executes when the Reset button is pushed.
   onReset() {
     if (detector && detector.isRunning) {
       detector.reset();
     }
   };
-
-  //Draw the detected facial feature points on the image
-  drawFeaturePoints(img, featurePoints) {
-    var contxt = $('#face_video_canvas')[0].getContext('2d');
-
-    var hRatio = contxt.canvas.width / img.width;
-    var vRatio = contxt.canvas.height / img.height;
-    var ratio = Math.min(hRatio, vRatio);
-
-    contxt.strokeStyle = "#FFFFFF";
-    for (var id in featurePoints) {
-      contxt.beginPath();
-      contxt.arc(featurePoints[id].x,
-        featurePoints[id].y, 2, 0, 2 * Math.PI);
-      contxt.stroke();
-
-    }
-  }
 
   startStageAdjust() {
     this.setState({stage: 'Adjust'});
