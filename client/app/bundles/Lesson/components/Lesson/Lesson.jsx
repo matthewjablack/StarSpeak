@@ -34,8 +34,6 @@ var uuid = uuidV1();
 //Construct a CameraDetector and specify the image width / height and face detector mode.
 var detector;
 
-var basicCount = 0;
-
 export default class Lesson extends Component{
   static get propTypes() {
     return {
@@ -183,7 +181,6 @@ export default class Lesson extends Component{
   }
 
   componentWillMount() {
-    var self = this;
     var _this = this;
 
     var divRoot = $("#affdex_elements")[0];
@@ -193,20 +190,12 @@ export default class Lesson extends Component{
 
     detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
 
-    //Enable detection of all Expressions, Emotions and Emojis classifiers.
     detector.detectAllEmotions();
     detector.detectAllExpressions();
     detector.detectAllEmojis();
     detector.detectAllAppearance();
 
-
-    console.log('testing detector');
-
     this.onStart();
-
-    var newCounter = 0;
-
-    console.log('detector testing');
 
     detector.addEventListener("onWebcamConnectSuccess", function() {
       console.log("I was able to connect to the camera successfully.");
@@ -214,17 +203,6 @@ export default class Lesson extends Component{
 
     detector.addEventListener("onImageResultsSuccess", function(faces, image, timestamp) {
       _this.setState({affectivaLoaded: true});
-      if (_this.state.stage == 'Record' && _this.state.presentCount >= 5 && _this.state.presentCount < 15) {
-        newCounter += 1;
-        // console.log(newCounter);
-        // console.log(JSON.stringify(faces[0].appearance));
-        // console.log(JSON.stringify(faces[0].emotions, function(key, val) {
-        //     return val.toFixed ? Number(val.toFixed(0)) : val;
-        //   }));
-      }
-      $('#results').html("");
-      _this.loggerInfo('#results', "Timestamp: " + timestamp.toFixed(2));
-      _this.loggerInfo('#results', "Number of faces found: " + faces.length);
       if (faces.length > 0) {
         _this.setState({
           affectiva: {
@@ -235,15 +213,6 @@ export default class Lesson extends Component{
             emojis: faces[0].emojis
           }
         })
-        _this.loggerInfo('#results', "Appearance: " + JSON.stringify(faces[0].appearance));
-        _this.loggerInfo('#results', "Emotions: " + JSON.stringify(faces[0].emotions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-        _this.loggerInfo('#results', "Expressions: " + JSON.stringify(faces[0].expressions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-        _this.loggerInfo('#results', "Emoji: " + faces[0].emojis.dominantEmoji);
-        // this.drawFeaturePoints(image, faces[0].featurePoints);
       } else {
         _this.setState({affectiva: {faces: faces.length, appearance: null, emotions: null, expressions: null, emojis: null} });
       }
@@ -251,15 +220,11 @@ export default class Lesson extends Component{
   }
 
   async componentDidMount() {
-
     this.fetchToken();
     requestUserMedia();
-
     this.setPresentCount();
-
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
-
     this.setRefreshIntervalId();
   }
 
@@ -277,7 +242,6 @@ export default class Lesson extends Component{
       let newErrors = this.state.errors;
       newErrors[newErrors.length] = txt;
       this.setState({errors: newErrors});
-      // errors[errors.length] = txt;
       this.showAlert(type,txt);
     }
   }
@@ -287,7 +251,6 @@ export default class Lesson extends Component{
       let newAlerts = this.state.alerts;
       newAlerts[newAlerts.length] = txt;
       this.setState({alerts: newAlerts});
-      // errors[errors.length] = txt;
       this.showAlert(type,txt);
     }
   }
@@ -306,16 +269,14 @@ export default class Lesson extends Component{
   }
 
   setRefreshIntervalId() {
-    console.log(this.state.presentCount);
     var _this = this;
-    var interval = 1000; // ms
+    var interval = 1000;
     var expected = Date.now() + interval;
     setTimeout(step, interval);
     function step() {
-        var dt = Date.now() - expected; // the drift (positive for overshooting)
+        var dt = Date.now() - expected;
         if (dt > interval) {
-            // something really bad happened. Maybe the browser (tab) was inactive?
-            // possibly special handling to avoid futile "catch up" run
+          this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
         }
 
         if (_this.state.loadCount === 0) {
@@ -330,7 +291,6 @@ export default class Lesson extends Component{
         } else {
           _this.setState({ loadCount: _this.state.loadCount - 1 });
         }
-
 
         if (_this.state.stage == 'Record' && _this.state.presentCount > 0) {
           _this.setState({ presentCount: _this.state.presentCount - 1 });
@@ -353,7 +313,6 @@ export default class Lesson extends Component{
           } catch(error) {
             _this.createError('error', 'Error using webcam. Make sure it\'s turned on');
           }
-
         }
 
         expected += interval;
@@ -371,15 +330,12 @@ export default class Lesson extends Component{
     function step() {
         var dt = Date.now() - expected; // the drift (positive for overshooting)
         if (dt > interval) {
-            // something really bad happened. Maybe the browser (tab) was inactive?
-            // possibly special handling to avoid futile "catch up" run
+          this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
         }
 
         var aff = _this.state.affectiva;
-        
         var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis);
         facialEmotions.addFacialEmotion(facialEmotion);
-
 
         if (_this.state.stage == 'Record') {
           newCounter += 1;
@@ -399,7 +355,7 @@ export default class Lesson extends Component{
         throw new Error('Error retrieving auth token');
       }
       return res.text();
-    }). // todo: throw here if non-200 status
+    }).
     then(token => this.setState({token})).catch(this.handleError);
   }
 
@@ -408,22 +364,15 @@ export default class Lesson extends Component{
     this.setState({length: parseInt(num)});
   }
 
-  loggerInfo(node_name, msg) {
-    $(node_name).append("<span>" + msg + "</span><br />");
-  }
-
   //function executes when Start button is pushed.
   onStart() {
     if (detector && !detector.isRunning) {
-      $("#logs").html("");
       detector.start();
     }
-    this.loggerInfo('#logs', "Clicked the start button");
   }
 
   //function executes when the Stop button is pushed.
   onStop() {
-    this.loggerInfo('#logs', "Clicked the stop button");
     if (detector && detector.isRunning) {
       detector.removeEventListener();
       detector.stop();
@@ -432,11 +381,8 @@ export default class Lesson extends Component{
 
   //function executes when the Reset button is pushed.
   onReset() {
-    this.loggerInfo('#logs', "Clicked the reset button");
     if (detector && detector.isRunning) {
       detector.reset();
-
-      $('#results').html("");
     }
   };
 
