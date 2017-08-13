@@ -20,6 +20,8 @@ import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 import $ from 'jquery';
+import FacialEmotion from './FacialEmotion';
+import FacialEmotions from './FacialEmotions';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
@@ -156,6 +158,14 @@ export default class Lesson extends Component{
       umCount: 0,
       gradeScore: 0,
       affectivaLoaded: false,
+      affectiva: {
+        faces: 0,
+        appearance: {},
+        emotions: {},
+        expressions: {},
+        emojis: {},
+      },
+      facialEmotions: null
     };
 
     this.fetchToken = this.fetchToken.bind(this);
@@ -169,10 +179,12 @@ export default class Lesson extends Component{
     this.updatePresentCount = this.updatePresentCount.bind(this);
     this.setPresentCount = this.setPresentCount.bind(this);
     this.collectEmotions = this.collectEmotions.bind(this);
+    this.setRefreshIntervalId = this.setRefreshIntervalId.bind(this);
   }
 
   componentWillMount() {
     var self = this;
+    var _this = this;
 
     var divRoot = $("#affdex_elements")[0];
     var width = 640;
@@ -192,6 +204,8 @@ export default class Lesson extends Component{
 
     this.onStart();
 
+    var newCounter = 0;
+
     console.log('detector testing');
 
     detector.addEventListener("onWebcamConnectSuccess", function() {
@@ -199,25 +213,39 @@ export default class Lesson extends Component{
     });
 
     detector.addEventListener("onImageResultsSuccess", function(faces, image, timestamp) {
-      self.setState({affectivaLoaded: true});
-      console.log(JSON.stringify(faces[0].appearance));
-      console.log(JSON.stringify(faces[0].emotions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-      console.log()
+      _this.setState({affectivaLoaded: true});
+      if (_this.state.stage == 'Record' && _this.state.presentCount >= 5 && _this.state.presentCount < 15) {
+        newCounter += 1;
+        // console.log(newCounter);
+        // console.log(JSON.stringify(faces[0].appearance));
+        // console.log(JSON.stringify(faces[0].emotions, function(key, val) {
+        //     return val.toFixed ? Number(val.toFixed(0)) : val;
+        //   }));
+      }
       $('#results').html("");
-      this.loggerInfo('#results', "Timestamp: " + timestamp.toFixed(2));
-      this.loggerInfo('#results', "Number of faces found: " + faces.length);
+      _this.loggerInfo('#results', "Timestamp: " + timestamp.toFixed(2));
+      _this.loggerInfo('#results', "Number of faces found: " + faces.length);
       if (faces.length > 0) {
-        this.loggerInfo('#results', "Appearance: " + JSON.stringify(faces[0].appearance));
-        this.loggerInfo('#results', "Emotions: " + JSON.stringify(faces[0].emotions, function(key, val) {
+        _this.setState({
+          affectiva: {
+            faces: faces.length,
+            appearance: faces[0].appearance,
+            emotions: faces[0].emotions,
+            expressions: faces[0].expressions,
+            emojis: faces[0].emojis
+          }
+        })
+        _this.loggerInfo('#results', "Appearance: " + JSON.stringify(faces[0].appearance));
+        _this.loggerInfo('#results', "Emotions: " + JSON.stringify(faces[0].emotions, function(key, val) {
           return val.toFixed ? Number(val.toFixed(0)) : val;
         }));
-        this.loggerInfo('#results', "Expressions: " + JSON.stringify(faces[0].expressions, function(key, val) {
+        _this.loggerInfo('#results', "Expressions: " + JSON.stringify(faces[0].expressions, function(key, val) {
           return val.toFixed ? Number(val.toFixed(0)) : val;
         }));
-        this.loggerInfo('#results', "Emoji: " + faces[0].emojis.dominantEmoji);
-        drawFeaturePoints(image, faces[0].featurePoints);
+        _this.loggerInfo('#results', "Emoji: " + faces[0].emojis.dominantEmoji);
+        // this.drawFeaturePoints(image, faces[0].featurePoints);
+      } else {
+        _this.setState({affectiva: {faces: faces.length, appearance: null, emotions: null, expressions: null, emojis: null} });
       }
     });
   }
@@ -278,6 +306,8 @@ export default class Lesson extends Component{
   }
 
   setRefreshIntervalId() {
+    console.log(this.state.presentCount);
+    var _this = this;
     var interval = 1000; // ms
     var expected = Date.now() + interval;
     setTimeout(step, interval);
@@ -288,40 +318,40 @@ export default class Lesson extends Component{
             // possibly special handling to avoid futile "catch up" run
         }
 
-        if (this.state.loadCount === 0) {
-          if (this.state.stage == 'Adjust') {
-            let screenshot = this.refs.webcam.getScreenshot();
-            if (this.refs.webcam && screenshot === null) {
-              this.createError('error', 'Looks like your Webcam isn\'t turned on.');
+        if (_this.state.loadCount === 0) {
+          if (_this.state.stage == 'Adjust') {
+            let screenshot = _this.refs.webcam.getScreenshot();
+            if (_this.refs.webcam && screenshot === null) {
+              _this.createError('error', 'Looks like your Webcam isn\'t turned on.');
             } else {
-              this.createAlert('success', 'Webcam loaded successfully');
+              _this.createAlert('success', 'Webcam loaded successfully');
             }
           }
         } else {
-          this.setState({ loadCount: this.state.loadCount - 1 });
+          _this.setState({ loadCount: _this.state.loadCount - 1 });
         }
 
 
-        if (this.state.stage == 'Record' && this.state.presentCount > 0) {
-          this.setState({ presentCount: this.state.presentCount - 1 });
-          if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === '') {
-            this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
+        if (_this.state.stage == 'Record' && _this.state.presentCount > 0) {
+          _this.setState({ presentCount: _this.state.presentCount - 1 });
+          if (((_this.state.length - _this.state.presentCount) === 5) && _this.state.local.sttInterim[0] === '') {
+            _this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
           }
-        } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
-          this.startStageAnalyze();
-          handleMicClick(this);
+        } else if (_this.state.stage == 'Record' && _this.state.presentCount == 0) {
+          _this.startStageAnalyze();
+          handleMicClick(_this);
         }
 
-        if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
+        if (_this.state.presentCount % 2 == 0 && _this.state.stage == 'Record') {
           try {
-            let screenshot = this.refs.webcam.getScreenshot();
+            let screenshot = _this.refs.webcam.getScreenshot();
             if (screenshot === null) {
-              this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+              _this.createError('error', 'Error using webcam. Make sure it\'s turned on');
             }
             screenshots[screenCount] = screenshot;
             screenCount += 1;
           } catch(error) {
-            this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+            _this.createError('error', 'Error using webcam. Make sure it\'s turned on');
           }
 
         }
@@ -329,13 +359,13 @@ export default class Lesson extends Component{
         expected += interval;
         setTimeout(step, Math.max(0, interval - dt)); // take into account drift
     }
-
-    // this.setState({intervalId: refreshIntervalId});
   }
 
   collectEmotions() {
+    var _this = this;
+    var facialEmotions = new FacialEmotions();
     var newCounter = 0;
-    var interval = 100; // ms
+    var interval = 50; // ms
     var expected = Date.now() + interval;
     setTimeout(step, interval);
     function step() {
@@ -344,23 +374,24 @@ export default class Lesson extends Component{
             // something really bad happened. Maybe the browser (tab) was inactive?
             // possibly special handling to avoid futile "catch up" run
         }
-        newCounter += 1;
-        console.log(newCounter);
+
+        var aff = _this.state.affectiva;
+        
+        var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis);
+        facialEmotions.addFacialEmotion(facialEmotion);
+
+
+        if (_this.state.stage == 'Record') {
+          newCounter += 1;
+        } else {
+          _this.setState({facialEmotions: facialEmotions});
+          return
+        }
 
         expected += interval;
         setTimeout(step, Math.max(0, interval - dt)); // take into account drift
     }
   }
-
-  //   // var refreshIntervalId = setInterval(() => {
-
-  //   //   if (this.state.stage == 'Record' && this.state.presentCount >= 5 && this.state.presentCount < 15) {
-  //   //     basicCount += 1;
-  //   //     console.log(basicCount);
-  //   //   }
-
-  //   // }, 30);
-  // }
 
   fetchToken() {
     return fetch('https://view.starspeak.io/api/token').then(res => {
