@@ -18,4 +18,8 @@ class PagesController < ApplicationController
 	def render_result_dev
 
 	end
+
+	def stt_test
+
+	end
 end
