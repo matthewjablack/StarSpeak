@@ -13,6 +13,8 @@ module ApplicationHelper
 	def get_body_class()
 		if params[:controller] == "home" && params[:action] == "index"
 			"startup-home"
+		elsif params[:controller] == "pages" && params[:action] == "stt_test"
+			"main stt_test"
 		else
 			"main"
 		end

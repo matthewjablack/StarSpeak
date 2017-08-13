@@ -41,6 +41,7 @@ StarSpeak::Application.routes.draw do
   get '/help' => 'pages#help', via: [:get], as: :help
   get '/upload' => 'pages#upload', via: [:get], as: :upload
   get '/render_result_dev' => 'pages#render_result_dev', via: [:get], as: :render_result_dev
+  get '/stt_test' => 'pages#stt_test', via: [:get], as: :stt_test
 
   get '/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 
