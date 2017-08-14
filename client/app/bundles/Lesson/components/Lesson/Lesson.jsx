@@ -21,7 +21,7 @@ import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 import $ from 'jquery';
 import FacialEmotion from './FacialEmotion';
-import FacialEmotions from './FacialEmotions';
+import FacialEmotionsContainer from './FacialEmotionsContainer';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
@@ -159,7 +159,7 @@ export default class Lesson extends Component{
         expressions: {},
         emojis: {},
       },
-      facialEmotions: null
+      facialEmotionsContainer: null
     };
 
     this.fetchToken = this.fetchToken.bind(this);
@@ -318,7 +318,7 @@ export default class Lesson extends Component{
 
   collectEmotions() {
     var _this = this;
-    var facialEmotions = new FacialEmotions();
+    var facialEmotionsContainer = new FacialEmotionsContainer();
     var newCounter = 0;
     var interval = 50; // ms
     var expected = Date.now() + interval;
@@ -331,12 +331,12 @@ export default class Lesson extends Component{
 
         var aff = _this.state.affectiva;
         var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis);
-        facialEmotions.addFacialEmotion(facialEmotion);
+        facialEmotionsContainer.addFacialEmotion(facialEmotion);
 
         if (_this.state.stage == 'Record') {
           newCounter += 1;
         } else {
-          _this.setState({facialEmotions: facialEmotions});
+          _this.setState({facialEmotionsContainer: facialEmotionsContainer});
           return
         }
 

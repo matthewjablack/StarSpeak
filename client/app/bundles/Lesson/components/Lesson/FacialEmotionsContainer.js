@@ -1,4 +1,4 @@
-export default class FacialEmotions {
+export default class FacialEmotionsContainer {
   constructor(){
     this.data = [];
   }
