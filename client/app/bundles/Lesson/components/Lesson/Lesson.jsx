@@ -20,19 +20,15 @@ import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 import $ from 'jquery';
+import FacialEmotion from './FacialEmotion';
+import FacialEmotionsContainer from './FacialEmotionsContainer';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
 var screenshots = [];
 var screenCount = 0;
 var uuid = uuidV1();
-
-
-
-//Construct a CameraDetector and specify the image width / height and face detector mode.
 var detector;
-
-
 
 export default class Lesson extends Component{
   static get propTypes() {
@@ -156,6 +152,14 @@ export default class Lesson extends Component{
       umCount: 0,
       gradeScore: 0,
       affectivaLoaded: false,
+      affectiva: {
+        faces: 0,
+        appearance: {},
+        emotions: {},
+        expressions: {},
+        emojis: {},
+      },
+      facialEmotionsContainer: null
     };
 
     this.fetchToken = this.fetchToken.bind(this);
@@ -168,10 +172,12 @@ export default class Lesson extends Component{
     this.showAlert = this.showAlert.bind(this);
     this.updatePresentCount = this.updatePresentCount.bind(this);
     this.setPresentCount = this.setPresentCount.bind(this);
+    this.collectEmotions = this.collectEmotions.bind(this);
+    this.setRefreshIntervalId = this.setRefreshIntervalId.bind(this);
   }
 
   componentWillMount() {
-    var self = this;
+    var _this = this;
 
     var divRoot = $("#affdex_elements")[0];
     var width = 640;
@@ -180,43 +186,31 @@ export default class Lesson extends Component{
 
     detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
 
-    //Enable detection of all Expressions, Emotions and Emojis classifiers.
     detector.detectAllEmotions();
     detector.detectAllExpressions();
     detector.detectAllEmojis();
     detector.detectAllAppearance();
 
-
-    console.log('testing detector');
-
     this.onStart();
-
-    console.log('detector testing');
 
     detector.addEventListener("onWebcamConnectSuccess", function() {
       console.log("I was able to connect to the camera successfully.");
     });
 
     detector.addEventListener("onImageResultsSuccess", function(faces, image, timestamp) {
-      self.setState({affectivaLoaded: true});
-      console.log(JSON.stringify(faces[0].appearance));
-      console.log(JSON.stringify(faces[0].emotions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-      console.log()
-      $('#results').html("");
-      this.loggerInfo('#results', "Timestamp: " + timestamp.toFixed(2));
-      this.loggerInfo('#results', "Number of faces found: " + faces.length);
+      _this.setState({affectivaLoaded: true});
       if (faces.length > 0) {
-        this.loggerInfo('#results', "Appearance: " + JSON.stringify(faces[0].appearance));
-        this.loggerInfo('#results', "Emotions: " + JSON.stringify(faces[0].emotions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-        this.loggerInfo('#results', "Expressions: " + JSON.stringify(faces[0].expressions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-        this.loggerInfo('#results', "Emoji: " + faces[0].emojis.dominantEmoji);
-        drawFeaturePoints(image, faces[0].featurePoints);
+        _this.setState({
+          affectiva: {
+            faces: faces.length,
+            appearance: faces[0].appearance,
+            emotions: faces[0].emotions,
+            expressions: faces[0].expressions,
+            emojis: faces[0].emojis
+          }
+        })
+      } else {
+        _this.setState({affectiva: {faces: faces.length, appearance: null, emotions: null, expressions: null, emojis: null} });
       }
     });
   }
@@ -224,12 +218,9 @@ export default class Lesson extends Component{
   async componentDidMount() {
     this.fetchToken();
     requestUserMedia();
-
     this.setPresentCount();
-
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
-
     this.setRefreshIntervalId();
   }
 
@@ -247,7 +238,6 @@ export default class Lesson extends Component{
       let newErrors = this.state.errors;
       newErrors[newErrors.length] = txt;
       this.setState({errors: newErrors});
-      // errors[errors.length] = txt;
       this.showAlert(type,txt);
     }
   }
@@ -257,7 +247,6 @@ export default class Lesson extends Component{
       let newAlerts = this.state.alerts;
       newAlerts[newAlerts.length] = txt;
       this.setState({alerts: newAlerts});
-      // errors[errors.length] = txt;
       this.showAlert(type,txt);
     }
   }
@@ -276,47 +265,84 @@ export default class Lesson extends Component{
   }
 
   setRefreshIntervalId() {
-    var refreshIntervalId = setInterval(() => {
-      if (this.state.loadCount === 0) {
-        if (this.state.stage == 'Adjust') {
-          let screenshot = this.refs.webcam.getScreenshot();
-          if (this.refs.webcam && screenshot === null) {
-            this.createError('error', 'Looks like your Webcam isn\'t turned on.');
-          } else {
-            this.createAlert('success', 'Webcam loaded successfully');
+    var _this = this;
+    var interval = 1000;
+    var expected = Date.now() + interval;
+    setTimeout(step, interval);
+    function step() {
+        var dt = Date.now() - expected;
+        if (dt > interval) {
+          _this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
+        }
+
+        if (_this.state.loadCount === 0) {
+          if (_this.state.stage == 'Adjust') {
+            let screenshot = _this.refs.webcam.getScreenshot();
+            if (_this.refs.webcam && screenshot === null) {
+              _this.createError('error', 'Looks like your Webcam isn\'t turned on.');
+            } else {
+              _this.createAlert('success', 'Webcam loaded successfully');
+            }
+          }
+        } else {
+          _this.setState({ loadCount: _this.state.loadCount - 1 });
+        }
+
+        if (_this.state.stage == 'Record' && _this.state.presentCount > 0) {
+          _this.setState({ presentCount: _this.state.presentCount - 1 });
+          if (((_this.state.length - _this.state.presentCount) === 5) && _this.state.local.sttInterim[0] === '') {
+            _this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
+          }
+        } else if (_this.state.stage == 'Record' && _this.state.presentCount == 0) {
+          _this.startStageAnalyze();
+          handleMicClick(_this);
+        }
+
+        if (_this.state.presentCount % 2 == 0 && _this.state.stage == 'Record') {
+          try {
+            let screenshot = _this.refs.webcam.getScreenshot();
+            if (screenshot === null) {
+              _this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+            }
+            screenshots[screenCount] = screenshot;
+            screenCount += 1;
+          } catch(error) {
+            _this.createError('error', 'Error using webcam. Make sure it\'s turned on');
           }
         }
-      } else {
-        this.setState({ loadCount: this.state.loadCount - 1 });
-      }
 
+        expected += interval;
+        setTimeout(step, Math.max(0, interval - dt)); // take into account drift
+    }
+  }
 
-      if (this.state.stage == 'Record' && this.state.presentCount > 0) {
-        this.setState({ presentCount: this.state.presentCount - 1 });
-        if (((this.state.length - this.state.presentCount) === 5) && this.state.local.sttInterim[0] === '') {
-          this.createError('error', 'We aren\'t picking up any words from your presentation. Double check that your microphone is working properly ');
-        }
-      } else if (this.state.stage == 'Record' && this.state.presentCount == 0) {
-        this.startStageAnalyze();
-        handleMicClick(this);
-      }
-
-      if (this.state.presentCount % 2 == 0 && this.state.stage == 'Record') {
-        try {
-          let screenshot = this.refs.webcam.getScreenshot();
-          if (screenshot === null) {
-            this.createError('error', 'Error using webcam. Make sure it\'s turned on');
-          }
-          screenshots[screenCount] = screenshot;
-          screenCount += 1;
-        } catch(error) {
-          this.createError('error', 'Error using webcam. Make sure it\'s turned on');
+  collectEmotions() {
+    var _this = this;
+    var facialEmotionsContainer = new FacialEmotionsContainer();
+    var newCounter = 0;
+    var interval = 50; // ms
+    var expected = Date.now() + interval;
+    setTimeout(step, interval);
+    function step() {
+        var dt = Date.now() - expected; // the drift (positive for overshooting)
+        if (dt > interval) {
+          _this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
         }
 
-      }
-    }, 1000);
+        var aff = _this.state.affectiva;
+        var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis);
+        facialEmotionsContainer.addFacialEmotion(facialEmotion);
 
-    this.setState({intervalId: refreshIntervalId});
+        if (_this.state.stage == 'Record') {
+          newCounter += 1;
+        } else {
+          _this.setState({facialEmotionsContainer: facialEmotionsContainer});
+          return
+        }
+
+        expected += interval;
+        setTimeout(step, Math.max(0, interval - dt)); // take into account drift
+    }
   }
 
   fetchToken() {
@@ -325,7 +351,7 @@ export default class Lesson extends Component{
         throw new Error('Error retrieving auth token');
       }
       return res.text();
-    }). // todo: throw here if non-200 status
+    }).
     then(token => this.setState({token})).catch(this.handleError);
   }
 
@@ -334,55 +360,24 @@ export default class Lesson extends Component{
     this.setState({length: parseInt(num)});
   }
 
-  loggerInfo(node_name, msg) {
-    $(node_name).append("<span>" + msg + "</span><br />");
-  }
-
-  //function executes when Start button is pushed.
   onStart() {
     if (detector && !detector.isRunning) {
-      $("#logs").html("");
       detector.start();
     }
-    this.loggerInfo('#logs', "Clicked the start button");
   }
 
-  //function executes when the Stop button is pushed.
   onStop() {
-    this.loggerInfo('#logs', "Clicked the stop button");
     if (detector && detector.isRunning) {
       detector.removeEventListener();
       detector.stop();
     }
   };
 
-  //function executes when the Reset button is pushed.
   onReset() {
-    this.loggerInfo('#logs', "Clicked the reset button");
     if (detector && detector.isRunning) {
       detector.reset();
-
-      $('#results').html("");
     }
   };
-
-  //Draw the detected facial feature points on the image
-  drawFeaturePoints(img, featurePoints) {
-    var contxt = $('#face_video_canvas')[0].getContext('2d');
-
-    var hRatio = contxt.canvas.width / img.width;
-    var vRatio = contxt.canvas.height / img.height;
-    var ratio = Math.min(hRatio, vRatio);
-
-    contxt.strokeStyle = "#FFFFFF";
-    for (var id in featurePoints) {
-      contxt.beginPath();
-      contxt.arc(featurePoints[id].x,
-        featurePoints[id].y, 2, 0, 2 * Math.PI);
-      contxt.stroke();
-
-    }
-  }
 
   startStageAdjust() {
     this.setState({stage: 'Adjust'});
@@ -399,6 +394,7 @@ export default class Lesson extends Component{
   startStageRecord() {
     startRecord(this);
     this.setState({stage: 'Record'});
+    this.collectEmotions();
     handleMicClick(this);
     handleLocalStream(this);
   }
