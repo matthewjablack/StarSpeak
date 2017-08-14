@@ -336,7 +336,6 @@ export default class Lesson extends Component{
         if (_this.state.stage == 'Record') {
           newCounter += 1;
         } else {
-          debugger;
           _this.setState({facialEmotionsContainer: facialEmotionsContainer});
           return
         }
