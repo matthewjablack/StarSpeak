@@ -86,6 +86,18 @@ export default class RenderPreload extends Component {
     this.setEmotionValue(emotionType, value)
   }
 
+  getEmotionNoun(adjective) {
+    if (adjective === 'happy') {
+      return 'happiness';
+    } else if (adjective === 'sad') {
+      return 'sadness';
+    } else if (adjective === 'excited') {
+      return 'excitement';
+    } else if (adjective === 'angry') {
+      return 'anger';
+    }
+  }
+
   setColour(emotionType, value) {
     let newEmotionImgUrlList = Object.assign({}, this.state.emotionImgUrlList)
 
@@ -103,7 +115,8 @@ export default class RenderPreload extends Component {
     })
   }
 
-  setEmotionValue() {
+  setEmotionValue(emotionType, value) {
+    this.props.setEmotionGoal(this.getEmotionNoun(emotionType), value);
     // TODO: set the emotion value to the Lesson.jsx state
   }
 
