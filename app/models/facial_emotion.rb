@@ -1,0 +1,2 @@
+class FacialEmotion < ApplicationRecord
+end
