@@ -272,7 +272,7 @@ export default class Lesson extends Component{
     function step() {
         var dt = Date.now() - expected;
         if (dt > interval) {
-          this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
+          _this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
         }
 
         if (_this.state.loadCount === 0) {
@@ -326,7 +326,7 @@ export default class Lesson extends Component{
     function step() {
         var dt = Date.now() - expected; // the drift (positive for overshooting)
         if (dt > interval) {
-          this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
+          _this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
         }
 
         var aff = _this.state.affectiva;
