@@ -330,7 +330,7 @@ export default class Lesson extends Component{
         }
 
         var aff = _this.state.affectiva;
-        var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis);
+        var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis, newCounter);
         facialEmotionsContainer.addFacialEmotion(facialEmotion);
 
         if (_this.state.stage == 'Record') {
@@ -435,7 +435,8 @@ export default class Lesson extends Component{
     this.setState({indico: indico, stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode);
+      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
+      this.facialEmotionsContainer);
 
     try {
       let reUm = / um ?/g;

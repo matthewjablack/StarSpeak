@@ -35,7 +35,7 @@ export async function getGradeScore(text, count){
   return responseJson.data.score;
 }
 
-export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode) {
+export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode, facialEmotions) {
   if (user.auth_token !== null) {
 
     let starViewData = {};
@@ -90,7 +90,10 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin',
-      body: JSON.stringify({speechstat: Object.assign(speechStatData, starViewData)})
+      body: JSON.stringify({
+        speechstat: Object.assign(speechStatData, starViewData),
+        facial_stats: facialEmotions
+      })
     })
 
     let responseJson = await response.json();
