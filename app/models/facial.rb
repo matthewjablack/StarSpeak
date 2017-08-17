@@ -1,0 +1,2 @@
+class Facial < ApplicationRecord
+end

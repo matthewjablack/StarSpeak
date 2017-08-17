@@ -1,9 +1,10 @@
 export default class FacialEmotion {
-  constructor(faces, appearance, emotions, expressions, emojis){
+  constructor(faces, appearances, emotions, expressions, emojis, frame){
     this.faces = faces;
-    this.appearance = appearance;
+    this.appearances = appearances;
     this.emotions = emotions;
     this.expressions = expressions;
     this.emojis = emojis;
+    this.frame = frame;
   }
 }

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  face_count: 1
+  facial_appearance_id: 1
+  facial_emotion_id: 1
+  facial_expression_id: 1
+  facial_emoji_id: 1
+
+two:
+  user_id: 1
+  face_count: 1
+  facial_appearance_id: 1
+  facial_emotion_id: 1
+  facial_expression_id: 1
+  facial_emoji_id: 1

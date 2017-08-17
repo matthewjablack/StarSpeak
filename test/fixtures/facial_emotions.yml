@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  speechstat_id: 1
+  facial_id: 1
+  user_id: 1
+  joy: 1.5
+  sadness: 1.5
+  disgust: 1.5
+  contempt: 1.5
+  anger: 1.5
+  fear: 1.5
+  surprise: 1.5
+  valance: 1.5
+  engagement: 1.5
+
+two:
+  speechstat_id: 1
+  facial_id: 1
+  user_id: 1
+  joy: 1.5
+  sadness: 1.5
+  disgust: 1.5
+  contempt: 1.5
+  anger: 1.5
+  fear: 1.5
+  surprise: 1.5
+  valance: 1.5
+  engagement: 1.5

@@ -119,4 +119,8 @@ class Api::V1::SpeechstatsController < ApplicationController
       :uuid
     )
   end
+
+  def facial_infos_params
+    params.require(:facial_infos).permit(:data)
+  end
 end

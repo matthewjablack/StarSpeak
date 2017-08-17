@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170626020435) do
+ActiveRecord::Schema.define(version: 20170814050115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,94 @@ ActiveRecord::Schema.define(version: 20170626020435) do
     t.string   "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "facial_appearances", force: :cascade do |t|
+    t.integer  "speechstat_id"
+    t.integer  "facial_id"
+    t.integer  "user_id"
+    t.integer  "frame"
+    t.string   "gender"
+    t.string   "glasses"
+    t.string   "age"
+    t.string   "ethnicity"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "facial_emojis", force: :cascade do |t|
+    t.integer  "speechstat_id"
+    t.integer  "facial_id"
+    t.integer  "user_id"
+    t.integer  "frame"
+    t.float    "relaxed"
+    t.float    "smiley"
+    t.float    "laughing"
+    t.float    "kissing"
+    t.float    "disappointed"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "facial_emotions", force: :cascade do |t|
+    t.integer  "speechstat_id"
+    t.integer  "facial_id"
+    t.integer  "user_id"
+    t.integer  "frame"
+    t.float    "joy"
+    t.float    "sadness"
+    t.float    "disgust"
+    t.float    "contempt"
+    t.float    "anger"
+    t.float    "fear"
+    t.float    "surprise"
+    t.float    "valance"
+    t.float    "engagement"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "facial_expressions", force: :cascade do |t|
+    t.integer  "speechstat_id"
+    t.integer  "facial_id"
+    t.integer  "user_id"
+    t.integer  "frame"
+    t.float    "smile"
+    t.float    "inner_brow_raise"
+    t.float    "brow_raise"
+    t.float    "brow_furrow"
+    t.float    "nose_wrinkle"
+    t.float    "upper_lip_raise"
+    t.float    "lip_corner_depressor"
+    t.float    "chin_raise"
+    t.float    "lip_pucker"
+    t.float    "lip_press"
+    t.float    "lip_suck"
+    t.float    "mouth_open"
+    t.float    "smirk"
+    t.float    "eye_closure"
+    t.float    "attention"
+    t.float    "lid_tighten"
+    t.float    "jaw_drop"
+    t.float    "simpler"
+    t.float    "eye_widen"
+    t.float    "cheek_raise"
+    t.float    "lip_stretch"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  create_table "facials", force: :cascade do |t|
+    t.integer  "speechstat_id"
+    t.integer  "user_id"
+    t.integer  "face_count"
+    t.integer  "frame"
+    t.integer  "facial_appearance_id"
+    t.integer  "facial_emotion_id"
+    t.integer  "facial_expression_id"
+    t.integer  "facial_emoji_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "images", force: :cascade do |t|
