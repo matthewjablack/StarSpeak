@@ -1,2 +1,0 @@
-class FacialExpression < ApplicationRecord
-end

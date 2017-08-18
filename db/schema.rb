@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170814050115) do
+ActiveRecord::Schema.define(version: 20170818042434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,22 +36,22 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "facial_appearances", force: :cascade do |t|
-    t.integer  "speechstat_id"
-    t.integer  "facial_id"
+  create_table "facial_appearance_stats", force: :cascade do |t|
+    t.integer  "speech_stat_id"
+    t.integer  "facial_stat_id"
     t.integer  "user_id"
     t.integer  "frame"
     t.string   "gender"
     t.string   "glasses"
     t.string   "age"
     t.string   "ethnicity"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  create_table "facial_emojis", force: :cascade do |t|
-    t.integer  "speechstat_id"
-    t.integer  "facial_id"
+  create_table "facial_emoji_stats", force: :cascade do |t|
+    t.integer  "speech_stat_id"
+    t.integer  "facial_stat_id"
     t.integer  "user_id"
     t.integer  "frame"
     t.float    "relaxed"
@@ -59,13 +59,13 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.float    "laughing"
     t.float    "kissing"
     t.float    "disappointed"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  create_table "facial_emotions", force: :cascade do |t|
-    t.integer  "speechstat_id"
-    t.integer  "facial_id"
+  create_table "facial_emotion_stats", force: :cascade do |t|
+    t.integer  "speech_stat_id"
+    t.integer  "facial_stat_id"
     t.integer  "user_id"
     t.integer  "frame"
     t.float    "joy"
@@ -77,13 +77,13 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.float    "surprise"
     t.float    "valance"
     t.float    "engagement"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  create_table "facial_expressions", force: :cascade do |t|
-    t.integer  "speechstat_id"
-    t.integer  "facial_id"
+  create_table "facial_expression_stats", force: :cascade do |t|
+    t.integer  "speech_stat_id"
+    t.integer  "facial_stat_id"
     t.integer  "user_id"
     t.integer  "frame"
     t.float    "smile"
@@ -111,17 +111,13 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.datetime "updated_at",           null: false
   end
 
-  create_table "facials", force: :cascade do |t|
-    t.integer  "speechstat_id"
+  create_table "facial_stats", force: :cascade do |t|
+    t.integer  "speech_stat_id"
     t.integer  "user_id"
     t.integer  "face_count"
     t.integer  "frame"
-    t.integer  "facial_appearance_id"
-    t.integer  "facial_emotion_id"
-    t.integer  "facial_expression_id"
-    t.integer  "facial_emoji_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "images", force: :cascade do |t|
@@ -165,7 +161,7 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.integer  "sort_order"
   end
 
-  create_table "speechstats", force: :cascade do |t|
+  create_table "speech_stats", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "betacode_id"
     t.integer  "lesson_id"
@@ -185,8 +181,6 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.float    "conscientiousness_indico"
     t.float    "extraversion_indico"
     t.float    "openness_indico"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
     t.text     "watson_text"
     t.text     "local_text"
     t.string   "browser_name"
@@ -216,6 +210,8 @@ ActiveRecord::Schema.define(version: 20170814050115) do
     t.datetime "video_updated_at"
     t.integer  "video_id"
     t.string   "uuid"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
   create_table "users", force: :cascade do |t|

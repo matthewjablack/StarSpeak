@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FacialEmotionTest < ActiveSupport::TestCase
+class FacialExpressionStatTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

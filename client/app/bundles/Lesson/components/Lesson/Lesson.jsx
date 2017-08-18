@@ -436,7 +436,7 @@ export default class Lesson extends Component{
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
-      this.facialEmotionsContainer);
+      this.state.facialEmotionsContainer);
 
     try {
       let reUm = / um ?/g;

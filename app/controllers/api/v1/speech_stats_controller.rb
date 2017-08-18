@@ -1,4 +1,6 @@
-class Api::V1::SpeechstatsController < ApplicationController
+require 'hash_utils'
+
+class Api::V1::SpeechStatsController < ApplicationController
   skip_before_filter :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
   before_action :check_authentication
@@ -7,20 +9,22 @@ class Api::V1::SpeechstatsController < ApplicationController
 
 
   def create
-    @speechstat = Speechstat.new(speechstat_params)
+    speech_stat = SpeechStat.new(speech_stat_params)
 
-    if @speechstat.save
+    speech_stat_service = SpeechStatService.new(speech_stat: speech_stat, facial_data: facial_data)
 
-      ProcessSpeechstatJob.perform_in(1.second, @speechstat.id, 0)
+    if speech_stat_service.save
+
+      ProcessSpeechStatJob.perform_in(1.second, speech_stat_service.speech_stat.id, 0)
 
       render :status => 201, 
              :json => { :success => true,
-                        :info => "Successfully created speechstat",
-                        :data => { speechstat: @speechstat } }
+                        :info => "Successfully created speech stat",
+                        :data => { speech_stat: speech_stat_service.speech_stat } }
     else
       render :status => 200, 
              :json => { :success => false,
-                        :info => "Error: " + @speechstat.errors.full_messages,
+                        :info => "Error: " + speech_stat_service.speech_stat.errors.full_messages,
                         :data => {} }
     end
   end
@@ -76,8 +80,8 @@ class Api::V1::SpeechstatsController < ApplicationController
     end
   end
 
-  def speechstat_params
-    params.require(:speechstat).permit(
+  def speech_stat_params
+    params.require(:speech_stat).permit(
       :user_id, 
       :betacode_id, 
       :lesson_id, 
@@ -120,7 +124,7 @@ class Api::V1::SpeechstatsController < ApplicationController
     )
   end
 
-  def facial_infos_params
-    params.require(:facial_infos).permit(:data)
+  def facial_data
+    params[:facial_data][:data]
   end
 end

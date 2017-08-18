@@ -1,2 +1,0 @@
-class FacialAppearance < ApplicationRecord
-end
