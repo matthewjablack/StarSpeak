@@ -34,6 +34,8 @@ gem 'jbuilder', '2.6.2'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 
+gem 'json-waveform'
+
 gem 'bulk_insert'
 
 gem 'activesupport'

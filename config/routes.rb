@@ -17,6 +17,7 @@ StarSpeak::Application.routes.draw do
     namespace :v1, defaults: { format: 'json' } do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api
       post 'speech_stats' => 'speech_stats#create'
+      get 'speech_stats' => 'speech_stats#index'
       post 'watson_tone' => 'services#watson_tone'
       resources :videos, only: [:index, :create]
       resources :uploads, only: [:create]

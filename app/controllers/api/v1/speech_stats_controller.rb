@@ -64,6 +64,15 @@ class Api::V1::SpeechStatsController < ApplicationController
                                    time: params[:count]} }
   end
 
+  def index
+    @facial_emotion_stats = FacialEmotionStat.where(speech_stat_id: 281)
+
+    render :status => 200, 
+             :json => { :success => true,
+                        :info => "Successfully returned score",
+                        :data => { facial_emotion_stats: @facial_emotion_stats} }
+  end
+
   private
 
   def check_authentication

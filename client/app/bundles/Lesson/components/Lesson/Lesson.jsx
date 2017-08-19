@@ -30,6 +30,9 @@ var screenCount = 0;
 var uuid = uuidV1();
 var detector;
 
+var audioCtx;
+var analyser;
+
 export default class Lesson extends Component{
   static get propTypes() {
     return {
@@ -320,7 +323,7 @@ export default class Lesson extends Component{
     var _this = this;
     var facialEmotionsContainer = new FacialEmotionsContainer();
     var newCounter = 0;
-    var interval = 50; // ms
+    var interval = 200; // ms
     var expected = Date.now() + interval;
     setTimeout(step, interval);
     function step() {
@@ -397,6 +400,8 @@ export default class Lesson extends Component{
     this.collectEmotions();
     handleMicClick(this);
     handleLocalStream(this);
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
   }
 
   async startStageAnalyze() {

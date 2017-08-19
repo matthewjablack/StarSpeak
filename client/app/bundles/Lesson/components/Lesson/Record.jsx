@@ -37,6 +37,8 @@ export function stopRecord(ctx, uuid) {
         type: 'video/webm'
     });
 
+    debugger;
+
     ctx.setState({upload: {name: file.name, size: file.size, loaded: 0} });
 
     FileStore.createResource(file, ctx, { onProgress: handleProgress })
