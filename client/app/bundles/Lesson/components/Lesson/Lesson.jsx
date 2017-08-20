@@ -22,6 +22,7 @@ import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 import $ from 'jquery';
 import FacialEmotion from './FacialEmotion';
 import FacialEmotionsContainer from './FacialEmotionsContainer';
+import {waveBars} from './WaveBars';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
@@ -232,59 +233,13 @@ export default class Lesson extends Component{
   }
 
   async componentDidMount() {
-    var _this = this;
-
     this.fetchToken();
     requestUserMedia();
     this.setPresentCount();
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
     this.setRefreshIntervalId();
-
-    canvas = $('.visualizer')[0];
-    canvasCtx = canvas.getContext("2d");
-
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.minDecibels = -90;
-    analyser.maxDecibels = -10;
-    analyser.smoothingTimeConstant = 0.85;
-    distortion = audioCtx.createWaveShaper();
-    gainNode = audioCtx.createGain();
-    biquadFilter = audioCtx.createBiquadFilter();
-    convolver = audioCtx.createConvolver();
-
-    if (navigator.getUserMedia) {
-       console.log('getUserMedia supported.');
-       navigator.getUserMedia (
-          // constraints - only audio needed for this app
-          {
-             audio: true
-          },
-
-          // Success callback
-          function(stream) {
-             source = audioCtx.createMediaStreamSource(stream);
-             source.connect(analyser);
-             analyser.connect(distortion);
-             distortion.connect(biquadFilter);
-             biquadFilter.connect(convolver);
-             convolver.connect(gainNode);
-             gainNode.connect(audioCtx.destination);
-
-             _this.visualize();
-             _this.voiceChange();
-
-          },
-
-          // Error callback
-          function(err) {
-             console.log('The following gUM error occured: ' + err);
-          }
-       );
-    } else {
-       console.log('getUserMedia not supported on your browser!');
-    }
+    waveBars()
   }
 
   componentWillUnmount() {
@@ -406,50 +361,6 @@ export default class Lesson extends Component{
         expected += interval;
         setTimeout(step, Math.max(0, interval - dt)); // take into account drift
     }
-  }
-
-  visualize() {
-    var WIDTH = canvas.width;
-    var HEIGHT = canvas.height;
-
-    analyser.fftSize = 256;
-    var bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
-    var dataArray = new Uint8Array(bufferLength);
-
-    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-    var draw = function() {
-      drawVisual = requestAnimationFrame(draw);
-
-      analyser.getByteFrequencyData(dataArray);
-
-      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-      canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)';
-      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-
-      var barWidth = (WIDTH / bufferLength) * 2.5;
-      var barHeight;
-      var x = 0;
-
-      for(var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
-
-        canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
-        canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
-
-        x += barWidth + 1;
-      }
-    };
-
-    draw();
-  }
-
-  voiceChange() {
-    distortion.oversample = '4x';
-    biquadFilter.gain.value = 0;
-    convolver.buffer = undefined;
   }
 
   fetchToken() {
