@@ -175,9 +175,12 @@ export default class Lesson extends Component{
         expressions: {},
         emojis: {},
       },
-      facialStatsContainer: null
+      facialStatsContainer: null,
+      confidenceGoal: 4
     };
 
+
+    this.setConfidenceGoal = this.setConfidenceGoal.bind(this);
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.startStageAdjust = this.startStageAdjust.bind(this);
@@ -280,6 +283,12 @@ export default class Lesson extends Component{
     } else {
       this.setState({presentCount: 20, length: 20, linkback: ''});
     }
+  }
+
+  setConfidenceGoal(newConfidenceGoal) {
+    this.setState({
+      confidenceGoal: newConfidenceGoal
+    });
   }
 
   setRefreshIntervalId() {
@@ -498,7 +507,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Develop') {
       lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} />;
     } else if (this.state.stage === 'Preload'){
-      lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} />
+      lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} setConfidenceGoal={this.setConfidenceGoal} />
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {

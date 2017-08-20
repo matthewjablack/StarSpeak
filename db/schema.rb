@@ -120,14 +120,6 @@ ActiveRecord::Schema.define(version: 20170818042434) do
     t.datetime "updated_at",     null: false
   end
 
-  create_table "images", force: :cascade do |t|
-    t.string   "image"
-    t.integer  "speechstat_id"
-    t.integer  "user_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
   create_table "ip_sessions", force: :cascade do |t|
     t.string   "ip"
     t.integer  "count",      default: 0
@@ -200,14 +192,6 @@ ActiveRecord::Schema.define(version: 20170818042434) do
     t.float    "extraversion_speech_watson"
     t.float    "agreeableness_speech_watson"
     t.float    "emotional_range_speech_watson"
-    t.integer  "facial_emotions_rating"
-    t.integer  "social_tone_rating"
-    t.integer  "language_tone_rating"
-    t.integer  "emotion_tone_rating"
-    t.string   "video_file_name"
-    t.string   "video_content_type"
-    t.integer  "video_file_size"
-    t.datetime "video_updated_at"
     t.integer  "video_id"
     t.string   "uuid"
     t.datetime "created_at",                      null: false
