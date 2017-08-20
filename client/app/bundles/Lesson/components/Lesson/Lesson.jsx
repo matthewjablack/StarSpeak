@@ -160,16 +160,11 @@ export default class Lesson extends Component{
         emojis: {},
       },
       facialEmotionsContainer: null,
-      emotionGoals: {
-        happiness: 0,
-        sadness: 0,
-        excitement: 0,
-        anger: 0,
-      }
+      confidenceGoal: 4
     };
 
 
-    this.setEmotionGoal = this.setEmotionGoal.bind(this);
+    this.setConfidenceGoal = this.setConfidenceGoal.bind(this);
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.startStageAdjust = this.startStageAdjust.bind(this);
@@ -272,20 +267,10 @@ export default class Lesson extends Component{
     }
   }
 
-  setEmotionGoal(emotion, value) {
-    console.log(emotion+" "+value)
-    console.log(emotion+" "+value)
-    console.log(emotion+" "+value)
-    console.log(emotion+" "+value)
-    console.log(emotion+" "+value)
-    console.log(emotion+" "+value)
-    console.log(emotion+" "+value)
-    let newEmotionGoals = Object.assign({}, this.state.emotionGoals)
-    newEmotionGoals[emotion] = value;
+  setConfidenceGoal(newConfidenceGoal) {
     this.setState({
-      emotionGoals: newEmotionGoals
-    })
-
+      confidenceGoal: newConfidenceGoal
+    });
   }
 
   setRefreshIntervalId() {
@@ -490,7 +475,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Develop') {
       lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} />;
     } else if (this.state.stage === 'Preload'){
-      lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} setEmotionGoal={this.setEmotionGoal} />
+      lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} setConfidenceGoal={this.setConfidenceGoal} />
     } else if (this.state.stage === 'Record') {
       lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
     } else if (this.state.stage == 'Analyze') {

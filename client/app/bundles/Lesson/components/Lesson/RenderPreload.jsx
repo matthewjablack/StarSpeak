@@ -10,28 +10,6 @@ export default class RenderPreload extends Component {
     super(props)
     this.state = {
 
-      emotionImgUrlList: {
-        'happy0': '/images/emotion_list/happy/happy_0.png',
-        'happy1': '/images/emotion_list/happy/happy_1_grey.png',
-        'happy2': '/images/emotion_list/happy/happy_2_grey.png',
-        'happy3': '/images/emotion_list/happy/happy_3_grey.png',
-
-        'sad0': '/images/emotion_list/sad/sad_0.png',
-        'sad1': '/images/emotion_list/sad/sad_1_grey.png',
-        'sad2': '/images/emotion_list/sad/sad_2_grey.png',
-        'sad3': '/images/emotion_list/sad/sad_3_grey.png',
-
-        'excited0': '/images/emotion_list/excited/excited_0.png',
-        'excited1': '/images/emotion_list/excited/excited_1_grey.png',
-        'excited2': '/images/emotion_list/excited/excited_2_grey.png',
-        'excited3': '/images/emotion_list/excited/excited_3_grey.png',
-
-        'angry0': '/images/emotion_list/angry/angry_0.png',
-        'angry1': '/images/emotion_list/angry/angry_1_grey.png',
-        'angry2': '/images/emotion_list/angry/angry_2_grey.png',
-        'angry3': '/images/emotion_list/angry/angry_3_grey.png',
-      },
-
       confidenceImgUrlList: [
         '/images/confidence/confidence_0_grey.png',
         '/images/confidence/confidence_1_grey.png',
@@ -48,13 +26,6 @@ export default class RenderPreload extends Component {
 
   setElements() {
     this.setConfidenceForm();
-    this.setEmotionForms();
-    this.emotionForm = (
-      <div>
-      <h2> What kind of emotions do you wish to portray? </h2>
-        {this.formList.map(form => <div> {form} <br></br> </div>)}
-      </div>
-      )
     if (this.props.affectivaLoaded) {
       this.speechAnalyticsSection = (
         <div>
@@ -73,9 +44,9 @@ export default class RenderPreload extends Component {
 
   setConfidenceForm() {
     this.formStyle = {
-      width: 30,
-      height: 30,
-      marginRight: 10
+      width: 40,
+      height: 40,
+      marginRight: 20
     }
 
     this.confidenceForm = (
@@ -97,43 +68,24 @@ export default class RenderPreload extends Component {
   }
 
   onConfidenceGoalChange(newVal) {
-    newUrlList = [];
+    this.props.setConfidenceGoal(newVal)
+    this.updateConfidenceFormView(newVal);
+  }
 
+  updateConfidenceFormView(newVal) {
+    var newUrlList = [];
     for (var i = 0; i < 9; i++) {
       var grey = "_grey";
       if (i === newVal) {
         grey = "";
       }
-      imgUrl = '/images/confidence/confidence_' + i + grey + '.png';
-      newUrlList.push(imgUrl)
+      var imgUrl = '/images/confidence/confidence_' + i + grey + '.png';
+      newUrlList.push(imgUrl);
     }
 
     this.setState({
       confidenceImgUrlList: newUrlList
-    })
-  }
-
-  setEmotionForms() {
-
-    this.formList = [];
-
-    this.emList = ['happy', 'sad', 'excited', 'angry']
-
-    for (let j = 0; j < 4; j++) {
-      let emotion = this.emList[j]
-      this.formList.push((
-        <div>
-        <h3>{emotion}:    </h3>
-          <img src={this.state.emotionImgUrlList[emotion+0]} style={{width: 50, height: 50}} onClick={() => this.onEmotionGoalChange(emotion, 0)} />
-          <span> ----------- </span>
-          <img src={this.state.emotionImgUrlList[emotion+1]} style={{width: 50, height: 50}} onClick={() => this.onEmotionGoalChange(emotion, 1)} />
-          <span> ----------- </span>
-          <img src={this.state.emotionImgUrlList[emotion+2]} style={{width: 50, height: 50}} onClick={() => this.onEmotionGoalChange(emotion, 2)} />
-          <span> ----------- </span>
-          <img src={this.state.emotionImgUrlList[emotion+3]} style={{width: 50, height: 50}} onClick={() => this.onEmotionGoalChange(emotion, 3)} />
-        </div>
-      ))
-    }
+    });
   }
 
   onEmotionGoalChange(emotionType, value) {
@@ -168,11 +120,6 @@ export default class RenderPreload extends Component {
     this.setState({
       emotionImgUrlList: newEmotionImgUrlList
     })
-  }
-
-  setEmotionValue(emotionType, value) {
-    this.props.setEmotionGoal(this.getEmotionNoun(emotionType), value);
-    // TODO: set the emotion value to the Lesson.jsx state
   }
 
 
