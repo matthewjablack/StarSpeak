@@ -45,6 +45,7 @@ const config = {
                 use: 'babel-loader',
                 exclude: /node_modules/,
             },
+            { test: /\.(png|jpg|gif)$/, loader: 'file-loader?name=./images/[name].[ext]' },
         ],
     },
 };
