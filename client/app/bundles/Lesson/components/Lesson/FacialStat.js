@@ -1,4 +1,4 @@
-export default class FacialEmotion {
+export default class FacialStat {
   constructor(faces, appearances, emotions, expressions, emojis, frame){
     this.faces = faces;
     this.appearances = appearances;

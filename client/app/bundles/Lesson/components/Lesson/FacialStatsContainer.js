@@ -1,10 +1,10 @@
-export default class FacialEmotionsContainer {
+export default class FacialStatsContainer {
   constructor(){
     this.data = [];
   }
 
-  addFacialEmotion(facialEmotion){
-    this.data.push(facialEmotion);
+  addFacialStat(facialStat){
+    this.data.push(facialStat);
   }
 
   emotionsData(){
