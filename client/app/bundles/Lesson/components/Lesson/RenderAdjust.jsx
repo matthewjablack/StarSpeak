@@ -37,7 +37,6 @@ export default class RenderAdjust extends Component {
             {presentCountDropdown}
           </div>
         </div>
-        <canvas className="visualizer" width="320" height="50"></canvas> 
         {this.props.children}
       </div>
     )

@@ -6,4 +6,12 @@ export default class FacialEmotionsContainer {
   addFacialEmotion(facialEmotion){
     this.data.push(facialEmotion);
   }
+
+  emotionsData(){
+    let array = [];
+    for (let datum of this.data) {
+      array.push(datum.formatEmotions());
+    }
+    return array;
+  }
 }

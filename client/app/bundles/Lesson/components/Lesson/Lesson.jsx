@@ -504,7 +504,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
     } else if (this.state.stage == 'Results') {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} facialEmotionsContainer={this.state.facialEmotionsContainer} />;
     } else if (this.state.stage == 'DemoLimitExceeded') {
       lessonContent = <RenderDemoExceeded/>;
     }
@@ -513,6 +513,7 @@ export default class Lesson extends Component{
     if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results' && this.state.stage !== 'DemoLimitExceeded') {
       commonContent = (
         <div>
+          <canvas className="visualizer" width="320" height="50"></canvas> 
           <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
         </div>
       );
