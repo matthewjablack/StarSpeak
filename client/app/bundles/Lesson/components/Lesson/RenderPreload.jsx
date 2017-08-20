@@ -30,11 +30,24 @@ export default class RenderPreload extends Component {
         'angry1': '/images/emotion_list/angry/angry_1_grey.png',
         'angry2': '/images/emotion_list/angry/angry_2_grey.png',
         'angry3': '/images/emotion_list/angry/angry_3_grey.png',
-      }
+      },
+
+      confidenceImgUrlList: [
+        '/images/confidence/confidence_0_grey.png',
+        '/images/confidence/confidence_1_grey.png',
+        '/images/confidence/confidence_2_grey.png',
+        '/images/confidence/confidence_3_grey.png',
+        '/images/confidence/confidence_4.png',
+        '/images/confidence/confidence_5_grey.png',
+        '/images/confidence/confidence_6_grey.png',
+        '/images/confidence/confidence_7_grey.png',
+        '/images/confidence/confidence_8_grey.png'
+      ]
     }
   }
 
   setElements() {
+    this.setConfidenceForm();
     this.setEmotionForms();
     this.emotionForm = (
       <div>
@@ -56,6 +69,48 @@ export default class RenderPreload extends Component {
         <p>Loading...</p>
       )
     }
+  }
+
+  setConfidenceForm() {
+    this.formStyle = {
+      width: 30,
+      height: 30,
+      marginRight: 10
+    }
+
+    this.confidenceForm = (
+      <div>
+        <h3> How confident are you discussing this topic? </h3>
+        <div>
+          <img src={this.state.confidenceImgUrlList[0]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(0)} />
+          <img src={this.state.confidenceImgUrlList[1]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(1)} />
+          <img src={this.state.confidenceImgUrlList[2]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(2)} />
+          <img src={this.state.confidenceImgUrlList[3]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(3)} />
+          <img src={this.state.confidenceImgUrlList[4]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(4)} />
+          <img src={this.state.confidenceImgUrlList[5]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(5)} />
+          <img src={this.state.confidenceImgUrlList[6]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(6)} />
+          <img src={this.state.confidenceImgUrlList[7]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(7)} />
+          <img src={this.state.confidenceImgUrlList[8]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(8)} />
+        </div>
+      </div>
+      )
+  }
+
+  onConfidenceGoalChange(newVal) {
+    newUrlList = [];
+
+    for (var i = 0; i < 9; i++) {
+      var grey = "_grey";
+      if (i === newVal) {
+        grey = "";
+      }
+      imgUrl = '/images/confidence/confidence_' + i + grey + '.png';
+      newUrlList.push(imgUrl)
+    }
+
+    this.setState({
+      confidenceImgUrlList: newUrlList
+    })
   }
 
   setEmotionForms() {
@@ -129,7 +184,7 @@ export default class RenderPreload extends Component {
     return (
       <div>
         <div className="centerFixed">
-        {this.emotionForm}
+        {this.confidenceForm}
         {this.speechAnalyticsSection}
 
         </div>
