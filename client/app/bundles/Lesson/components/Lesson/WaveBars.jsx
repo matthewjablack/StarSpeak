@@ -1,8 +1,8 @@
-import React from 'react';
+import $ from 'jquery';
 
 export function waveBars() {
   var canvas = $('.visualizer')[0];
-  var canvasCtx = canvas.getContext("2d");
+  var canvasCtx = canvas.getContext('2d');
 
   var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   var analyser = audioCtx.createAnalyser();
@@ -15,35 +15,31 @@ export function waveBars() {
   var convolver = audioCtx.createConvolver();
 
   if (navigator.getUserMedia) {
-     console.log('getUserMedia supported.');
-     navigator.getUserMedia (
-        // constraints - only audio needed for this app
-        {
-           audio: true
-        },
+    navigator.getUserMedia (
+      {
+        audio: true
+      },
 
-        // Success callback
-        function(stream) {
-           var source = audioCtx.createMediaStreamSource(stream);
-           source.connect(analyser);
-           analyser.connect(distortion);
-           distortion.connect(biquadFilter);
-           biquadFilter.connect(convolver);
-           convolver.connect(gainNode);
-           gainNode.connect(audioCtx.destination);
+      function(stream) {
+        var source = audioCtx.createMediaStreamSource(stream);
+        source.connect(analyser);
+        analyser.connect(distortion);
+        distortion.connect(biquadFilter);
+        biquadFilter.connect(convolver);
+        convolver.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
 
-           visualize(canvas, canvasCtx, analyser);
-           voiceChange(distortion, biquadFilter, convolver);
+        visualize(canvas, canvasCtx, analyser);
+        voiceChange(distortion, biquadFilter, convolver);
 
-        },
+      },
 
-        // Error callback
-        function(err) {
-           console.log('The following gUM error occured: ' + err);
-        }
-     );
+      function(err) {
+        console.log('The following gUM error occured: ' + err); // eslint-disable-line
+      }
+    );
   } else {
-     console.log('getUserMedia not supported on your browser!');
+    console.log('getUserMedia not supported on your browser!');
   }
 }
 
@@ -54,13 +50,13 @@ function visualize(canvas, canvasCtx, analyser) {
 
   analyser.fftSize = 256;
   var bufferLength = analyser.frequencyBinCount;
-  console.log(bufferLength);
+  console.log(bufferLength); // eslint-disable-line
   var dataArray = new Uint8Array(bufferLength);
 
   canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
   var draw = function() {
-    var drawVisual = requestAnimationFrame(draw);
+    requestAnimationFrame(draw);
 
     analyser.getByteFrequencyData(dataArray);
 

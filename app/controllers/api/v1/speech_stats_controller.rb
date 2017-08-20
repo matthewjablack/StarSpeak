@@ -1,7 +1,7 @@
 require 'hash_utils'
 
 class Api::V1::SpeechStatsController < ApplicationController
-  skip_before_filter :verify_authenticity_token,
+  skip_before_action :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
   before_action :check_authentication
 

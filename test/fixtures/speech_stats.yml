@@ -1,5 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+main:
+  user_id: 1
+  betacode_id: 1
+  lesson_id: 1
+  moduler_id: 1
+  happy_facial_indico: 1.5
+  sad_facial_indico: 1.5
+  angry_facial_indico: 1.5
+  fear_facial_indico: 1.5
+  surprise_facial_indico: 1.5
+  neutral_facial_indico: 1.5
+
 one:
   user_id: 1
   betacode_id: 1
@@ -20,41 +32,13 @@ one:
   conscientiousness_indico: 1.5
   extraversion_indico: 1.5
   openness_indico: 1.5
-  watson_text: MyText
-  local_text: MyText
-  browser_name: MyString
-  browser_version: MyString
-  watson_text_pace: 1.5
-  local_text_pace: 1.5
-  anger_speech_watson: 1.5
-  disgust_speech_watson: 1.5
-  fear_speech_watson: 1.5
-  joy_speech_watson: 1.5
-  sadness_speech_watson: 1.5
-  analytical_speech_watson: 1.5
-  confident_speech_watson: 1.5
-  tentative_speech_watson: 1.5
-  openness_speech_watson: 1.5
-  conscientiousness_speech_watson: 1.5
-  extraversion_speech_watson: 1.5
-  agreeableness_speech_watson: 1.5
-  emotional_range_speech_watson: 1.5
-  facial_emotions_rating: 1
-  social_tone_rating: 1
-  language_tone_rating: 1
-  emotion_tone_rating: 1
-  video_file_name: MyString
-  video_content_type: MyString
-  video_file_size: 1
-  video_updated_at: 2017-08-16 20:55:30
-  video_id: 1
-  uuid: MyString
 
 two:
   user_id: 1
   betacode_id: 1
   lesson_id: 1
   moduler_id: 1
+  lesson_id: 1
   happy_facial_indico: 1.5
   sad_facial_indico: 1.5
   angry_facial_indico: 1.5
@@ -70,32 +54,3 @@ two:
   conscientiousness_indico: 1.5
   extraversion_indico: 1.5
   openness_indico: 1.5
-  watson_text: MyText
-  local_text: MyText
-  browser_name: MyString
-  browser_version: MyString
-  watson_text_pace: 1.5
-  local_text_pace: 1.5
-  anger_speech_watson: 1.5
-  disgust_speech_watson: 1.5
-  fear_speech_watson: 1.5
-  joy_speech_watson: 1.5
-  sadness_speech_watson: 1.5
-  analytical_speech_watson: 1.5
-  confident_speech_watson: 1.5
-  tentative_speech_watson: 1.5
-  openness_speech_watson: 1.5
-  conscientiousness_speech_watson: 1.5
-  extraversion_speech_watson: 1.5
-  agreeableness_speech_watson: 1.5
-  emotional_range_speech_watson: 1.5
-  facial_emotions_rating: 1
-  social_tone_rating: 1
-  language_tone_rating: 1
-  emotion_tone_rating: 1
-  video_file_name: MyString
-  video_content_type: MyString
-  video_file_size: 1
-  video_updated_at: 2017-08-16 20:55:30
-  video_id: 1
-  uuid: MyString
