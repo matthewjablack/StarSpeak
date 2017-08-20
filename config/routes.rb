@@ -16,12 +16,13 @@ StarSpeak::Application.routes.draw do
   namespace :api do
     namespace :v1, defaults: { format: 'json' } do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api
-      post 'speechstats' => 'speechstats#create'
+      post 'speech_stats' => 'speech_stats#create'
+      get 'speech_stats' => 'speech_stats#index'
       post 'watson_tone' => 'services#watson_tone'
       resources :videos, only: [:index, :create]
       resources :uploads, only: [:create]
       resources :ip_sessions, only: [:create]
-      post 'dalechall' => 'speechstats#dale_chall'
+      post 'dalechall' => 'speech_stats#dale_chall'
     end
   end
 
@@ -44,7 +45,7 @@ StarSpeak::Application.routes.draw do
 
   get '/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 
-  get 'dalechall' => 'speechstats#dale_chall'
+  get 'dalechall' => 'speech_stats#dale_chall'
 
 
   resources :users, only: [:show, :create] do

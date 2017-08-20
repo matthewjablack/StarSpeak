@@ -20,8 +20,9 @@ import {requestUserMedia, startRecord, stopRecord} from './Record';
 import {handleLocalStream} from './LocalStt';
 import {handleMicClick,getFinalAndLatestInterimResult} from './WatsonStt';
 import $ from 'jquery';
-import FacialEmotion from './FacialEmotion';
-import FacialEmotionsContainer from './FacialEmotionsContainer';
+import FacialStat from './FacialStat';
+import FacialStatsContainer from './FacialStatsContainer';
+import {waveBars} from './WaveBars';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
@@ -29,6 +30,21 @@ var screenshots = [];
 var screenCount = 0;
 var uuid = uuidV1();
 var detector;
+
+var audioCtx;
+var analyser;
+var source;
+var stream;
+
+var distortion;
+var gainNode;
+var biquadFilter;
+var convolver;
+
+var canvas;
+var canvasCtx;
+
+var drawVisual;
 
 export default class Lesson extends Component{
   static get propTypes() {
@@ -159,7 +175,7 @@ export default class Lesson extends Component{
         expressions: {},
         emojis: {},
       },
-      facialEmotionsContainer: null,
+      facialStatsContainer: null,
       confidenceGoal: 4
     };
 
@@ -181,6 +197,7 @@ export default class Lesson extends Component{
 
   componentWillMount() {
     var _this = this;
+
 
     var divRoot = $("#affdex_elements")[0];
     var width = 640;
@@ -225,6 +242,7 @@ export default class Lesson extends Component{
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions.bind(this));
     this.setRefreshIntervalId();
+    waveBars()
   }
 
   componentWillUnmount() {
@@ -327,9 +345,9 @@ export default class Lesson extends Component{
 
   collectEmotions() {
     var _this = this;
-    var facialEmotionsContainer = new FacialEmotionsContainer();
+    var facialStatsContainer = new FacialStatsContainer();
     var newCounter = 0;
-    var interval = 50; // ms
+    var interval = 200; // ms
     var expected = Date.now() + interval;
     setTimeout(step, interval);
     function step() {
@@ -339,13 +357,13 @@ export default class Lesson extends Component{
         }
 
         var aff = _this.state.affectiva;
-        var facialEmotion = new FacialEmotion(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis, newCounter);
-        facialEmotionsContainer.addFacialEmotion(facialEmotion);
+        var facialStat = new FacialStat(aff.faces, aff.appearance, aff.emotions, aff.expressions, aff.emojis, newCounter);
+        facialStatsContainer.addFacialStat(facialStat);
 
         if (_this.state.stage == 'Record') {
           newCounter += 1;
         } else {
-          _this.setState({facialEmotionsContainer: facialEmotionsContainer});
+          _this.setState({facialStatsContainer: facialStatsContainer});
           return
         }
 
@@ -408,6 +426,20 @@ export default class Lesson extends Component{
     handleLocalStream(this);
   }
 
+  makeDistortionCurve(amount) {
+    var k = typeof amount === 'number' ? amount : 50,
+      n_samples = 44100,
+      curve = new Float32Array(n_samples),
+      deg = Math.PI / 180,
+      i = 0,
+      x;
+    for ( ; i < n_samples; ++i ) {
+      x = i * 2 / n_samples - 1;
+      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+    }
+    return curve;
+  };
+
   async startStageAnalyze() {
     stopRecord(this, uuid);
     detector.stop();
@@ -445,7 +477,7 @@ export default class Lesson extends Component{
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
-      this.facialEmotionsContainer);
+      this.state.facialStatsContainer);
 
     try {
       let reUm = / um ?/g;
@@ -481,7 +513,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
     } else if (this.state.stage == 'Results') {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} facialStatsContainer={this.state.facialStatsContainer} />;
     } else if (this.state.stage == 'DemoLimitExceeded') {
       lessonContent = <RenderDemoExceeded/>;
     }
@@ -490,6 +522,7 @@ export default class Lesson extends Component{
     if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results' && this.state.stage !== 'DemoLimitExceeded') {
       commonContent = (
         <div>
+          <canvas className="visualizer" width="320" height="50"></canvas> 
           <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
         </div>
       );

@@ -83,7 +83,7 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       uuid: uuid
     }
 
-    let response = await fetch('/api/v1/speechstats.json?auth_token=' + user.auth_token, {
+    let response = await fetch('/api/v1/speech_stats.json?auth_token=' + user.auth_token, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -91,8 +91,8 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       },
       credentials: 'same-origin',
       body: JSON.stringify({
-        speechstat: Object.assign(speechStatData, starViewData),
-        facial_stats: facialEmotions
+        speech_stat: Object.assign(speechStatData, starViewData),
+        facial_data: facialEmotions
       })
     })
 
