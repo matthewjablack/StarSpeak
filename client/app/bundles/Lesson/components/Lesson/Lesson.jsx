@@ -528,7 +528,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage === 'Preload'){
       lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} setConfidenceGoal={this.setConfidenceGoal} />
     } else if (this.state.stage === 'Record') {
-      lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
+      lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} affectiva={this.state.affectiva} />;
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
     } else if (this.state.stage == 'Results') {
