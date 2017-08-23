@@ -26,8 +26,6 @@ export default class RenderRecord extends Component {
                     {name: 'a', amt: 3, uv: 2}];
 
 
-
-
     return (
       <div>
         <div className="centerFixed">
