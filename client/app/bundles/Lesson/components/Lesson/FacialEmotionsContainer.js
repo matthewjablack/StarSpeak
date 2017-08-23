@@ -1,10 +1,10 @@
 export default class FacialEmotionsContainer {
   constructor(){
-    this.data = [];
+	this.data = [];
   }
 
   addFacialEmotion(facialEmotion){
-    this.data.push(facialEmotion);
+	this.data.push(facialEmotion);
   }
 
   getLatestFacialEmotion() {
