@@ -88,40 +88,6 @@ export default class RenderPreload extends Component {
     });
   }
 
-  onEmotionGoalChange(emotionType, value) {
-    this.setColour(emotionType, value)
-    this.setEmotionValue(emotionType, value)
-  }
-
-  getEmotionNoun(adjective) {
-    if (adjective === 'happy') {
-      return 'happiness';
-    } else if (adjective === 'sad') {
-      return 'sadness';
-    } else if (adjective === 'excited') {
-      return 'excitement';
-    } else if (adjective === 'angry') {
-      return 'anger';
-    }
-  }
-
-  setColour(emotionType, value) {
-    let newEmotionImgUrlList = Object.assign({}, this.state.emotionImgUrlList)
-
-    for (var i = 0; i <= 3; i++) {
-      var grey = ""
-      var imgUrl = "/images/emotion_list/"
-      if (i !== value) {
-        grey = "_grey"
-      }
-      imgUrl =imgUrl + emotionType + '/' + emotionType + '_' + i + grey + ".png"
-      newEmotionImgUrlList[emotionType+i] = imgUrl
-    }
-    this.setState({
-      emotionImgUrlList: newEmotionImgUrlList
-    })
-  }
-
 
   render() {
     this.setElements();

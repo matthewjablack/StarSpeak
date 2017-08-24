@@ -25,18 +25,18 @@ export default class RenderRecord extends Component {
                     {name: 'a', amt: 2, uv: 4},
                     {name: 'a', amt: 3, uv: 2}];
 
+    this.zero = '0 0 40px #69F0AE' // , 0 0 20px #69F0AE, 0 0 20px #69F0AE, 0 0 20px #69F0AE, 0 0 20px #69F0AE';
+    this.liveEmojiStyle = {
+      fontSize: 40,
+      textShadow: this.zero
+    }
 
     return (
       <div>
         <div className="centerFixed">
-          <span> {this.currentEmoji} </span>
+          <span> 😐</span>
           <br/>
-          <LineChart width={400} height={400} data={this.justArr} >
-            <Line type="monotone" dataKey="uv" stroke="#ff0000" />
-            <XAxis dataKey="name"/>
-            <YAxis/>
-            <Tooltip />
-          </LineChart>
+          <div style={this.liveEmojiStyle} >{this.currentEmoji}</div>
           <br/>
           <h2>
             {(this.props.presentCount % 2) == 0 ?
