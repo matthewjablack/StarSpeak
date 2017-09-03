@@ -11,10 +11,10 @@ export default class FacialStat {
   formatEmotions() {
     if (this.emotions != null) {
       return {
-        joy: this.emotions.joy, 
-        sadness: this.emotions.sadness, 
-        excitement: this.emotions.surprise,
-        anger: this.emotions.anger
+        joy: Math.round(this.emotions.joy), 
+        sadness: Math.round(this.emotions.sadness), 
+        excitement: Math.round(this.emotions.surprise),
+        anger: Math.round(this.emotions.anger)
       };
     } else {
       return {joy: 0, sadness: 0, excitement: 0, anger: 0};

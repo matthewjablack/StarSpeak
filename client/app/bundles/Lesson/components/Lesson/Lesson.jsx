@@ -23,6 +23,7 @@ import $ from 'jquery';
 import FacialStat from './FacialStat';
 import FacialStatsContainer from './FacialStatsContainer';
 import {waveBars} from './WaveBars';
+import SpeechFrameContainer from './SpeechFrameContainer';
 
 const uuidV1 = require('uuid/v1'); // eslint-disable-line
 
@@ -176,7 +177,9 @@ export default class Lesson extends Component{
         emojis: {},
       },
       facialStatsContainer: null,
-      confidenceGoal: 4
+      confidenceGoal: 4,
+      frame: 0,
+      speechFrameContainer: new SpeechFrameContainer(),
     };
 
 
@@ -197,7 +200,6 @@ export default class Lesson extends Component{
 
   componentWillMount() {
     var _this = this;
-
 
     var divRoot = $("#affdex_elements")[0];
     var width = 640;
@@ -299,7 +301,7 @@ export default class Lesson extends Component{
     function step() {
         var dt = Date.now() - expected;
         if (dt > interval) {
-          _this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
+          console.log('Error in browser detected');
         }
 
         if (_this.state.loadCount === 0) {
@@ -347,13 +349,13 @@ export default class Lesson extends Component{
     var _this = this;
     var facialStatsContainer = new FacialStatsContainer();
     var newCounter = 0;
-    var interval = 200; // ms
+    var interval = 50; // ms // 20 fps
     var expected = Date.now() + interval;
     setTimeout(step, interval);
     function step() {
         var dt = Date.now() - expected; // the drift (positive for overshooting)
         if (dt > interval) {
-          _this.createError('error', 'We detected a bug in your browser. Perhaps the browser tab was inactive?');
+          console.log('Error in browser detected');
         }
 
         var aff = _this.state.affectiva;
@@ -361,6 +363,7 @@ export default class Lesson extends Component{
         facialStatsContainer.addFacialStat(facialStat);
 
         if (_this.state.stage == 'Record') {
+          _this.setState({frame: newCounter});
           newCounter += 1;
         } else {
           _this.setState({facialStatsContainer: facialStatsContainer});
@@ -473,11 +476,16 @@ export default class Lesson extends Component{
 
     let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
 
+    this.state.speechFrameContainer.addStt(this.state.local.stt);
+
+    this.state.speechFrameContainer.determineWordTiming();
+
     this.setState({indico: indico, stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
       this.state.facialStatsContainer);
+
 
     try {
       let reUm = / um ?/g;
@@ -503,7 +511,15 @@ export default class Lesson extends Component{
     if (this.state.stage === 'Intro') {
       lessonContent = <RenderIntro startStageAdjust={this.startStageAdjust} />;
     } else if (this.state.stage === 'Adjust') {
-      lessonContent = <RenderAdjust startStageDevelop={this.startStageDevelop} width={this.state.width} mode={this.state.mode} updatePresentCount={(x) => this.updatePresentCount(x)} presentCount={this.state.presentCount} />;
+      lessonContent = (
+        <RenderAdjust 
+          startStageDevelop={this.startStageDevelop} 
+          width={this.state.width} 
+          mode={this.state.mode} 
+          updatePresentCount={(x) => this.updatePresentCount(x)} 
+          presentCount={this.state.presentCount} 
+        />
+      );
     } else if (this.state.stage === 'Develop') {
       lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} />;
     } else if (this.state.stage === 'Preload'){
@@ -513,7 +529,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
     } else if (this.state.stage == 'Results') {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} facialStatsContainer={this.state.facialStatsContainer} />;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} facialStatsContainer={this.state.facialStatsContainer} video={this.state.video} speechFrameContainer={this.state.speechFrameContainer} />;
     } else if (this.state.stage == 'DemoLimitExceeded') {
       lessonContent = <RenderDemoExceeded/>;
     }
