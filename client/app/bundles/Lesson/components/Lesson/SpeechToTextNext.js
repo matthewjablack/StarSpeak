@@ -12,7 +12,7 @@ export default class SpeechToTextNext {
   constructor(onAnythingSaid, onFinalised, onFinishedListening, language = 'en-US') {
     // Check to see if this browser supports speech recognition
     if (!('webkitSpeechRecognition' in window)) {
-      throw new Error("This browser doesn't support speech recognition. Try Google Chrome.");
+      throw new Error('This browser doesn\'t support speech recognition. Try Google Chrome.');
     }
 
     const WebkitSpeechRecognition = window.webkitSpeechRecognition;

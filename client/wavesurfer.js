@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*! wavesurfer.js 1.2.3 (Thu, 10 Nov 2016 12:01:47 GMT)
 * https://github.com/katspaugh/wavesurfer.js
 * @license CC-BY-3.0 */

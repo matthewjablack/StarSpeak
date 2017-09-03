@@ -27,11 +27,11 @@ export default class SpeechFrameContainer {
     let placeholderText = '';
 
     for (let datum of this.data) {
-      let regexp = new RegExp("^(" + placeholderText + ")");
-      let speechFrame = new SpeechFrame(datum.text.replace(regexp,"").trim(), datum.frame, datum.confidence);
+      let regexp = new RegExp('^(' + placeholderText + ')');
+      let speechFrame = new SpeechFrame(datum.text.replace(regexp,'').trim(), datum.frame, datum.confidence);
       if (this.stt.startsWith(datum.text + ' ') && !this.formattedDataSpeech().includes(datum.text)
-        && (speechFrame.text !== "") && (datum.text.length >= placeholderText.length)){
-        placeholderText = datum.text
+        && (speechFrame.text !== '') && (datum.text.length >= placeholderText.length)){
+        placeholderText = datum.text;
         this.formattedData.push(speechFrame);
       }
     }

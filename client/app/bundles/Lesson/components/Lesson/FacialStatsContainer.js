@@ -16,6 +16,6 @@ export default class FacialStatsContainer {
   }
 
   findByFrame(frame){
-    this.data.filter(x => x.frame === frame)
+    this.data.filter(x => x.frame === frame);
   }
 }
