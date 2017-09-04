@@ -15,6 +15,16 @@ export default class FacialStatsContainer {
     return array;
   }
 
+  dataExists(){
+    let countEmpty;
+    for (let datum of this.data){
+      if (datum.emotions == null) {
+        countEmpty += 1;
+      }
+    }
+    return countEmpty/this.data.length < 0.9
+  }
+
   findByFrame(frame){
     this.data.filter(x => x.frame === frame);
   }
