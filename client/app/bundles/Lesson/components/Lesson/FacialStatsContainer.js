@@ -22,7 +22,7 @@ export default class FacialStatsContainer {
         countEmpty += 1;
       }
     }
-    return countEmpty/this.data.length < 0.9
+    return countEmpty/this.data.length < 0.9;
   }
 
   findByFrame(frame){
