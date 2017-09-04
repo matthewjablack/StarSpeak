@@ -11,6 +11,7 @@ import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip 
 import sizeMe from 'react-sizeme';
 import Wavesurfer from 'react-wavesurfer';
 import WordImpactBoxContainer from './WordImpactBoxContainer';
+import KeywordDensity from './KeywordDensity';
 
 class RenderResults extends Component {
   constructor(props) {
@@ -57,6 +58,7 @@ class RenderResults extends Component {
             <Pace pace={this.props.local.pace} />
             <UmCount umCount={this.props.umCount} />
             <GradeLevel gradeScore={this.props.gradeScore} />
+            <KeywordDensity wordFrequency={this.props.wordFrequency} />
           </Collapsible>
 
           <Card textClassName='white-text' title='Facial Emotions'>
@@ -126,10 +128,8 @@ class RenderResults extends Component {
           </Card>
 
           <br/>
-          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} user={this.props.user} screenshot={this.props.screenshot} local={this.props.local} />
           {this.props.children}
           <br/><br/>
-          <p></p>
         </div>
       </div>
     )

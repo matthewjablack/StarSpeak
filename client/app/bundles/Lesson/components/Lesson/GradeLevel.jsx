@@ -33,7 +33,7 @@ export default class GradeLevel extends Component {
     return (
       <CollapsibleItem header={gradeHeader} icon='error' {...other}>
         <p>Your speaking grade level was {gradeLevel}. </p>
-        <p>This doesn't mean you spoke at a {gradeLevel} level, but rather that anyone {gradeLevel} or older would be capable of understanding your speech.</p>
+        <p>This doesn't mean you spoke like a {gradeLevel} student, but rather that anyone in {gradeLevel} or older would be capable of understanding your speech.</p>
       </CollapsibleItem>
     )
   }

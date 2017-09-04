@@ -5,7 +5,7 @@ import browser from 'detect-browser';
 import {isObjectEmpty} from './params';
 import {getIndicoEmotions} from './indico-emotion';
 import {parseWatson} from './watson-parse';
-import {createSpeechstat, getGradeScore, calculatePace} from './speechstat';
+import {createSpeechstat, getDaleChall, calculatePace} from './speechstat';
 import RenderIntro from './RenderIntro';
 import RenderAdjust from './RenderAdjust';
 import RenderDevelop from './RenderDevelop';
@@ -463,9 +463,12 @@ export default class Lesson extends Component{
     newLocal.pace = calculatePace(newLocal.stt,  this.state.length - this.state.presentCount);
     newWatson.pace = calculatePace(newWatson.stt,  this.state.length - this.state.presentCount);
 
-    let gradeScore = await getGradeScore(newLocal.stt, this.state.length - this.state.presentCount);
+    let daleChall = await getDaleChall(newLocal.stt, this.state.length - this.state.presentCount);
 
-    this.setState({gradeScore: gradeScore});
+    this.setState({
+      gradeScore: daleChall.score,
+      wordFrequency: daleChall.frequency
+    })
 
     let WatsonTone = await watsonTone(this.state.user, newLocal.stt, this.state.mode);
 
@@ -529,7 +532,7 @@ export default class Lesson extends Component{
     } else if (this.state.stage == 'Analyze') {
       lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
     } else if (this.state.stage == 'Results') {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} facialStatsContainer={this.state.facialStatsContainer} video={this.state.video} speechFrameContainer={this.state.speechFrameContainer} />;
+      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} wordFrequency={this.state.wordFrequency} facialStatsContainer={this.state.facialStatsContainer} video={this.state.video} speechFrameContainer={this.state.speechFrameContainer} />;
     } else if (this.state.stage == 'DemoLimitExceeded') {
       lessonContent = <RenderDemoExceeded/>;
     }

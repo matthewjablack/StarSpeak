@@ -18,7 +18,7 @@ export async function checkIpSession(){
   }
 }
 
-export async function getGradeScore(text, count){
+export async function getDaleChall(text, count){
   let response = await fetch('/api/v1/dalechall.json', {
     method: 'POST', 
     headers: {
@@ -32,7 +32,7 @@ export async function getGradeScore(text, count){
     })
   })
   let responseJson = await response.json();
-  return responseJson.data.score;
+  return responseJson.data
 }
 
 export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode, facialEmotions) {

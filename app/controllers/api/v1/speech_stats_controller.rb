@@ -32,6 +32,8 @@ class Api::V1::SpeechStatsController < ApplicationController
   def dale_chall
     @dalechall ||= set_list_content(Rails.root.join("config", "dalechall.yml"))
 
+    @common_words ||= set_list_content(Rails.root.join("config", "common_en_words.yml"))
+
     word_count = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split.size.to_f
 
     difficult_word_count = (params[:text].gsub(/[^-a-z'A-Z]/, ' ').split - @dalechall).count.to_f
@@ -42,15 +44,18 @@ class Api::V1::SpeechStatsController < ApplicationController
 
     difficult_weight = difficult_ratio > 0.05 ? 3.6365 : 0
 
-     words = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split #splits the array   
- 
-     wf = Hash.new(0).tap { |h| words.each { |word| h[word] += 1 } } #turns array of words into dictionary hash which makes the frequency
+    words = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split #splits the array   
 
-     unique = wf.count #counts the number of unique words
+    filtered_words = words
+    filtered_words.delete_if {|x| @common_words.include?(x)}
 
-     minute = Float(params[:count] / 60.0)
+    wf = Hash.new(0).tap { |h| filtered_words.each { |word| h[word] += 1 } } #turns array of words into dictionary hash which makes the frequency
 
-     wpm = word_count / minute #calculates words per minute
+    unique = wf.count #counts the number of unique words
+
+    minute = Float(params[:count] / 60.0)
+
+    wpm = word_count / minute #calculates words per minute
 
     score = 0.1579 * (difficult_ratio * 100) + 0.0496* (word_count / sentences) + difficult_weight #Final Score calculation for dalechall
 
