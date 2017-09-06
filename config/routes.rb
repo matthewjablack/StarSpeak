@@ -66,6 +66,10 @@ StarSpeak::Application.routes.draw do
     end
   end
 
+  resources :organizations, path: '', param: :url do
+    resources :groups, param: :url
+  end
+
 
 
 

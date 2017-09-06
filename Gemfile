@@ -83,6 +83,8 @@ gem 'capistrano-rbenv', '~> 2.1'
 gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
 # gem 'capistrano-rvm'
 
+gem 'urlify', '0.2.2'
+
 gem "font-awesome-rails"
 
 gem "wysiwyg-rails"
