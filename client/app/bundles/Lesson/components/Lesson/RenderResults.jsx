@@ -1,3 +1,5 @@
+require('wavesurfer.js');
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
@@ -7,17 +9,35 @@ import GradeLevel from './GradeLevel';
 import {Collapsible, CollapsibleItem, Row, Card, Button, Icon} from '@mblackmblack/react-materialize'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import sizeMe from 'react-sizeme';
+import Wavesurfer from 'react-wavesurfer';
+import WordImpactBoxContainer from './WordImpactBoxContainer';
+import KeywordDensity from './KeywordDensity';
 
 class RenderResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      containerWidth: 0
-    }
+      containerWidth: 0,
+      playing: false, 
+      pos: 0
+    };
+    this.handleTogglePlay = this.handleTogglePlay.bind(this);
+    this.handlePosChange = this.handlePosChange.bind(this);
   }
 
   componentDidMount() {
     this.setState({containerWidth: this.refs.container.offsetWidth});
+  }
+
+  handleTogglePlay() {
+    this.setState({
+      playing: !this.state.playing
+    });
+  }
+  handlePosChange(e) {
+    this.setState({
+      pos: e.originalArgs[0]
+    });
   }
 
   render() {
@@ -38,6 +58,7 @@ class RenderResults extends Component {
             <Pace pace={this.props.local.pace} />
             <UmCount umCount={this.props.umCount} />
             <GradeLevel gradeScore={this.props.gradeScore} />
+            <KeywordDensity wordFrequency={this.props.wordFrequency} />
           </Collapsible>
 
           <Card textClassName='white-text' title='Facial Emotions'>
@@ -72,11 +93,43 @@ class RenderResults extends Component {
             </AreaChart>
           </Card>
 
+          <Card>
+            <Wavesurfer
+              audioFile={this.props.video.direct_upload_url}
+              pos={this.state.pos}
+              onPosChange={this.handlePosChange}
+              playing={this.state.playing}
+            />
+            <div style={{textAlign: 'center'}}>
+              <Button className="red lighten-2" waves="light" onClick={this.handleTogglePlay}>
+                <i className="glyphicon glyphicon-play"></i>
+                Play
+              </Button>
+
+              <div className="row">
+                <div className="col-xs-1">
+                  <i className="glyphicon glyphicon-zoom-in"></i>
+                </div>
+
+                <div className="col-xs-10">
+                  <input id="slider" type="range" min="1" max="200" defaultValue="1" style={{width: '100%'}} />
+                </div>
+
+                <div className="col-xs-1">
+                  <i className="glyphicon glyphicon-zoom-out"></i>
+                </div>
+              </div>
+            </div>
+
+            <WordImpactBoxContainer
+              speechFrameContainer={this.props.speechFrameContainer}
+              facialStatsContainer={this.props.facialStatsContainer}
+            />
+          </Card>
+
           <br/>
-          <Stats stage={this.props.stage} indico={this.props.indico} watson={this.props.watson} user={this.props.user} screenshot={this.props.screenshot} local={this.props.local} />
           {this.props.children}
           <br/><br/>
-          <p></p>
         </div>
       </div>
     )

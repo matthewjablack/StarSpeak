@@ -13,5 +13,4 @@ class Api::V1::UploadsController < ApplicationController
   def create_params
     params.require(:upload).permit(:filename)
   end
-
 end

@@ -15,7 +15,9 @@
     "create-react-class": "^15.5.3",
     "jquery": "^3.2.1",
     "react-dropdown": "^1.2.5",
-    "speech-to-text": "^0.4.4"
+    "react-tooltip": "^3.3.0",
+    "speech-to-text": "^0.4.4",
+    "wavesurfer.js": "^1.4.0"
   },
   "devDependencies": {
     "karma": "^1.7.0"

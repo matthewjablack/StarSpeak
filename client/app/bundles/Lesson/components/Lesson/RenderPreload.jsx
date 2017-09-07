@@ -30,7 +30,7 @@ export default class RenderPreload extends Component {
       this.speechAnalyticsSection = (
         <div>
           <p>loaded!</p>
-          <Button className="red lighten-2" waves="light" onClick={() => this.props.startStageRecord}>
+          <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>
             continue
           </Button>
         </div>
@@ -51,7 +51,7 @@ export default class RenderPreload extends Component {
 
     this.confidenceForm = (
       <div>
-        <h3> How confident are you discussing this topic? </h3>
+        <h3>How confident are you speaking about this topic?</h3>
         <div>
           <img src={this.state.confidenceImgUrlList[0]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(0)} />
           <img src={this.state.confidenceImgUrlList[1]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(1)} />
