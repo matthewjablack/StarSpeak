@@ -524,7 +524,7 @@ export default class Lesson extends Component{
         />
       );
     } else if (this.state.stage === 'Develop') {
-      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} />;
+      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} presentCount={this.state.presentCount} />;
     } else if (this.state.stage === 'Preload'){
       lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} setConfidenceGoal={this.setConfidenceGoal} />
     } else if (this.state.stage === 'Record') {

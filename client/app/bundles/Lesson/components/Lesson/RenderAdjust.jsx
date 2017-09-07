@@ -31,7 +31,7 @@ export default class RenderAdjust extends Component {
         <div className="centerFixed">
           <h2>Adjust your camera</h2>
           <div className="row center">
-            <Button className="red lighten-2" waves="light" onClick={this.props.startStageDevelop}>Ready</Button>
+            <Button className="red lighten-2" waves="light" onClick={this.props.startStageDevelop}>Next</Button>
           </div>
           <div>
             {presentCountDropdown}

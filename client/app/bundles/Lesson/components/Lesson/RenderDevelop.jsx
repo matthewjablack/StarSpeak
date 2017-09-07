@@ -7,7 +7,7 @@ export default class RenderDevelop extends Component {
   render() {
     let continueButton = (
       <Button className="red lighten-2" waves="light" onClick={this.props.startStagePreload}>
-        Continue
+        Next
       </Button>
     )
     if (this.props.mode == "StarView") {
@@ -18,6 +18,7 @@ export default class RenderDevelop extends Component {
             <h4>Read the situation below and present your solution to the best of your ability.</h4>
             <h2>{this.props.lesson.content}</h2>
             <h4>You have {this.props.presentCount} seconds to present.</h4>
+            <h4>Your time starts once you see the red recording button.</h4>
             {continueButton}
 
           </div>

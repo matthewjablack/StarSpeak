@@ -31,7 +31,7 @@ export default class RenderPreload extends Component {
         <div>
           <p>loaded!</p>
           <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>
-            continue
+            Start Presenting
           </Button>
         </div>
       )
