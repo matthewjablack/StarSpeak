@@ -6,7 +6,7 @@ import { Button } from '@mblackmblack/react-materialize';
 export default class RenderDevelop extends Component {
   render() {
     let continueButton = (
-      <Button className="red lighten-2" waves="light" onClick={this.props.startStagePreload}>
+      <Button className="red lighten-2" waves="light" onClick={this.props.startStageConfidence}>
         Next
       </Button>
     )
