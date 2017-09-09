@@ -25,7 +25,7 @@ export default class RenderRecord extends Component {
                     {name: 'a', amt: 2, uv: 4},
                     {name: 'a', amt: 3, uv: 2}];
 
-    this.zero = '0 0 40px #69F0AE' // , 0 0 20px #69F0AE, 0 0 20px #69F0AE, 0 0 20px #69F0AE, 0 0 20px #69F0AE';
+    this.zero = '0 0 40px #69F0AE' // , 0 0 40px #69F0AE, 0 0 40px #69F0AE, 0 0 40px #69F0AE, 0 0 40px #69F0AE';
     this.liveEmojiStyle = {
       fontSize: 40,
       textShadow: this.zero
@@ -34,7 +34,6 @@ export default class RenderRecord extends Component {
     return (
       <div>
         <div className="centerFixed">
-          <span> 😐</span>
           <br/>
           <div style={this.liveEmojiStyle} >{this.currentEmoji}</div>
           <br/>
@@ -43,8 +42,8 @@ export default class RenderRecord extends Component {
             <FontAwesome
               className='super-crazy-colors'
               name='circle'
-              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',   display: 'none', position: 'fixed', top: '78px', marginLeft: '-25px' }}
-            /> :
+              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',   display: 'none', position: 'fixed', top: '78px', marginLeft: '-25px' }}/>
+               :
             <FontAwesome
               className='super-crazy-colors'
               name='circle'
