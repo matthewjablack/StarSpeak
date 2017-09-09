@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  speech_stat_id: 1
+  facial_stat_id: 1
+  user_id: 1
+  frame: 1
+
+two:
+  speech_stat_id: 1
+  facial_stat_id: 1
+  user_id: 1
+  frame: 1

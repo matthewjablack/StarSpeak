@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Webcam from 'react-webcam';
-import { Button } from 'react-materialize';
+import { Button } from '@mblackmblack/react-materialize';
 
 export default class RenderDevelop extends Component {
   render() {
-    console.log(this.props.mode);
+    let continueButton = (
+      <Button className="red lighten-2" waves="light" onClick={this.props.startStageConfidence}>
+        Next
+      </Button>
+    )
     if (this.props.mode == "StarView") {
       return (
         <div>
@@ -14,7 +18,8 @@ export default class RenderDevelop extends Component {
             <h4>Read the situation below and present your solution to the best of your ability.</h4>
             <h2>{this.props.lesson.content}</h2>
             <h4>You have {this.props.presentCount} seconds to present.</h4>
-            <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>Continue</Button>
+            <h4>Your time starts once you see the red recording button.</h4>
+            {continueButton}
 
           </div>
           {this.props.children}
@@ -26,7 +31,7 @@ export default class RenderDevelop extends Component {
           <div className="centerFixed">
             <h1>StarLight</h1>
             <h4>You'll have {this.props.presentCount} seconds to present a quick speech.</h4>
-            <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>Continue</Button>
+            {continueButton}
 
           </div>
           {this.props.children}

@@ -16,7 +16,8 @@ module.exports = {
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "jsx"
     ],
     "rules": {
         "indent": [
@@ -34,6 +35,10 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "jsx/uses-factory": [1, {"pragma": "JSX"}],
+        "jsx/factory-in-scope": [1, {"pragma": "JSX"}],
+        "jsx/mark-used-vars": 1,
+        "jsx/no-undef": 1
     }
 };

@@ -57,6 +57,92 @@ body, h1, h2, h3, h4, h5, h6, p {
   }
 }
 
+#affdex_elements {
+  display: none;
+}
+
+#results {
+  display: none;
+}
+
+#logs {
+  display: none;
+}
+
+.visualizer {
+  z-index: 2;
+  display: block;
+  position: absolute;
+  bottom: 0 !important;
+}
+
+.tooltipped {
+  cursor: pointer;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.green-chip {
+  background: #27ae60; 
+}
+
+.green-yellow-chip {
+  background: -webkit-linear-gradient(left, #27ae60 50%, #f1c40f 50%);
+}
+
+.yellow-chip {
+  background: #f1c40f;
+}
+
+.blue-red-chip {
+  background: -webkit-linear-gradient(left, #2980b9 50%, #e74c3c 50%);
+}
+
+.blue-chip {
+  background: #2980b9;
+}
+
+.anger-chip {
+  background: #e74c3c;
+}
+
+.regular-chip {
+  background: #bdc3c7;
+}
+
+.word-chip {
+  color: white;
+  font-weight: 800;
+}
+
+.full-height {
+  height: 100%;
+}
 
 //
 // h1 {

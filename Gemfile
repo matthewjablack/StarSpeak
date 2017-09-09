@@ -34,6 +34,8 @@ gem 'jbuilder', '2.6.2'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 
+gem 'bulk_insert'
+
 gem 'activesupport'
 gem 'eventmachine'
 gem 'websocket-client-simple'

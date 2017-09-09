@@ -16,12 +16,13 @@ StarSpeak::Application.routes.draw do
   namespace :api do
     namespace :v1, defaults: { format: 'json' } do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api
-      post 'speechstats' => 'speechstats#create'
+      post 'speech_stats' => 'speech_stats#create'
+      get 'speech_stats' => 'speech_stats#index'
       post 'watson_tone' => 'services#watson_tone'
       resources :videos, only: [:index, :create]
       resources :uploads, only: [:create]
       resources :ip_sessions, only: [:create]
-      post 'dalechall' => 'speechstats#dale_chall'
+      post 'dalechall' => 'speech_stats#dale_chall'
     end
   end
 
@@ -41,11 +42,13 @@ StarSpeak::Application.routes.draw do
   get '/help' => 'pages#help', via: [:get], as: :help
   get '/upload' => 'pages#upload', via: [:get], as: :upload
   get '/render_result_dev' => 'pages#render_result_dev', via: [:get], as: :render_result_dev
+  get '/render_preload_loading_dev' => 'pages#render_preload_loading_dev', via: [:get], as: :render_preload_loading_dev
+  get '/render_preload_loaded_dev' => 'pages#render_preload_loaded_dev', via: [:get], as: :render_preload_loaded_dev
   get '/stt_test' => 'pages#stt_test', via: [:get], as: :stt_test
 
   get '/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 
-  get 'dalechall' => 'speechstats#dale_chall'
+  get 'dalechall' => 'speech_stats#dale_chall'
 
 
   resources :users, only: [:show, :create] do
