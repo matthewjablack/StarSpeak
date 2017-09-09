@@ -79,7 +79,7 @@
     "react-voice-components": "^1.0.0",
     "react-wavesurfer": "^0.8.6",
     "react-webcam": "^0.1.0",
-    "recharts": "^1.0.0-alpha.3",
+    "recharts": "^1.0.0-alpha.4",
     "recordrtc": "^5.4.1",
     "recordrtc-nodejs": "^1.0.6",
     "sinon": "^2.3.8",
