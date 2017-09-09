@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@mblackmblack/react-materialize';
+import { Button } from 'react-materialize';
 
 
 export default class RenderDemoExceeded extends Component {

@@ -1,7 +1,5 @@
-require 'hash_utils'
-
-class Api::V1::SpeechStatsController < ApplicationController
-  skip_before_action :verify_authenticity_token,
+class Api::V1::SpeechstatsController < ApplicationController
+  skip_before_filter :verify_authenticity_token,
                      :if => Proc.new { |c| c.request.format == 'application/json' }
   before_action :check_authentication
 
@@ -9,30 +7,26 @@ class Api::V1::SpeechStatsController < ApplicationController
 
 
   def create
-    speech_stat = SpeechStat.new(speech_stat_params)
+    @speechstat = Speechstat.new(speechstat_params)
 
-    speech_stat_service = SpeechStatService.new(speech_stat: speech_stat, facial_data: facial_data)
+    if @speechstat.save
 
-    if speech_stat_service.save
-
-      ProcessSpeechStatJob.perform_in(1.second, speech_stat_service.speech_stat.id, 0)
+      ProcessSpeechstatJob.perform_in(1.second, @speechstat.id, 0)
 
       render :status => 201, 
              :json => { :success => true,
-                        :info => "Successfully created speech stat",
-                        :data => { speech_stat: speech_stat_service.speech_stat } }
+                        :info => "Successfully created speechstat",
+                        :data => { speechstat: @speechstat } }
     else
       render :status => 200, 
              :json => { :success => false,
-                        :info => "Error: " + speech_stat_service.speech_stat.errors.full_messages,
+                        :info => "Error: " + @speechstat.errors.full_messages,
                         :data => {} }
     end
   end
 
   def dale_chall
     @dalechall ||= set_list_content(Rails.root.join("config", "dalechall.yml"))
-
-    @common_words ||= set_list_content(Rails.root.join("config", "common_en_words.yml"))
 
     word_count = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split.size.to_f
 
@@ -44,18 +38,15 @@ class Api::V1::SpeechStatsController < ApplicationController
 
     difficult_weight = difficult_ratio > 0.05 ? 3.6365 : 0
 
-    words = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split #splits the array   
+     words = params[:text].gsub(/[^-a-z'A-Z]/, ' ').split #splits the array   
+ 
+     wf = Hash.new(0).tap { |h| words.each { |word| h[word] += 1 } } #turns array of words into dictionary hash which makes the frequency
 
-    filtered_words = words
-    filtered_words.delete_if {|x| @common_words.include?(x)}
+     unique = wf.count #counts the number of unique words
 
-    wf = Hash.new(0).tap { |h| filtered_words.each { |word| h[word] += 1 } } #turns array of words into dictionary hash which makes the frequency
+     minute = Float(params[:count] / 60.0)
 
-    unique = wf.count #counts the number of unique words
-
-    minute = Float(params[:count] / 60.0)
-
-    wpm = word_count / minute #calculates words per minute
+     wpm = word_count / minute #calculates words per minute
 
     score = 0.1579 * (difficult_ratio * 100) + 0.0496* (word_count / sentences) + difficult_weight #Final Score calculation for dalechall
 
@@ -67,15 +58,6 @@ class Api::V1::SpeechStatsController < ApplicationController
                                    unique_words: unique,
                                    words_per_minute: wpm,
                                    time: params[:count]} }
-  end
-
-  def index
-    @facial_emotion_stats = FacialEmotionStat.where(speech_stat_id: 281)
-
-    render :status => 200, 
-             :json => { :success => true,
-                        :info => "Successfully returned score",
-                        :data => { facial_emotion_stats: @facial_emotion_stats} }
   end
 
   private
@@ -94,8 +76,8 @@ class Api::V1::SpeechStatsController < ApplicationController
     end
   end
 
-  def speech_stat_params
-    params.require(:speech_stat).permit(
+  def speechstat_params
+    params.require(:speechstat).permit(
       :user_id, 
       :betacode_id, 
       :lesson_id, 
@@ -136,9 +118,5 @@ class Api::V1::SpeechStatsController < ApplicationController
       :emotional_range_speech_watson,
       :uuid
     )
-  end
-
-  def facial_data
-    params[:facial_data][:data]
   end
 end

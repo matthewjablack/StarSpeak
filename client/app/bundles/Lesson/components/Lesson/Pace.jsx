@@ -1,45 +1,33 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {CollapsibleItem} from '@mblackmblack/react-materialize'
 
 export default class Pace extends Component {
   render() {
-  	let paceHeader, icon, className;
+  	let paceInfo;
     if ((this.props.pace > 5) && (this.props.pace < 50)) {
-  		paceHeader = "Your talking pace was very slow. Try working on reducing your pauses.";
-      icon = "error";
-      className = "red-txt";
+  		paceInfo = (<p className="red-txt">Your talking pace was very slow. Try working on reducing your pauses.</p>);
   	} else if ((this.props.pace >= 50) && (this.props.pace < 120)) {
-  		paceHeader = "Your talking pace was slightly slow. Be sure not to have too many pauses.";
-      icon = "warning";
-      className = "yellow-txt";
+  		paceInfo = (<p className="yellow-txt">Your talking pace was slightly slow. Be sure not to have too many pauses.</p>);
   	} else if ((this.props.pace >= 120) && (this.props.pace < 150)) {
-  		paceHeader = "Excellent talking pace. Keep it up!";
-      icon = "done";
-      className = "green-txt";
+  		paceInfo = (<p className="green-txt">Excellent talking pace. Keep it up!</p>);
   	} else if ((this.props.pace >= 150) && (this.props.pace < 200)) {
-  		paceHeader = "Your talking pace was slightly fast. Try slowing down a little.";
-      icon = "warning";
-      className = "yellow-txt";
+  		paceInfo = (<p className="yellow-txt">Your talking pace was slightly fast. Try slowing down a little.</p>);
   	} else {
-  		paceHeader = "You're talking way too fast! Try slowing down."
-      icon = "error";
-      className = "red-txt";
+  		paceInfo = (<p className="red-txt">You're talking way too fast! Try slowing down.</p>);
   	}
-
-    const { children, ...other } = this.props;
 
     if (this.props.pace > 5) {
       return (
-          <CollapsibleItem className={className} header={paceHeader} icon={icon} {...other}>
-            Your talking pace was {Math.round(this.props.pace)} words per minute. {children}
-          </CollapsibleItem>
+        <div>
+          <p>Pace: {Math.round(this.props.pace)} Words per Minute</p>
+          {paceInfo}
+        </div>
       )
     } else {
       return (
-          <CollapsibleItem className="red-txt" header="We couldn't detect any words from your speech." icon='error' {...other}>
-            Double check your microphone and try again.
-          </CollapsibleItem>
+        <div>
+          <p className="red-txt">We couldn't detect any words from your speech. Double check your microphone and try again.</p>
+        </div>
       )
     }
 

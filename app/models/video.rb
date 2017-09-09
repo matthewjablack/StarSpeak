@@ -1,5 +1,5 @@
 class Video < ApplicationRecord
-  has_one :speech_stat
+  has_one :speechstat
 
 	DIRECT_UPLOAD_URL_FORMAT = %r{
     \A

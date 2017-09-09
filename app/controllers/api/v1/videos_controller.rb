@@ -1,7 +1,7 @@
 class Api::V1::VideosController < ApplicationController
 
   def index
-    @videos = Video.page(1).per(10)
+    @videos = Video.all
     render :status => 200,
            :json => {videos: serialize_videos(@videos)}
   end

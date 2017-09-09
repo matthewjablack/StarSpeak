@@ -14,7 +14,7 @@
               <li><a href="#modal1">Sign up</a></li>
             <% else %>
               <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
-              <li><%= link_to "Speech Results", speech_stats_path %></li>
+              <li><%= link_to "Speech Results", speechstats_path %></li>
               <li><%= link_to "My Profile", user_path(current_user) %></li>
               <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
               </ul>

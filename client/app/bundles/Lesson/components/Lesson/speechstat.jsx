@@ -18,7 +18,7 @@ export async function checkIpSession(){
   }
 }
 
-export async function getDaleChall(text, count){
+export async function getGradeScore(text, count){
   let response = await fetch('/api/v1/dalechall.json', {
     method: 'POST', 
     headers: {
@@ -32,10 +32,10 @@ export async function getDaleChall(text, count){
     })
   })
   let responseJson = await response.json();
-  return responseJson.data
+  return responseJson.data.score;
 }
 
-export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode, facialEmotions) {
+export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode) {
   if (user.auth_token !== null) {
 
     let starViewData = {};
@@ -83,17 +83,14 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       uuid: uuid
     }
 
-    let response = await fetch('/api/v1/speech_stats.json?auth_token=' + user.auth_token, {
+    let response = await fetch('/api/v1/speechstats.json?auth_token=' + user.auth_token, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin',
-      body: JSON.stringify({
-        speech_stat: Object.assign(speechStatData, starViewData),
-        facial_data: facialEmotions
-      })
+      body: JSON.stringify({speechstat: Object.assign(speechStatData, starViewData)})
     })
 
     let responseJson = await response.json();

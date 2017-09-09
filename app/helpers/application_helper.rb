@@ -23,5 +23,6 @@ module ApplicationHelper
 	def is_home_page?
 		params[:controller] == "home" && params[:action] == "index"
 	end
+
 end
 

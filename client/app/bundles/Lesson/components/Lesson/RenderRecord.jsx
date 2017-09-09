@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Webcam from 'react-webcam';
 import FontAwesome from 'react-fontawesome';
 import {formatSeconds} from './format-time';
-import { Button } from '@mblackmblack/react-materialize';
+import { Button } from 'react-materialize';
 
 export default class RenderRecord extends Component {
   render() {

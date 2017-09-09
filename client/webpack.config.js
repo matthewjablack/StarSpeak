@@ -24,14 +24,8 @@ const config = {
 
     resolve: {
         extensions: ['.js', '.jsx'],
-        alias: {
-          wavesurfer: require.resolve('wavesurfer.js')
-        }
     },
     plugins: [
-        new webpack.ProvidePlugin({
-          WaveSurfer: 'wavesurfer.js'
-        }),
         new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
     ],
     module: {
@@ -51,7 +45,6 @@ const config = {
                 use: 'babel-loader',
                 exclude: /node_modules/,
             },
-            { test: /\.(png|jpg|gif)$/, loader: 'file-loader?name=./images/[name].[ext]' },
         ],
     },
 };

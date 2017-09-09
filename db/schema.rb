@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818042434) do
+ActiveRecord::Schema.define(version: 20170626020435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,88 +36,12 @@ ActiveRecord::Schema.define(version: 20170818042434) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "facial_appearance_stats", force: :cascade do |t|
-    t.integer  "speech_stat_id"
-    t.integer  "facial_stat_id"
+  create_table "images", force: :cascade do |t|
+    t.string   "image"
+    t.integer  "speechstat_id"
     t.integer  "user_id"
-    t.integer  "frame"
-    t.string   "gender"
-    t.string   "glasses"
-    t.string   "age"
-    t.string   "ethnicity"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  create_table "facial_emoji_stats", force: :cascade do |t|
-    t.integer  "speech_stat_id"
-    t.integer  "facial_stat_id"
-    t.integer  "user_id"
-    t.integer  "frame"
-    t.float    "relaxed"
-    t.float    "smiley"
-    t.float    "laughing"
-    t.float    "kissing"
-    t.float    "disappointed"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  create_table "facial_emotion_stats", force: :cascade do |t|
-    t.integer  "speech_stat_id"
-    t.integer  "facial_stat_id"
-    t.integer  "user_id"
-    t.integer  "frame"
-    t.float    "joy"
-    t.float    "sadness"
-    t.float    "disgust"
-    t.float    "contempt"
-    t.float    "anger"
-    t.float    "fear"
-    t.float    "surprise"
-    t.float    "valance"
-    t.float    "engagement"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  create_table "facial_expression_stats", force: :cascade do |t|
-    t.integer  "speech_stat_id"
-    t.integer  "facial_stat_id"
-    t.integer  "user_id"
-    t.integer  "frame"
-    t.float    "smile"
-    t.float    "inner_brow_raise"
-    t.float    "brow_raise"
-    t.float    "brow_furrow"
-    t.float    "nose_wrinkle"
-    t.float    "upper_lip_raise"
-    t.float    "lip_corner_depressor"
-    t.float    "chin_raise"
-    t.float    "lip_pucker"
-    t.float    "lip_press"
-    t.float    "lip_suck"
-    t.float    "mouth_open"
-    t.float    "smirk"
-    t.float    "eye_closure"
-    t.float    "attention"
-    t.float    "lid_tighten"
-    t.float    "jaw_drop"
-    t.float    "simpler"
-    t.float    "eye_widen"
-    t.float    "cheek_raise"
-    t.float    "lip_stretch"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  create_table "facial_stats", force: :cascade do |t|
-    t.integer  "speech_stat_id"
-    t.integer  "user_id"
-    t.integer  "face_count"
-    t.integer  "frame"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "ip_sessions", force: :cascade do |t|
@@ -153,7 +77,7 @@ ActiveRecord::Schema.define(version: 20170818042434) do
     t.integer  "sort_order"
   end
 
-  create_table "speech_stats", force: :cascade do |t|
+  create_table "speechstats", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "betacode_id"
     t.integer  "lesson_id"
@@ -173,6 +97,8 @@ ActiveRecord::Schema.define(version: 20170818042434) do
     t.float    "conscientiousness_indico"
     t.float    "extraversion_indico"
     t.float    "openness_indico"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.text     "watson_text"
     t.text     "local_text"
     t.string   "browser_name"
@@ -192,10 +118,16 @@ ActiveRecord::Schema.define(version: 20170818042434) do
     t.float    "extraversion_speech_watson"
     t.float    "agreeableness_speech_watson"
     t.float    "emotional_range_speech_watson"
+    t.integer  "facial_emotions_rating"
+    t.integer  "social_tone_rating"
+    t.integer  "language_tone_rating"
+    t.integer  "emotion_tone_rating"
+    t.string   "video_file_name"
+    t.string   "video_content_type"
+    t.integer  "video_file_size"
+    t.datetime "video_updated_at"
     t.integer  "video_id"
     t.string   "uuid"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
   end
 
   create_table "users", force: :cascade do |t|

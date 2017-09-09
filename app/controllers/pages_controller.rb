@@ -19,14 +19,6 @@ class PagesController < ApplicationController
 
 	end
 
-	def render_preload_loading_dev
-
-	end
-
-	def render_preload_loaded_dev
-
-	end 
-
 	def stt_test
 
 	end
