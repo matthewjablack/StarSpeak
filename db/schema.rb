@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 20170906040417) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "speechstats", force: :cascade do |t|
+  create_table "speech_stats", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "betacode_id"
     t.integer  "lesson_id"
@@ -245,7 +245,7 @@ ActiveRecord::Schema.define(version: 20170906040417) do
     t.datetime "updated_at",                      null: false
   end
 
-  create_table "speech_stats", force: :cascade do |t|
+  create_table "speechstats", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "betacode_id"
     t.integer  "lesson_id"

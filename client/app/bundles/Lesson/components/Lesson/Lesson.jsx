@@ -607,10 +607,14 @@ export default class Lesson extends Component{
 
     let commonContent;
     if (this.state.stage !== 'Analyze' && this.state.stage !== 'Results' && this.state.stage !== 'DemoLimitExceeded') {
+      let webcamComponent = (
+        <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />);
+
       commonContent = (
         <div>
+          
           <canvas className="visualizer" width="320" height="50"></canvas> 
-          <Webcam audio={false} className="reactWebcam" ref='webcam' width={this.state.width} height={this.state.width * 0.75} />
+          { (this.state.stage == "Record" || this.state.stage == "Adjust") ? webcamComponent : <p> asdasd </p>}
         </div>
       );
     }

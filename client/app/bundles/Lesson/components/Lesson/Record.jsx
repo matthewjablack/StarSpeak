@@ -5,7 +5,7 @@ const uuidV1 = require('uuid/v1');
 var src;
 var uploadDetails;
 
-function captureUserMedia(callback) {  
+function captureUserMedia(callback) {
   var params = { audio: true, video: true };
   navigator.getUserMedia(params, callback, (error) => {
     alert(JSON.stringify(error));
