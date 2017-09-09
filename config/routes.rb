@@ -44,6 +44,7 @@ StarSpeak::Application.routes.draw do
   get '/render_result_dev' => 'pages#render_result_dev', via: [:get], as: :render_result_dev
   get '/render_preload_loading_dev' => 'pages#render_preload_loading_dev', via: [:get], as: :render_preload_loading_dev
   get '/render_preload_loaded_dev' => 'pages#render_preload_loaded_dev', via: [:get], as: :render_preload_loaded_dev
+  get '/stt_test' => 'pages#stt_test', via: [:get], as: :stt_test
 
   get '/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 

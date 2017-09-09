@@ -26,4 +26,8 @@ class PagesController < ApplicationController
 	def render_preload_loaded_dev
 
 	end 
+
+	def stt_test
+
+	end
 end
