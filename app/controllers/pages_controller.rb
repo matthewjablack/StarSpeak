@@ -18,4 +18,12 @@ class PagesController < ApplicationController
 	def render_result_dev
 
 	end
+
+	def render_preload_loading_dev
+
+	end
+
+	def render_preload_loaded_dev
+
+	end
 end
