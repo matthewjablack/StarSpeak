@@ -94,12 +94,14 @@ class RenderResults extends Component {
           </Card>
 
           <Card>
-            <Wavesurfer
-              audioFile={this.props.video.direct_upload_url}
-              pos={this.state.pos}
-              onPosChange={this.handlePosChange}
-              playing={this.state.playing}
-            />
+            {this.props.video != null && 
+              <Wavesurfer
+                audioFile={this.props.video.direct_upload_url}
+                pos={this.state.pos}
+                onPosChange={this.handlePosChange}
+                playing={this.state.playing}
+              />
+            }
             <div style={{textAlign: 'center'}}>
               <Button className="red lighten-2" waves="light" onClick={this.handleTogglePlay}>
                 <i className="glyphicon glyphicon-play"></i>

@@ -9,34 +9,66 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 export default class RenderRecord extends Component {
   render() {
 
-    if (this.props.affectiva != null &&
-      this.props.affectiva.emojis != null &&
-      this.props.affectiva.emojis.dominantEmoji != null) {
-      this.currentEmoji = this.props.affectiva.emojis.dominantEmoji;
-      this.currentEmotion = this.props.affectiva.emojis;
-    } else {
-      this.currentEmoji = '--';
+    let joy = -1;
+    let sadness = -1; 
+    let anger = -1;
+    let surprise = -1;
+
+    if (this.props.emotions != null) {
+      joy = Math.floor(this.props.emotions.joy);
+      sadness = Math.floor(this.props.emotions.sadness);
+      anger = Math.floor(this.props.emotions.anger);
+      surprise = Math.floor(this.props.emotions.surprise);
+    };
+
+    this.joyGlow = '0 0 40px #69F0AE';
+    this.sadnessGlow = '0 0 40px #69F0AE'
+    this.angerGlow = '0 0 40px #69F0AE';
+    this.surpriseGlow = '0 0 40px #69F0AE'
+
+    for (var i = 0; i < (joy/8); i++) {
+      this.joyGlow += ' , 0 0 20px #69F0AE';
+    }
+    for (var i = 0; i < (sadness/8); i++) {
+      this.sadnessGlow += ' , 0 0 20px #69F0AE';
+    }
+    for (var i = 0; i < (anger/8); i++) {
+      this.angerGlow += ' , 0 0 20px #69F0AE';
+    }
+    for (var i = 0; i < (surprise/8); i++) {
+      this.surpriseGlow += ' , 0 0 20px #69F0AE';
     }
 
-    this.justArr = [{name: 'a', amt: 1, uv: 5},
-                    {name: 'a', amt: 2, uv: 2},
-                    {name: 'a', amt: 3, uv: 3},
-                    {name: 'a', amt: 4, uv: 1},
-                    {name: 'a', amt: 2, uv: 4},
-                    {name: 'a', amt: 3, uv: 2}];
-
-    this.zero = '0 0 40px #69F0AE' // , 0 0 40px #69F0AE, 0 0 40px #69F0AE, 0 0 40px #69F0AE, 0 0 40px #69F0AE';
-    this.liveEmojiStyle = {
-      fontSize: 40,
-      textShadow: this.zero
-    }
+    this.joyEmojiStyle = {
+      fontSize: 50,
+      textShadow: this.joyGlow,
+      marginRight: 15
+    };
+    this.sadnessEmojiStyle = {
+      fontSize: 50,
+      textShadow: this.sadnessGlow,
+      marginRight: 15
+    };
+    this.angerEmojiStyle ={
+      fontSize: 50,
+      textShadow: this.angerGlow,
+      marginRight: 15
+    };
+    this.surpriseEmojiStyle = {
+      fontSize: 50,
+      textShadow: this.surpriseGlow,
+      marginRight: 15
+    };
 
     return (
       <div>
+        <div style={{position: 'absolute', right: 30, top: 80, zIndex: 11}}>
+          <div style={this.joyEmojiStyle} className="inline-block">😃</div>
+          <div style={this.sadnessEmojiStyle} className="inline-block">🙁</div>
+          <div style={this.angerEmojiStyle} className="inline-block">😠</div>
+          <div style={this.surpriseEmojiStyle} className="inline-block">😮</div>
+        </div>
         <div className="centerFixed">
-          <br/>
-          <div style={this.liveEmojiStyle} >{this.currentEmoji}</div>
-          <br/>
           <h2>
             {(this.props.presentCount % 2) == 0 ?
             <FontAwesome
