@@ -41,32 +41,34 @@ export default class RenderRecord extends Component {
 
     this.joyEmojiStyle = {
       fontSize: 50,
-      textShadow: this.joyGlow
+      textShadow: this.joyGlow,
+      marginRight: 15
     };
     this.sadnessEmojiStyle = {
       fontSize: 50,
-      textShadow: this.sadnessGlow
+      textShadow: this.sadnessGlow,
+      marginRight: 15
     };
     this.angerEmojiStyle ={
       fontSize: 50,
-      textShadow: this.angerGlow
+      textShadow: this.angerGlow,
+      marginRight: 15
     };
     this.surpriseEmojiStyle = {
       fontSize: 50,
-      textShadow: this.surpriseGlow
+      textShadow: this.surpriseGlow,
+      marginRight: 15
     };
 
     return (
       <div>
+        <div style={{position: 'absolute', right: 30, top: 80, zIndex: 11}}>
+          <div style={this.joyEmojiStyle} className="inline-block">😃</div>
+          <div style={this.sadnessEmojiStyle} className="inline-block">🙁</div>
+          <div style={this.angerEmojiStyle} className="inline-block">😠</div>
+          <div style={this.surpriseEmojiStyle} className="inline-block">😮</div>
+        </div>
         <div className="centerFixed">
-          <br/>
-          <div >
-            <div style={this.joyEmojiStyle} >😃</div>
-            <div style={this.sadnessEmojiStyle} >🙁</div>
-            <div style={this.angerEmojiStyle} >😠</div>
-            <div style={this.surpriseEmojiStyle} >😮</div>
-          </div>
-          <br/>
           <h2>
             {(this.props.presentCount % 2) == 0 ?
             <FontAwesome
