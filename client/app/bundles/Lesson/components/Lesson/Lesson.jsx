@@ -614,7 +614,8 @@ export default class Lesson extends Component{
         <div>
           
           <canvas className="visualizer" width="320" height="50"></canvas> 
-          { (this.state.stage == "Record" || this.state.stage == "Adjust") ? webcamComponent : <p> asdasd </p>}
+          { (this.state.stage == "Record" || this.state.stage == "Adjust" || this.state.stage == "Preload") ? webcamComponent : <p></p>}
+          
         </div>
       );
     }
