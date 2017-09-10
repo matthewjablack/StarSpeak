@@ -32,7 +32,7 @@ export default class Pace extends Component {
     if (this.props.pace > 5) {
       return (
           <CollapsibleItem className={className} header={paceHeader} icon={icon} {...other}>
-            Your talking pace was {this.props.pace} words per minute. {children}
+            Your talking pace was {Math.round(this.props.pace)} words per minute. {children}
           </CollapsibleItem>
       )
     } else {

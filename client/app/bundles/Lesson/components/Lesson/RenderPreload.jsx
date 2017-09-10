@@ -2,138 +2,98 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Webcam from 'react-webcam';
 import { Button } from '@mblackmblack/react-materialize';
+import FontAwesome from 'react-fontawesome';
+import $ from 'jquery'
+import Slider from 'react-slick';
 
 export default class RenderPreload extends Component {
-
 
   constructor(props) {
     super(props)
     this.state = {
-
-      confidenceImgUrlList: [
-        '/images/confidence/confidence_0_grey.png',
-        '/images/confidence/confidence_1_grey.png',
-        '/images/confidence/confidence_2_grey.png',
-        '/images/confidence/confidence_3_grey.png',
-        '/images/confidence/confidence_4.png',
-        '/images/confidence/confidence_5_grey.png',
-        '/images/confidence/confidence_6_grey.png',
-        '/images/confidence/confidence_7_grey.png',
-        '/images/confidence/confidence_8_grey.png'
-      ]
-    }
+      countDown: 3
+    };
+    this.setCountDown = this.setCountDown.bind(this);
   }
 
-  setElements() {
-    this.setConfidenceForm();
-    if (this.props.affectivaLoaded) {
-      this.speechAnalyticsSection = (
-        <div>
-          <p>loaded!</p>
-          <Button className="red lighten-2" waves="light" onClick={this.props.startStageRecord}>
-            continue
-          </Button>
-        </div>
-      )
-    } else {
-      this.speechAnalyticsSection = (
-        <p>Loading...</p>
-      )
-    }
+  componentDidMount() {
+    this.setCountDown();
   }
 
-  setConfidenceForm() {
-    this.formStyle = {
-      width: 40,
-      height: 40,
-      marginRight: 20
-    }
-
-    this.confidenceForm = (
-      <div>
-        <h3>How confident are you speaking about this topic?</h3>
-        <div>
-          <img src={this.state.confidenceImgUrlList[0]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(0)} />
-          <img src={this.state.confidenceImgUrlList[1]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(1)} />
-          <img src={this.state.confidenceImgUrlList[2]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(2)} />
-          <img src={this.state.confidenceImgUrlList[3]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(3)} />
-          <img src={this.state.confidenceImgUrlList[4]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(4)} />
-          <img src={this.state.confidenceImgUrlList[5]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(5)} />
-          <img src={this.state.confidenceImgUrlList[6]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(6)} />
-          <img src={this.state.confidenceImgUrlList[7]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(7)} />
-          <img src={this.state.confidenceImgUrlList[8]} style={this.formStyle} onClick={() => this.onConfidenceGoalChange(8)} />
-        </div>
-      </div>
-      )
-  }
-
-  onConfidenceGoalChange(newVal) {
-    this.props.setConfidenceGoal(newVal)
-    this.updateConfidenceFormView(newVal);
-  }
-
-  updateConfidenceFormView(newVal) {
-    var newUrlList = [];
-    for (var i = 0; i < 9; i++) {
-      var grey = "_grey";
-      if (i === newVal) {
-        grey = "";
+  setCountDown() {
+    var _this = this;
+    var interval = 1000;
+    var expected = Date.now() + interval;
+    setTimeout(step, interval);
+    function step() {
+      var dt = Date.now() - expected;
+      if (dt > interval) {
+        console.log('Error in browser detected');
       }
-      var imgUrl = '/images/confidence/confidence_' + i + grey + '.png';
-      newUrlList.push(imgUrl);
-    }
 
-    this.setState({
-      confidenceImgUrlList: newUrlList
-    });
-  }
-
-  onEmotionGoalChange(emotionType, value) {
-    this.setColour(emotionType, value)
-    this.setEmotionValue(emotionType, value)
-  }
-
-  getEmotionNoun(adjective) {
-    if (adjective === 'happy') {
-      return 'happiness';
-    } else if (adjective === 'sad') {
-      return 'sadness';
-    } else if (adjective === 'excited') {
-      return 'excitement';
-    } else if (adjective === 'angry') {
-      return 'anger';
-    }
-  }
-
-  setColour(emotionType, value) {
-    let newEmotionImgUrlList = Object.assign({}, this.state.emotionImgUrlList)
-
-    for (var i = 0; i <= 3; i++) {
-      var grey = ""
-      var imgUrl = "/images/emotion_list/"
-      if (i !== value) {
-        grey = "_grey"
+      if (_this.props.affectivaLoaded) {
+        if (_this.state.countDown === 1) {
+          console.log('start stage record');
+          _this.props.startStageRecord();
+        } else {
+          _this.setState({countDown: _this.state.countDown - 1});
+          expected += interval;
+          setTimeout(step, Math.max(0, interval - dt)); // take into account drift
+        }
+      } else {
+        expected += interval;
+        setTimeout(step, Math.max(0, interval - dt)); // take into account drift
       }
-      imgUrl =imgUrl + emotionType + '/' + emotionType + '_' + i + grey + ".png"
-      newEmotionImgUrlList[emotionType+i] = imgUrl
     }
-    this.setState({
-      emotionImgUrlList: newEmotionImgUrlList
-    })
   }
-
 
   render() {
-    this.setElements();
+    var settings = {
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000
+    };
 
+    let preloadContent;
+    if (this.props.affectivaLoaded) {
+      preloadContent = (
+        <div>
+          <h2>Get ready to present in:</h2>
+          <h1 style={{fontSize: 90}}>{this.state.countDown}</h1>
+        </div>
+      );
+    } else {
+      preloadContent = (
+        <div>
+          <p style={{height: $(window).height()/3 + 20, fontSize: $(window).height()/6, marginTop: 0.5 * $(window).height()/6}}>
+            <FontAwesome
+              className='super-crazy-colors'
+              name='refresh'
+              size='3x'
+              spin={true}
+              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', marginLeft: -1.2 * $(window).height()/6 }}
+            />
+          </p>
+          <Slider {...settings}>
+            <div><h3>Turning on the lights</h3></div>
+            <div><h3>Setting the stage</h3></div>
+            <div><h3>Testing the mic</h3></div>
+            <div><h3>Checking the speakers</h3></div>
+            <div><h3>Opening the curtains</h3></div>
+            <div><h3>Prepping the audience</h3></div>
+            <div><h3>Taking a deep breath</h3></div>
+          </Slider>
+        </div>
+      );
+    }
 
-    /* TODO: 'children' removable? */
     return (
       <div>
-        <div className="centerFixed">
-        {this.confidenceForm}
-        {this.speechAnalyticsSection}
-
+        <div className="centerFixed full-height">
+          {preloadContent}
         </div>
         {this.props.children}
       </div>

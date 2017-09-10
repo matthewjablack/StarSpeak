@@ -42,6 +42,9 @@ StarSpeak::Application.routes.draw do
   get '/help' => 'pages#help', via: [:get], as: :help
   get '/upload' => 'pages#upload', via: [:get], as: :upload
   get '/render_result_dev' => 'pages#render_result_dev', via: [:get], as: :render_result_dev
+  get '/render_record_dev' => 'pages#render_record_dev', via: [:get], as: :render_record_dev
+  get '/render_preload_loading_dev' => 'pages#render_preload_loading_dev', via: [:get], as: :render_preload_loading_dev
+  get '/render_preload_loaded_dev' => 'pages#render_preload_loaded_dev', via: [:get], as: :render_preload_loaded_dev
 
   get '/starlight' => 'pages#starlight', via: [:get], as: :starlight_demo
 

@@ -12,6 +12,7 @@ import RenderDevelop from './RenderDevelop';
 import RenderPreload from './RenderPreload';
 import RenderRecord from './RenderRecord';
 import RenderAnalyze from './RenderAnalyze';
+import RenderConfidence from './RenderConfidence';
 import RenderResults from './RenderResults';
 import RenderDemoExceeded from './RenderDemoExceeded';
 import AlertContainer from 'react-alert';
@@ -89,7 +90,7 @@ export default class Lesson extends Component{
         speakerLabels: false
       },
       error: null,
-      stage: 'Adjust',
+      stage: 'Develop',
       count1: 2,
       presentCount: 20,
       loadCount: 3,
@@ -187,6 +188,7 @@ export default class Lesson extends Component{
     this.fetchToken = this.fetchToken.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.startStageAdjust = this.startStageAdjust.bind(this);
+    this.startStageConfidence = this.startStageConfidence.bind(this);
     this.startStageDevelop = this.startStageDevelop.bind(this);
     this.startStagePreload = this.startStagePreload.bind(this);
     this.startStageRecord = this.startStageRecord.bind(this);
@@ -413,6 +415,10 @@ export default class Lesson extends Component{
     this.setState({stage: 'Adjust'});
   }
 
+  startStageConfidence() {
+    this.setState({stage: 'Confidence'});
+  }
+
   startStageDevelop() {
     this.setState({stage: 'Develop'});
   }
@@ -513,26 +519,89 @@ export default class Lesson extends Component{
     let lessonContent;
     if (this.state.stage === 'Intro') {
       lessonContent = <RenderIntro startStageAdjust={this.startStageAdjust} />;
+    } else if (this.state.stage === 'Develop') {
+      lessonContent = (
+        <RenderDevelop
+          startStageConfidence={this.startStageConfidence}
+          width={this.state.width}
+          lesson={this.state.lesson}
+          mode={this.state.mode}
+          updatePresentCount={(x) => this.updatePresentCount(x)} 
+          affectivaLoaded={this.state.affectivaLoaded}
+          presentCount={this.state.presentCount}
+        />
+      );
+    } else if (this.state.stage === 'Confidence'){
+      lessonContent = (
+        <RenderConfidence
+          startStageAdjust={this.startStageAdjust}
+          setConfidenceGoal={this.setConfidenceGoal}
+        />
+      );
     } else if (this.state.stage === 'Adjust') {
       lessonContent = (
         <RenderAdjust 
-          startStageDevelop={this.startStageDevelop} 
+          startStagePreload={this.startStagePreload}
           width={this.state.width} 
           mode={this.state.mode} 
           updatePresentCount={(x) => this.updatePresentCount(x)} 
           presentCount={this.state.presentCount} 
         />
       );
-    } else if (this.state.stage === 'Develop') {
-      lessonContent = <RenderDevelop startStageRecord={this.startStageRecord} startStagePreload={this.startStagePreload} width={this.state.width} lesson={this.state.lesson} mode={this.state.mode} affectivaLoaded={this.state.affectivaLoaded} />;
     } else if (this.state.stage === 'Preload'){
-      lessonContent = <RenderPreload startStageRecord={this.startStageRecord} affectivaLoaded={this.state.affectivaLoaded} setConfidenceGoal={this.setConfidenceGoal} />
+      lessonContent = (
+        <RenderPreload
+          startStageRecord={this.startStageRecord}
+          affectivaLoaded={this.state.affectivaLoaded}
+          setConfidenceGoal={this.setConfidenceGoal}
+        />
+      );
     } else if (this.state.stage === 'Record') {
-      lessonContent = <RenderRecord startStageAnalyze={this.startStageAnalyze} width={this.state.width} presentCount={this.state.presentCount} stt={this.state.local.sttInterim} />;
+      lessonContent = (
+        <RenderRecord
+          startStageAnalyze={this.startStageAnalyze}
+          width={this.state.width}
+          presentCount={this.state.presentCount}
+          stt={this.state.local.sttInterim}
+          emotions={this.state.affectiva.emotions}
+        />
+      );
     } else if (this.state.stage == 'Analyze') {
-      lessonContent = <RenderAnalyze local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} percentUploaded={this.state.percentUploaded} user={this.state.user} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} />;
+      lessonContent = (
+        <RenderAnalyze
+          local={this.state.local}
+          watson={this.state.watson}
+          stage={this.state.stage}
+          indico={this.state.indico}
+          linkback={this.state.linkback}
+          percentage={this.state.percentage}
+          percentUploaded={this.state.percentUploaded}
+          user={this.state.user}
+          mode={this.state.mode}
+          umCount={this.state.umCount}
+          gradeScore={this.state.gradeScore}
+        />
+      );
     } else if (this.state.stage == 'Results') {
-      lessonContent = <RenderResults local={this.state.local} watson={this.state.watson} stage={this.state.stage} indico={this.state.indico} linkback={this.state.linkback} percentage={this.state.percentage} user={this.state.user} screenshot={screenshots[screenshots.length - 1]} mode={this.state.mode} umCount={this.state.umCount} gradeScore={this.state.gradeScore} wordFrequency={this.state.wordFrequency} facialStatsContainer={this.state.facialStatsContainer} video={this.state.video} speechFrameContainer={this.state.speechFrameContainer} />;
+      lessonContent = (
+        <RenderResults
+          local={this.state.local}
+          watson={this.state.watson}
+          stage={this.state.stage}
+          indico={this.state.indico}
+          linkback={this.state.linkback}
+          percentage={this.state.percentage}
+          user={this.state.user}
+          screenshot={screenshots[screenshots.length - 1]}
+          mode={this.state.mode}
+          umCount={this.state.umCount}
+          gradeScore={this.state.gradeScore}
+          wordFrequency={this.state.wordFrequency}
+          facialStatsContainer={this.state.facialStatsContainer}
+          video={this.state.video}
+          speechFrameContainer={this.state.speechFrameContainer}
+        />
+      );
     } else if (this.state.stage == 'DemoLimitExceeded') {
       lessonContent = <RenderDemoExceeded/>;
     }
