@@ -1,5 +1,3 @@
-require('wavesurfer.js');
-
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
@@ -94,14 +92,6 @@ class RenderResults extends Component {
           </Card>
 
           <Card>
-            {this.props.video != null && 
-              <Wavesurfer
-                audioFile={this.props.video.direct_upload_url}
-                pos={this.state.pos}
-                onPosChange={this.handlePosChange}
-                playing={this.state.playing}
-              />
-            }
             <div style={{textAlign: 'center'}}>
               <Button className="red lighten-2" waves="light" onClick={this.handleTogglePlay}>
                 <i className="glyphicon glyphicon-play"></i>
