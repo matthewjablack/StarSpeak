@@ -92,11 +92,6 @@ class RenderResults extends Component {
 
           <Card>
             <div style={{textAlign: 'center'}}>
-              <Button className="red lighten-2" waves="light" onClick={this.handleTogglePlay}>
-                <i className="glyphicon glyphicon-play"></i>
-                Play
-              </Button>
-
               <div className="row">
                 <div className="col-xs-1">
                   <i className="glyphicon glyphicon-zoom-in"></i>
