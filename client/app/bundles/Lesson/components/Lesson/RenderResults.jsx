@@ -7,7 +7,6 @@ import GradeLevel from './GradeLevel';
 import {Collapsible, CollapsibleItem, Row, Card, Button, Icon} from '@mblackmblack/react-materialize'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import sizeMe from 'react-sizeme';
-import Wavesurfer from 'react-wavesurfer';
 import WordImpactBoxContainer from './WordImpactBoxContainer';
 import KeywordDensity from './KeywordDensity';
 
