@@ -562,7 +562,7 @@ export default class Lesson extends Component{
           width={this.state.width}
           presentCount={this.state.presentCount}
           stt={this.state.local.sttInterim}
-          affectiva={this.state.affectiva}
+          emotions={this.state.affectiva.emotions}
         />
       );
     } else if (this.state.stage == 'Analyze') {
