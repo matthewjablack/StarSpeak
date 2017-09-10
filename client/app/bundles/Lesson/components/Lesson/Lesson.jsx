@@ -526,6 +526,7 @@ export default class Lesson extends Component{
           width={this.state.width}
           lesson={this.state.lesson}
           mode={this.state.mode}
+          updatePresentCount={(x) => this.updatePresentCount(x)} 
           affectivaLoaded={this.state.affectivaLoaded}
           presentCount={this.state.presentCount}
         />
