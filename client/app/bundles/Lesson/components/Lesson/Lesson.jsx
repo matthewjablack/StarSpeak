@@ -71,7 +71,7 @@ export default class Lesson extends Component{
 
   showAlert(type, txt) {
     this.msg.show(txt, {
-      time: 200000,
+      time: 5000,
       type: type,
     });
   }
@@ -483,8 +483,6 @@ export default class Lesson extends Component{
     this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
     handleMicClick(this);
 
-    let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
-
     this.state.speechFrameContainer.addStt(this.state.local.stt);
 
     this.state.speechFrameContainer.determineWordTiming();
@@ -492,7 +490,7 @@ export default class Lesson extends Component{
     this.setState({indico: indico, stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
+      this.state.watson, this.state.local, browser, uuid, this.state.mode,
       this.state.facialStatsContainer);
 
 

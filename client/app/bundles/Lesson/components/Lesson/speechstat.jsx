@@ -35,7 +35,7 @@ export async function getDaleChall(text, count){
   return responseJson.data
 }
 
-export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode, facialEmotions) {
+export async function createSpeechstat(user, lesson, moduler, watson, local, browser, uuid, mode, facialEmotions) {
   if (user.auth_token !== null) {
 
     let starViewData = {};
