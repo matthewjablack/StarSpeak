@@ -55,12 +55,6 @@ export async function createSpeechstat(user, lesson, moduler, watson, local, bro
     }
 
     let speechStatData = {
-      happy_facial_indico: indico.facialEmotion.happy,
-      sad_facial_indico: indico.facialEmotion.sad,
-      angry_facial_indico: indico.facialEmotion.angry,
-      fear_facial_indico: indico.facialEmotion.fear,
-      surprise_facial_indico: indico.facialEmotion.surprise,
-      neutral_facial_indico: indico.facialEmotion.neutral,
       watson_text: watson.stt,
       local_text: local.stt,
       watson_text_pace: watson.pace,
