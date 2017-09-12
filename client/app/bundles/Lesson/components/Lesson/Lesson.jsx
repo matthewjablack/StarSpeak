@@ -487,7 +487,7 @@ export default class Lesson extends Component{
 
     this.state.speechFrameContainer.determineWordTiming();
 
-    this.setState({indico: indico, stage: 'Results'});
+    this.setState({stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
       this.state.watson, this.state.local, browser, uuid, this.state.mode,
