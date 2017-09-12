@@ -504,10 +504,6 @@ export default class Lesson extends Component{
 
     this.setState({speechstat: speechstat});
 
-    for (var i = 0; i < indico.errors.length; i++) {
-      this.createError('error', indico.errors[i]);
-    }
-
     for (var j = 0; j < WatsonTone.errors.length; j++) {
       this.createError('error', WatsonTone.errors[j]);
     }
