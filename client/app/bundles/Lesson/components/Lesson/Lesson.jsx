@@ -71,7 +71,7 @@ export default class Lesson extends Component{
 
   showAlert(type, txt) {
     this.msg.show(txt, {
-      time: 200000,
+      time: 5000,
       type: type,
     });
   }
