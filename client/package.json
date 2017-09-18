@@ -78,6 +78,7 @@
     "react-test-renderer": "^15.6.1",
     "react-timers": "^5.0.3",
     "react-voice-components": "^1.0.0",
+    "react-wavesurfer": "^0.8.6",
     "react-webcam": "^0.1.0",
     "recharts": "^1.0.0-alpha.4",
     "recordrtc": "^5.4.1",
@@ -89,6 +90,7 @@
     "watson-react-components": "^0.6.9",
     "watson-speech": "^0.33.0",
     "waveform-data": "^2.0.1",
+    "wavesurfer.js": "^1.4.0",
     "webpack": "^3.3.0"
   },
   "devDependencies": {
