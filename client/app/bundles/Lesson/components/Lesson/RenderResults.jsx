@@ -25,22 +25,6 @@ class RenderResults extends Component {
     this.handlePosChange = this.handlePosChange.bind(this);
   }
 
-  componentDidMount() {
-    newWaveSurfer = WaveSurfer.create({
-      container: '.waveform',
-      waveColor: 'red',
-      progressColor: 'purple'
-    })
-    this.setState({
-      containerWidth: this.refs.container.offsetWidth,
-      waveSurfer: newWaveSurfer,
-      mounted: true,
-    });
-
-    newWaveSurfer.load(this.props.video.direct_upload_url);
-
-  }
-
   handleTogglePlay() {
     this.setState({
       playing: !this.state.playing
