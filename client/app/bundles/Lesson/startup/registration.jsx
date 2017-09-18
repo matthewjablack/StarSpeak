@@ -6,6 +6,7 @@ import RenderRecordDev from '../components/Lesson/RenderRecordDev';
 import RenderPreloadLoading from '../components/Lesson/RenderPreloadLoading';
 import RenderPreloadLoaded from '../components/Lesson/RenderPreloadLoaded';
 import SpeechDashboard from '../components/Lesson/SpeechDashboard';
+import SpeechDashboardShow from '../components/Lesson/SpeechDashboardShow';
 import Upload from '../components/Upload/Upload';
 
 ReactOnRails.register({
@@ -15,5 +16,6 @@ ReactOnRails.register({
   RenderPreloadLoading,
   RenderPreloadLoaded,
   SpeechDashboard,
+  SpeechDashboardShow,
   Upload
 });
