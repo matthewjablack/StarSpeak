@@ -61,7 +61,7 @@ StarSpeak::Application.routes.draw do
     end
   end
 
-  resources :speechstats, only: [:index, :show]
+  resources :speech_stats, only: [:index, :show]
 
   resources :levels, only: [:show], path: '' do
     resources :modulers, only: [:index], path: '' do
