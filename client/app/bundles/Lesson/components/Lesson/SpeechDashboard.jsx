@@ -34,12 +34,12 @@ export default class SpeechDashboard extends Component {
               </Col>
               <Col m={3}>
                 <h2>{this.state.presentation_hours}</h2>
-                <p>hours spent presenting</p>
+                <p>Hours spent presenting</p>
               </Col>
             </Row>
           </Card>
 
-          <Card textClassName='white-text' title='Pace (Words per minute)'>
+          <Card  title='Pace (Words per minute)'>
             <AreaChart width={this.state.containerWidth} height={250} data={this.state.paces}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <defs>
@@ -54,9 +54,11 @@ export default class SpeechDashboard extends Component {
               <Tooltip />
               <Area type="monotone" dataKey="pace" stroke="#2ecc71" fillOpacity={1} fill="url(#joyColor)" />
             </AreaChart>
+
+            <p>The optimal pace is between 120-150 words per minute.</p>
           </Card>
 
-          <Card textClassName='white-text' title='Average Facial Emotions per Presentation (%)'>
+          <Card textClassName='white-text' title='Average Facial Emotions Per Presentation (%)'>
             <AreaChart width={this.state.containerWidth} height={250} data={this.state.emotions}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <defs>

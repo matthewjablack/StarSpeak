@@ -1,12 +1,12 @@
 class SpeechStatsController < ApplicationController
 	def index
-		speech_stats = current_user.speech_stats.where("local_text_pace > 5").page(params[:page]).per(15)
+		speech_stats = current_user.speech_stats.where("local_text_pace > 5").page(params[:page]).per(15).order(created_at: :desc)
 
     @speech_stat_dashboard_props = { 
       paces: serialize_speech_stats_pace(speech_stats),
       presentation_count: current_user.speech_stats.count,
       presentation_hours: 20.3,
-      speech_stats: speech_stats.reverse,
+      speech_stats: speech_stats,
       emotions: serialize_speech_stats_emotions(speech_stats)
     }
 	end
