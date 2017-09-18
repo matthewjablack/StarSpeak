@@ -9,6 +9,8 @@ import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip 
 import sizeMe from 'react-sizeme';
 import WordImpactBoxContainer from './WordImpactBoxContainer';
 import KeywordDensity from './KeywordDensity';
+require('wavesurfer.js');
+import Wavesurfer from "react-wavesurfer";
 
 class RenderResults extends Component {
   constructor(props) {
@@ -16,14 +18,27 @@ class RenderResults extends Component {
     this.state = {
       containerWidth: 0,
       playing: false, 
-      pos: 0
+      pos: 0,
+      mounted: false,
     };
     this.handleTogglePlay = this.handleTogglePlay.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
   }
 
   componentDidMount() {
-    this.setState({containerWidth: this.refs.container.offsetWidth});
+    newWaveSurfer = WaveSurfer.create({
+      container: '.waveform',
+      waveColor: 'red',
+      progressColor: 'purple'
+    })
+    this.setState({
+      containerWidth: this.refs.container.offsetWidth,
+      waveSurfer: newWaveSurfer,
+      mounted: true,
+    });
+
+    newWaveSurfer.load(this.props.video.direct_upload_url);
+
   }
 
   handleTogglePlay() {
@@ -91,21 +106,24 @@ class RenderResults extends Component {
           </Card>
 
           <Card>
+            {this.props.video != null && 
+              <Wavesurfer
+                audioFile={this.props.video.direct_upload_url}
+                pos={this.state.pos}
+                onPosChange={this.handlePosChange}
+                playing={this.state.playing}
+              />
+            }
+
             <div style={{textAlign: 'center'}}>
-              <div className="row">
-                <div className="col-xs-1">
-                  <i className="glyphicon glyphicon-zoom-in"></i>
-                </div>
-
-                <div className="col-xs-10">
-                  <input id="slider" type="range" min="1" max="200" defaultValue="1" style={{width: '100%'}} />
-                </div>
-
-                <div className="col-xs-1">
-                  <i className="glyphicon glyphicon-zoom-out"></i>
-                </div>
-              </div>
+              <Button className="red lighten-2" waves="light" onClick={this.handleTogglePlay}>
+                <i className="glyphicon glyphicon-play"></i>
+                Play
+              </Button>
             </div>
+
+            <br/>
+            <br/>
 
             <WordImpactBoxContainer
               speechFrameContainer={this.props.speechFrameContainer}
