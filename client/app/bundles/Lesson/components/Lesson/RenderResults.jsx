@@ -1,3 +1,5 @@
+require('wavesurfer.js');
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Stats} from './stats';
@@ -9,7 +11,6 @@ import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip 
 import sizeMe from 'react-sizeme';
 import WordImpactBoxContainer from './WordImpactBoxContainer';
 import KeywordDensity from './KeywordDensity';
-require('wavesurfer.js');
 import Wavesurfer from "react-wavesurfer";
 
 class RenderResults extends Component {
@@ -24,6 +25,13 @@ class RenderResults extends Component {
     this.handleTogglePlay = this.handleTogglePlay.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
   }
+
+  componentDidMount() {
+    this.setState({
+      containerWidth: this.refs.container.offsetWidth
+    })
+  }
+
 
   handleTogglePlay() {
     this.setState({
