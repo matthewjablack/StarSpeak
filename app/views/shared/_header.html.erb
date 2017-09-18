@@ -15,7 +15,7 @@
             <li><a href="#modal1">Sign up</a></li>
           <% else %>
             <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
-            <li><%= link_to "Speech Results", speechstats_path %></li>
+            <li><%= link_to "Speech Results", speech_stats_path %></li>
             <li><%= link_to "Help", help_path %></li>
             <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><%= current_user.first_name %> <span class="caret"></span></a></li>
             <ul id="dropdown1" class="dropdown-content">
@@ -34,7 +34,7 @@
       <li><a href="#modal1">Sign up</a></li>
     <% else %>
       <li><%= link_to "Dashboard", level_modulers_path(current_user.level) %></li>
-      <li><%= link_to "Speech Results", speechstats_path %></li>
+      <li><%= link_to "Speech Results", speech_stats_path %></li>
       <li><%= link_to "Help", help_path %></li>
       <li class="no-padding">
         <ul class="collapsible collapsible-accordion">

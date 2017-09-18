@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   belongs_to :level
   belongs_to :betacode
 
-  has_many :speechstats
+  has_many :speech_stats
 
   before_save :full_name
 
