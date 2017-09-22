@@ -7,6 +7,14 @@ class Api::V1::SpeechStatsController < ApplicationController
 
   respond_to :json
 
+  def show
+    user = User.find(params[:id])
+    video_urls = user.speech_stats.map {|x| x.video.nil? ? '' : x.video.direct_upload_url}.select {|x| x != ""}
+    render :status => 200, 
+             :json => { :success => true,
+                        :info => "Success ",
+                        :data => {video_urls: video_urls} }
+  end
 
   def create
     speech_stat = SpeechStat.new(speech_stat_params)

@@ -18,6 +18,7 @@ StarSpeak::Application.routes.draw do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api
       post 'speech_stats' => 'speech_stats#create'
       get 'speech_stats' => 'speech_stats#index'
+      get 'speech_stats/:id' => 'speech_stats#show'
       post 'watson_tone' => 'services#watson_tone'
       resources :videos, only: [:index, :create]
       resources :uploads, only: [:create]
