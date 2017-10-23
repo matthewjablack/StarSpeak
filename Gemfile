@@ -59,6 +59,8 @@ gem "react_on_rails", "~> 7"
 
 gem 'sidekiq'
 
+gem 'monologue', '~> 0.5.0'
+
 gem 'materialize-sass'
 gem 'material_icons'
 

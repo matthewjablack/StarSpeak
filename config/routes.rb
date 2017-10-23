@@ -13,6 +13,8 @@ StarSpeak::Application.routes.draw do
   # You can have the root of your site routed with "root"
   mount Sidekiq::Web => '/sidekiq'
 
+  mount Monologue::Engine, at: '/blog'
+
   namespace :api do
     namespace :v1, defaults: { format: 'json' } do
       match 'lesson/:id' => 'lessons#show', via: [:get, :post], as: :lesson_api

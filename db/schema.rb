@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906040417) do
+ActiveRecord::Schema.define(version: 20171023004812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,6 +177,38 @@ ActiveRecord::Schema.define(version: 20170906040417) do
     t.integer  "sort_order"
   end
 
+  create_table "monologue_posts", force: :cascade do |t|
+    t.boolean  "published"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+    t.string   "title"
+    t.text     "content"
+    t.string   "url"
+    t.datetime "published_at"
+    t.index ["url"], name: "index_monologue_posts_on_url", unique: true, using: :btree
+  end
+
+  create_table "monologue_taggings", force: :cascade do |t|
+    t.integer "post_id"
+    t.integer "tag_id"
+    t.index ["post_id"], name: "index_monologue_taggings_on_post_id", using: :btree
+    t.index ["tag_id"], name: "index_monologue_taggings_on_tag_id", using: :btree
+  end
+
+  create_table "monologue_tags", force: :cascade do |t|
+    t.string "name"
+    t.index ["name"], name: "index_monologue_tags_on_name", using: :btree
+  end
+
+  create_table "monologue_users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "organization_memberships", force: :cascade do |t|
     t.integer  "organization_id"
     t.integer  "user_id"
@@ -190,59 +222,6 @@ ActiveRecord::Schema.define(version: 20170906040417) do
     t.string   "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "speechstats", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "betacode_id"
-    t.integer  "lesson_id"
-    t.integer  "moduler_id"
-    t.float    "happy_facial_indico"
-    t.float    "sad_facial_indico"
-    t.float    "angry_facial_indico"
-    t.float    "fear_facial_indico"
-    t.float    "surprise_facial_indico"
-    t.float    "neutral_facial_indico"
-    t.float    "happy_speech_indico"
-    t.float    "sad_speech_indico"
-    t.float    "angry_speech_indico"
-    t.float    "fear_speech_indico"
-    t.float    "surprise_speech_indico"
-    t.float    "agreeableness_indico"
-    t.float    "conscientiousness_indico"
-    t.float    "extraversion_indico"
-    t.float    "openness_indico"
-    t.text     "watson_text"
-    t.text     "local_text"
-    t.string   "browser_name"
-    t.string   "browser_version"
-    t.float    "watson_text_pace"
-    t.float    "local_text_pace"
-    t.float    "anger_speech_watson"
-    t.float    "disgust_speech_watson"
-    t.float    "fear_speech_watson"
-    t.float    "joy_speech_watson"
-    t.float    "sadness_speech_watson"
-    t.float    "analytical_speech_watson"
-    t.float    "confident_speech_watson"
-    t.float    "tentative_speech_watson"
-    t.float    "openness_speech_watson"
-    t.float    "conscientiousness_speech_watson"
-    t.float    "extraversion_speech_watson"
-    t.float    "agreeableness_speech_watson"
-    t.float    "emotional_range_speech_watson"
-    t.integer  "facial_emotions_rating"
-    t.integer  "social_tone_rating"
-    t.integer  "language_tone_rating"
-    t.integer  "emotion_tone_rating"
-    t.string   "video_file_name"
-    t.string   "video_content_type"
-    t.integer  "video_file_size"
-    t.datetime "video_updated_at"
-    t.integer  "video_id"
-    t.string   "uuid"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
   end
 
   create_table "speech_stats", force: :cascade do |t|
