@@ -483,16 +483,14 @@ export default class Lesson extends Component{
     this.setState({analyzing: true, local: newLocal, watson: newWatson, stage: 'Analyze', length: this.state.length - this.state.presentCount});
     handleMicClick(this);
 
-    let indico = await getIndicoEmotions(screenshots, this.state.local.stt, this);
-
     this.state.speechFrameContainer.addStt(this.state.local.stt);
 
     this.state.speechFrameContainer.determineWordTiming();
 
-    this.setState({indico: indico, stage: 'Results'});
+    this.setState({stage: 'Results'});
 
     let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
+      this.state.watson, this.state.local, browser, uuid, this.state.mode,
       this.state.facialStatsContainer);
 
 
@@ -505,10 +503,6 @@ export default class Lesson extends Component{
     }
 
     this.setState({speechstat: speechstat});
-
-    for (var i = 0; i < indico.errors.length; i++) {
-      this.createError('error', indico.errors[i]);
-    }
 
     for (var j = 0; j < WatsonTone.errors.length; j++) {
       this.createError('error', WatsonTone.errors[j]);
