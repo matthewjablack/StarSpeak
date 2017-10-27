@@ -90,11 +90,7 @@ export default class SpeechDashboard extends Component {
             </AreaChart>
           </Card>
 
-          <Collection>
-          {this.state.speech_stats.map((speechStat) => 
-            <CollectionItem href={'/speech_stats/' + speechStat.id}>Presentation #{speechStat.id}</CollectionItem>
-          )}
-          </Collection>
+          
 
           <br/>
           {this.props.children}
