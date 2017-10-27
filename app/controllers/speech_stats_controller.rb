@@ -5,7 +5,7 @@ class SpeechStatsController < ApplicationController
     @speech_stat_dashboard_props = { 
       paces: serialize_speech_stats_pace(speech_stats),
       presentation_count: current_user.speech_stats.count,
-      presentation_hours: 20.3,
+      presentation_hours: 0,
       speech_stats: speech_stats,
       emotions: serialize_speech_stats_emotions(speech_stats)
     }
