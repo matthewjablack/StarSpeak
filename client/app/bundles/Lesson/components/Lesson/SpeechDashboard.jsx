@@ -32,10 +32,7 @@ export default class SpeechDashboard extends Component {
                 <h2>{this.state.presentation_count}</h2>
                 <p>Presentations</p>
               </Col>
-              <Col m={3}>
-                <h2>{this.state.presentation_hours}</h2>
-                <p>Hours spent presenting</p>
-              </Col>
+              
             </Row>
           </Card>
 
