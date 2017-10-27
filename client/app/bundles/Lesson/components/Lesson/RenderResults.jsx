@@ -52,7 +52,7 @@ class RenderResults extends Component {
 
           <Row>
             <Card className="hoverable center">
-              <h4>Hey {this.props.user.first_name}, here's your presentation results</h4>
+              <h4>Hey {this.props.user.first_name}, here are your presentation results</h4>
               <p>{this.props.local.stt}</p><br/>
               <img src={this.props.screenshot} style={{objectFit: 'cover', borderRadius:100, width: 150, height: 150}}/>
             </Card>
