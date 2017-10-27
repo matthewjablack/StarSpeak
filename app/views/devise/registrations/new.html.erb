@@ -36,7 +36,7 @@
   <%= f.password_field :password_confirmation, class: 'validate', placeholder: 'Password Confirmation', id: 'password_confirmation_field' %>
   <br />
 
-  <%= f.select :level_id, Level.all.collect { |p| [ p.name, p.id ] },  id: 'select-level' %>
+  <%= f.hidden_field :level_id, value: 1 %>
 
   <br />
   <br />
