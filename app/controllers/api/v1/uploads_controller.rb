@@ -1,4 +1,5 @@
 class Api::V1::UploadsController < ApplicationController
+  skip_before_filter :verify_authenticity_token
 
   def create
     @generate_upload_url_service = GenerateUploadUrl.new(create_params[:filename])

@@ -1,4 +1,5 @@
 class Api::V1::VideosController < ApplicationController
+  skip_before_filter :verify_authenticity_token
 
   def index
     @videos = Video.page(1).per(10)
