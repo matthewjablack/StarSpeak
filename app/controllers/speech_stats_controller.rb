@@ -7,7 +7,9 @@ class SpeechStatsController < ApplicationController
       presentation_count: current_user.speech_stats.count,
       presentation_hours: 0,
       speech_stats: speech_stats,
-      emotions: serialize_speech_stats_emotions(speech_stats)
+      emotions: serialize_speech_stats_emotions(speech_stats),
+      hesitations: serialize_speech_stats_hesitations(speech_stats),
+      grade_scores: serialize_speech_stats_grade_scores(speech_stats)
     }
 	end
 
@@ -36,6 +38,22 @@ class SpeechStatsController < ApplicationController
         sadness: (speech_stat.sad_facial_indico*100).round,
         anger: (speech_stat.angry_facial_indico*100).round,
         excitement: (speech_stat.surprise_facial_indico*100).round
+      }
+    end
+  end
+
+  def serialize_speech_stats_hesitations(speech_stats)
+    speech_stats.map do |speech_stat|
+      {
+        hesitation: speech_stat.hesitation_count
+      }
+    end
+  end
+
+  def serialize_speech_stats_grade_scores(speech_stats)
+    speech_stats.map do |speech_stat|
+      {
+        grade_score: speech_stat.grade_score.round
       }
     end
   end

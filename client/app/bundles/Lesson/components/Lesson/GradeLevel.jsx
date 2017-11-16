@@ -7,10 +7,7 @@ export default class GradeLevel extends Component {
     const { ...other } = this.props;
 
     let gradeLevel, gradeHeader;
-    if (this.props.gradeScore === 0) {
-      gradeLevel = '';
-      gradeHeader = "We had some trouble getting information on the complexity of your speech.";
-    } else if (this.props.gradeScore < 5.0) {
+    if (this.props.gradeScore < 5.0) {
       gradeLevel = '4th Grade';
       gradeHeader = "Your speech is suitable for most audiences.";
     } else if (this.props.gradeScore < 6.0) {
@@ -25,7 +22,7 @@ export default class GradeLevel extends Component {
     } else if (this.props.gradeScore < 9.0) {
       gradeLevel = '12th Grade';
       gradeHeader = "Your speech is suitable for a very knowledgeable audience.";
-    } else if (this.props.gradeScore < 10.0) {
+    } else if (this.props.gradeScore >= 9.0) {
       gradeLevel = 'University';
       gradeHeader = "Your speech is suitable for a very knowledgeable audience.";
     }

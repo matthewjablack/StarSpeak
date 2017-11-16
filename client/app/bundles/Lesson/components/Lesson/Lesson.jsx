@@ -491,11 +491,6 @@ export default class Lesson extends Component{
 
     this.setState({indico: indico, stage: 'Results'});
 
-    let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
-      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
-      this.state.facialStatsContainer);
-
-
     try {
       let reUm = / um ?/g;
       let umCount = this.state.watson.stt.match(reUm).length;
@@ -503,6 +498,12 @@ export default class Lesson extends Component{
     } catch(error) {
       console.log(error); // eslint-disable-line
     }
+
+    let speechstat = createSpeechstat(this.state.user, this.state.lesson, this.state.moduler,
+      this.state.indico, this.state.watson, this.state.local, browser, uuid, this.state.mode,
+      this.state.facialStatsContainer, this.state.gradeScore, this.state.umCount, 
+      this.state.wordFrequency);
+
 
     this.setState({speechstat: speechstat});
 

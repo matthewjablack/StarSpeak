@@ -142,6 +142,9 @@ class Api::V1::SpeechStatsController < ApplicationController
       :extraversion_speech_watson,
       :agreeableness_speech_watson,
       :emotional_range_speech_watson,
+      :grade_score, 
+      :word_frequency,
+      :hesitation_count, 
       :uuid
     )
   end

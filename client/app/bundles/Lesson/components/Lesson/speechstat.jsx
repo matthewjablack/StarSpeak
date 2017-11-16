@@ -35,7 +35,8 @@ export async function getDaleChall(text, count){
   return responseJson.data
 }
 
-export async function createSpeechstat(user, lesson, moduler, indico, watson, local, browser, uuid, mode, facialEmotions) {
+export async function createSpeechstat(
+  user, lesson, moduler, indico, watson, local, browser, uuid, mode, facialEmotions, gradeScore, umCount, wordFrequency) {
   if (user.auth_token !== null) {
 
     let starViewData = {};
@@ -80,6 +81,9 @@ export async function createSpeechstat(user, lesson, moduler, indico, watson, lo
       extraversion_speech_watson: watson.tone.social.extraversion,
       agreeableness_speech_watson: watson.tone.social.agreeableness,
       emotional_range_speech_watson: watson.tone.social.emotionalRange, 
+      grade_score: gradeScore,
+      hesitation_count: umCount, 
+      word_frequency: JSON.stringify(wordFrequency),
       uuid: uuid
     }
 
