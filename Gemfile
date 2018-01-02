@@ -78,6 +78,8 @@ gem 'omniauth-facebook'
 gem 'carrierwave'
 gem 'carrierwave-base64'
 
+gem 'activerecord-import'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'capistrano', '~> 3.7', '>= 3.7.1'
